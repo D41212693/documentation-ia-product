@@ -9,9 +9,9 @@ description: iGRCanalytics product lifecycle
 
 ## Support types
 
-- **Active**: Support and maintenance is fully operational. Conditions are described in your support and maintenance contract.  
-- **Passive**: Only blocking anomalies are considered. Conditions are described in your support and maintenance contract.  
-- **Limited**: Your version has limited support, which means that the anomaly will be solved on the closest upper Passive or Active version, conditions regarding Active/Passive still apply: Only blocking anomalies are considered in a Passive version.  
+- **Active**: Support and maintenance is fully operational. Conditions are described in your support and maintenance contract.
+- **Passive**: Only blocking anomalies are considered. Conditions are described in your support and maintenance contract.
+- **Limited**: Your version has limited support, which means that the anomaly will be solved on the closest upper Passive or Active version, conditions regarding Active/Passive still apply: Only blocking anomalies are considered in a Passive version.
 
 ## Lifecycle per version
 
@@ -19,8 +19,9 @@ description: iGRCanalytics product lifecycle
 
 | Version              | Release date |       Active       |      Passive       |      Limited       | End of support |
 | :------------------- | :----------: | :----------------: | :----------------: | :----------------: | :------------: |
-| Descartes R5 SP6     |  25/04/2025  | :white_check_mark: |                    |                    |   31/12/2027   |
-| Descartes R5 (SP0-5) |  13/08/2024  |                    |                    | :white_check_mark: |   31/12/2027   |
+| Eiffel R1            |  30/09/2025  | :white_check_mark: |                    |                    |   31/12/2029   |
+| Descartes R5 SP7     |  30/09/2025  | :white_check_mark: |                    |                    |   31/12/2027   |
+| Descartes R5 (SP0-6) |  13/08/2024  |                    |                    | :white_check_mark: |   31/12/2027   |
 | Descartes R4         |  01/07/2024  |                    |                    | :white_check_mark: |   31/12/2027   |
 | Descartes R3         |  06/05/2024  |                    |                    | :white_check_mark: |   31/12/2027   |
 | Descartes R2 (SP0-2) |  26/09/2023  |                    |                    | :white_check_mark: |   31/12/2027   |
