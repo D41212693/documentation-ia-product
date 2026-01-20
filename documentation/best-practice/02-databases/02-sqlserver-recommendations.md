@@ -58,6 +58,11 @@ It is recommended to configure between 8 Gb to 24 Gb depending on the available 
 
 All other parameters system parameters can remain as the default values. Some of them are set at installation according to the configuration of the current platform.
 
+**Maximum Degree of Parallelism (MAXDOP)**
+
+To ensure stable CPU utilization during data loading and analytics processing, it is recommended to set the Maximum Degree of Parallelism (MAXDOP) to 4.
+You may need to adjust this value based on your system configuration and performance requirements.
+
 #### The TEMPDB database
 
 The **TEMPDB** database is a system database is used as a global resource that is available to all users connected to the instance of SQL Server or connected to SQL Database.
