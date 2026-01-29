@@ -10,12 +10,12 @@ The table below shows the Helm chart versions to install for each Identity analy
 
 | Release | IDA_HELM chart version | IDA_SHARED_HELM chart version |
 | :------ | :--------------------: | :---------------------------: |
-| 3.4     |         3.4.0          |             3.2.0             |
+| 3.4     |         3.4.3          |             3.2.2             |
 | 3.3     |         3.3.2          |             3.2.0             |
 | 3.2     |         3.2.0          |             3.1.1             |
 | 3.1     |         3.1.0          |             3.1.0             |
 
-Ensure that you specify your target version when running installation and update commands that are listed in this document.  
+Ensure that you specify your target version when running installation and update commands that are listed in this document.
 
 ## Design
 
@@ -53,7 +53,7 @@ kubectl cluster-info
 kubectl get nodes
 ```
 
-2. **Create Configuration File**:  
+2. **Create Configuration File**:
 
 Create a file named `cnpg-custom-values.yaml` with the following properties and values:
 
@@ -129,7 +129,7 @@ global:
     private: true
     registry: docker.io
     existingSecret: ida-registry-credentials
-ingress: 
+ingress:
   enabled: true
   className: "nginx"
   annotations:
@@ -143,7 +143,7 @@ keycloak:
 4. **Install Shared Services**:
 
 ```bash
-helm upgrade --install rlss \ 
+helm upgrade --install rlss \
   oci://docker.io/radiantone/ida-shared-helm \
   --namespace <SHARED_NAMESPACE> \
   --create-namespace \
@@ -177,7 +177,7 @@ Before installing the Identity Analytics chart, ensure that you have the followi
 Follow these steps to deploy the Identity Analytics helm chart:
 
 1. **Set kube-context**.
-2. **Create Configuration File**:  
+2. **Create Configuration File**:
 
 Create a file named `env01.values.yaml` with the following properties:
 
@@ -247,7 +247,7 @@ Ensure that the pod named `portal-0` is up and running.
 
 After successful deployment of the Helm chart, you will find the following information in your terminal:
 
-- URLs of services, initial username, and instructions on how to retrieve initial credentials.  
+- URLs of services, initial username, and instructions on how to retrieve initial credentials.
 
 Open a browser and connect to the Identity Analytics service using the retrieved credentials.
 
@@ -275,8 +275,7 @@ etcd:
       memory: 512Mi
     persistence:
       size: 32Gi
-:
-  storage: 32Gi
+: storage: 32Gi
 cnpg:
   resources:
     limits:
@@ -473,12 +472,12 @@ helm upgrade --install rlss \
   --values shared-minimal.values.yaml
 ```
 
-> [!warning] when upgrading the shared service is can be required to perform additional actions BEFORE performing the `helm upgrade --install` command above:  
+> [!warning] when upgrading the shared service is can be required to perform additional actions BEFORE performing the `helm upgrade --install` command above:
 >
 > ```sh
 > kubectl scale deploy --replicas 0 --namespace ${SHARED_NAMESPACE} --selector "app.kubernetes.io/instance=${SHARED_RELEASE_NAME}"
 > kubectl delete deploy --namespace ${SHARED_NAMESPACE} --selector "app.kubernetes.io/instance=${SHARED_RELEASE_NAME}"
-> 
+>
 > kubectl scale sts --replicas 0 --namespace ${SHARED_NAMESPACE} --selector "app.kubernetes.io/instance=${SHARED_RELEASE_NAME}"
 > kubectl delete sts --namespace ${SHARED_NAMESPACE} --selector "app.kubernetes.io/instance=${SHARED_RELEASE_NAME}"
 > ```
@@ -509,17 +508,17 @@ The steps listed here are meant to help you identify and troubleshoot issues rel
 
    This command lists events in the specified namespace, helping to identify any issues related to pod deployment.
 
-     ```bash
-     kubectl get events -n <namespace>
-      ```
+   ```bash
+   kubectl get events -n <namespace>
+   ```
 
-3. **Describe a specific pod**
+2. **Describe a specific pod**
 
    This command provides detailed information about the pod, including its status, conditions, and any errors that might be affecting its deployment.
 
-     ```bash
-     kubectl describe pods/fid-0 -n <namespace>
-     ```
+   ```bash
+   kubectl describe pods/fid-0 -n <namespace>
+   ```
 
 ## Deleting Identity Analytics chart
 
@@ -527,23 +526,23 @@ If you would like to uninstall Identity Analytics, you may do so by following th
 
 1. **Uninstall Identity Analytics**:
 
-    ```bash
-    helm uninstall rlia \
-      --namespace <IDA_NAMESPACE> \
-      --ignore-not-found \
-      --wait
-    ```
+   ```bash
+   helm uninstall rlia \
+     --namespace <IDA_NAMESPACE> \
+     --ignore-not-found \
+     --wait
+   ```
 
 2. **Check for any remaining Persistent Volume Claims (PVCs)**:
 
-    ```bash
-    kubectl get pvc \
-      --namespace <IDA_NAMESPACE> \
-      --selector app.kubernetes.io/instance=rlia
-    ```
+   ```bash
+   kubectl get pvc \
+     --namespace <IDA_NAMESPACE> \
+     --selector app.kubernetes.io/instance=rlia
+   ```
 
-  Delete if necessary to free up space:
-  
+Delete if necessary to free up space:
+
     ```bash
       kubectl delete pvc \
         --namespace <IDA_NAMESPACE> \
@@ -552,11 +551,11 @@ If you would like to uninstall Identity Analytics, you may do so by following th
 
 3. **Delete existing namespace**:
 
-    You may choose to delete the namespace used for Identity Analytics:
-    
-    ```bash
-    kubectl delete namespace <IDA_NAMESPACE>
-    ```
+   You may choose to delete the namespace used for Identity Analytics:
+
+   ```bash
+   kubectl delete namespace <IDA_NAMESPACE>
+   ```
 
 ## Deleting Shared Services chart
 
@@ -564,42 +563,42 @@ Do not uninstall Shared Services if the Identity Analytics instance is still dep
 
 1. **Uninstall Shared Services**:
 
-    ```bash
-    helm uninstall rlss \
-      --namespace <SHARED_NAMESPACE> \
-      --ignore-not-found \
-      --wait
-    ```
+   ```bash
+   helm uninstall rlss \
+     --namespace <SHARED_NAMESPACE> \
+     --ignore-not-found \
+     --wait
+   ```
 
 2. **Check for any remaining PVCs**:
 
-    Depending on your PVC retention policy, persistent volumes may not be deleted. Verify by running:
+   Depending on your PVC retention policy, persistent volumes may not be deleted. Verify by running:
 
-    ```bash
-    kubectl get pvc \
-      --namespace <SHARED_NAMESPACE> \
-      --selector app.kubernetes.io/instance=rlss
-    ```
+   ```bash
+   kubectl get pvc \
+     --namespace <SHARED_NAMESPACE> \
+     --selector app.kubernetes.io/instance=rlss
+   ```
 
-    If any PVCs are present, delete them:
+   If any PVCs are present, delete them:
 
-    ```bash
-    kubectl delete pvc --namespace <IDA_NAMESPACE> <PVC_NAME>
-    ```
+   ```bash
+   kubectl delete pvc --namespace <IDA_NAMESPACE> <PVC_NAME>
+   ```
 
 3. **Delete namespace**:
 
-    You may choose to delete the namespace used for Shared Services:
+   You may choose to delete the namespace used for Shared Services:
 
-    ```bash
-    kubectl delete namespace <SHARED_NAMESPACE>
-    ```
+   ```bash
+   kubectl delete namespace <SHARED_NAMESPACE>
+   ```
 
 4. **Remove CRDs**:
 
-    Delete all CRDs installed by Shared Services:
+   Delete all CRDs installed by Shared Services:
 
-    ```bash
-    helm show crds oci://docker.io/radiantone/ida-shared-helm \
-      --version <SHARED_CHART_VERSION> | kubectl delete -f -
-    ```
+   ```bash
+   helm show crds oci://docker.io/radiantone/ida-shared-helm \
+     --version <SHARED_CHART_VERSION> | kubectl delete -f -
+   ```
