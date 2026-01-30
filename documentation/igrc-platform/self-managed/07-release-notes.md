@@ -2,6 +2,16 @@
 
 Please find below the release notes for Identity Analytics in self-managed. For more information on the contents of the project please refer to Identity Analytics user guides.
 
+## Version 3.5
+
+- **BWIPUAR-2419** – Updated Git Sync in self-managed mode to let users select alternative authentication methods.
+- **BWIPUAR-2433** – Resolved an issue preventing Identity Data Management credentials from being saved in configuration.
+- **BWIPUAR-2446** – Added support for adding custom labels to all ida-helm components in self-managed deployments.
+- **BWIPUAR-2452** – Corrected an issue that prevented users from renaming the technical configuration on the batch configuration page.
+- **BWIPUAR-2507** – Enhanced self-managed deployments to allow greater customization of Ingress parameters.
+- **BWIPUAR-2523** – Fixed a problem where sample installations on OpenShift could fail.
+- **BWIPUAR-2522** – Added support for bearer token authentication when connecting to AWS Bedrock.
+
 ## Version 3.4
 
 - **BWIPUAR-2278:** [Packaging] Saving Project Mashup Dashboard in SaaS

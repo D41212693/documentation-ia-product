@@ -5,6 +5,12 @@ description: Descartes R5 Release Notes
 
 # Release Notes Descartes R5
 
+## Version Descartes R5 SP8
+
+### Bug fixes
+
+- **IGRC-4855** some trawpermlinkreview are not renewed on next timeslot
+
 ## Version Descartes R5 SP7
 
 ### New Features
@@ -20,11 +26,10 @@ description: Descartes R5 Release Notes
 - **COL-1659:** Renew reconciliations can get stuck. You can now independently disable history searches during reconciliation renewals with new Java options. This helps prevent issues where renewals get stuck.
   - `-Ddisablereconsearchinhistoryforleavers=true`
     Disable the search of identities in history when renewing a 'leave' reconciliation.
-    When a 'leave' reconciliation exists in the previous timeslot, the product tries to find the latest reconciliation in the history to        find the identity and renew this one if the identity exists in the current timeslot.
+    When a 'leave' reconciliation exists in the previous timeslot, the product tries to find the latest reconciliation in the history to find the identity and renew this one if the identity exists in the current timeslot.
   - `-Ddisablereconsearchinhistoryfororphans=true`
     Disable the search of reconciliation in history when renewing an 'orphan' reconciliation.
-    When no reconciliation is found for an account in the previous timeslot, the product tries to find the latest reconciliation in the         history to renew it (either identity or service reconciliation) in the current timeslot.
-    
+    When no reconciliation is found for an account in the previous timeslot, the product tries to find the latest reconciliation in the history to renew it (either identity or service reconciliation) in the current timeslot.
 - **COL-1675:** Portal freeze after launching background tasks
 - **COL-1693:** Anonymous Birt reports don't work on Descartes R5 SP5
 
