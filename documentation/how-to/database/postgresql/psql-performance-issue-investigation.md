@@ -60,8 +60,9 @@ WHERE (now() - pg_stat_activity.query_start) > interval '5 minutes' and state = 
 
 All scripts are available for download at the following links:
 
-- [DBCheck_PostgreSQL_V10.sql](../postgresql/assets/DBCheck_PostgreSQL_v10.sql)  
-- [DBCheck_PostgreSQL_V9.sql](../postgresql/assets/DBCheck_PostgreSQL_v9.sql)  
-- [DBCheck_PostgreSQL_V8.sql](../postgresql/assets/DBCheck_PostgreSQL_v8.sql)
+- [DBCheck_PostgreSQL_V10.sql](../postgresql/assets/DBCheck_PostgreSQL_v10/)  
+- [DBCheck_PostgreSQL_V9.sql](../postgresql/assets/DBCheck_PostgreSQL_v9/)  
+- [DBCheck_PostgreSQL_V8.sql](../postgresql/assets/DBCheck_PostgreSQL_v8/)
+
 
 
