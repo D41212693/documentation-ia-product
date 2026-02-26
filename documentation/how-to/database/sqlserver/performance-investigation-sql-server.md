@@ -55,6 +55,6 @@ Save the results to an output file and send all to the Radiant Logic support tea
 All files are available for download in the following links:
 
 - [BrainwavePerformanceAnalysisTemplate.xlsx](https://download.brainwavegrc.com/index.php/s/YMJY53CFXTqgiF7)
-- [CheckDB_SQLServer_V15.sql](./sqlserver/assets/CheckDB_SQLServer_v15.sql)
-- [CheckDB_SQLServer_V16.sql](./sqlserver/assets/CheckDB_SQLServer_v16.sql)
+- [CheckDB_SQLServer_V15.sql](./assets/CheckDB_SQLServer_v15.sql)
+- [CheckDB_SQLServer_V16.sql](./assets/CheckDB_SQLServer_v16.sql)
 - [SQLServer_iGRC_Schema.sql](https://download.brainwavegrc.com/index.php/s/kY4CfAQsR9gS3QA)
