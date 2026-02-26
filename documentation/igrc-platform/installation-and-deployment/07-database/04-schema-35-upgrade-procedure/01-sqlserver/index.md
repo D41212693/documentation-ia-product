@@ -126,14 +126,14 @@ Depending on the version of the script displayed after the previous SQL request,
 
 |                                       Script                                        |
 |:-----------------------------------------------------------------------------------:|
-|         [mssql\_2017R2\_to\_Curie.sql](mssql_2017R2_to_Curie.sql)         |
-|         [mssql\_2017R3\_to\_Curie.sql](mssql_2017R3_to_Curie.sql)         |
-|         [mssql\_AderR1\_to\_Curie.sql](mssql_AderR1_to_Curie.sql)         |
-|      [mssql\_BrailleR1\_to\_Curie.sql](mssql_BrailleR1_to_Curie.sql)      |
-|    [mssql\_noml\_2017R2\_to\_Curie.sql](mssql_noml_2017R2_to_Curie.sql)    |
-|    [mssql\_noml\_2017R3\_to\_Curie.sql](mssql_noml_2017R3_to_Curie.sql)    |
-|    [mssql\_noml\_AderR1\_to\_Curie.sql](mssql_noml_AderR1_to_Curie.sql)    |
-| [mssql\_noml\_BrailleR1\_to\_Curie.sql](mssql_noml_BrailleR1_to_Curie.sql) |
+|         [mssql\_2017R2\_to\_Curie.sql](mssql_2017R2_to_Curie)         |
+|         [mssql\_2017R3\_to\_Curie.sql](mssql_2017R3_to_Curie)         |
+|         [mssql\_AderR1\_to\_Curie.sql](mssql_AderR1_to_Curie)         |
+|      [mssql\_BrailleR1\_to\_Curie.sql](mssql_BrailleR1_to_Curie)      |
+|    [mssql\_noml\_2017R2\_to\_Curie.sql](mssql_noml_2017R2_to_Curie)    |
+|    [mssql\_noml\_2017R3\_to\_Curie.sql](mssql_noml_2017R3_to_Curie)    |
+|    [mssql\_noml\_AderR1\_to\_Curie.sql](mssql_noml_AderR1_to_Curie)    |
+| [mssql\_noml\_BrailleR1\_to\_Curie.sql](mssql_noml_BrailleR1_to_Curie) |
 
 ### Execute the script
 
@@ -212,7 +212,7 @@ GROUP BY
 ORDER BY t.name ASC;
 ```
 
-In CURIE R1, and without project/custom indexes, this request should return [this result](./assets/bw_sq bw_sqlserver_CURIE_R1_indexes_number_per_table_aggregation.csv) if the CURIE R1 upgrade successfully worked.
+In CURIE R1, and without project/custom indexes, this request should return [this result](./assets/bw_sq bw_sqlserver_CURIE_R1_indexes_number_per_table_aggregation) if the CURIE R1 upgrade successfully worked.
 
 ### Lingual mode
 

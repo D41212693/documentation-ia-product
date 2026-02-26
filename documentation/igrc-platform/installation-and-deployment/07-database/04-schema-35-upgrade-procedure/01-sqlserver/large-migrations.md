@@ -30,15 +30,15 @@ The scripts to download are available for download only for Braille and SQL serv
 
 |       Multilingual - mssql       |
 | :------------------------------: |
-| [STEP1.sql](STEP1.sql) |
-| [STEP2.sql](STEP2.sql) |
-| [STEP4.sql](STEP4.sql) |
+| [STEP1.sql](STEP1) |
+| [STEP2.sql](STEP2) |
+| [STEP4.sql](STEP4) |
 
 |          Monolingual - mssql noml           |
 | :-----------------------------------------: |
-| [STEP1\_noml.sql](STEP1_noml.sql) |
-| [STEP2\_noml.sql](STEP2_noml.sql) |
-| [STEP4\_noml.sql](STEP4_noml.sql) |
+| [STEP1\_noml.sql](STEP1_noml) |
+| [STEP2\_noml.sql](STEP2_noml) |
+| [STEP4\_noml.sql](STEP4_noml) |
 
 ## Upgrade procedure
 
@@ -151,4 +151,4 @@ GROUP BY
 ORDER BY t.name ASC;
 ```
 
-In CURIE R1, and without project indexes, this request should return [this result](.assets/bw_sqlserver_CURIE_R1_indexes_number_per_table_aggregation.csv) if the CURIE R1 upgrade successfully worked.  
+In CURIE R1, and without project indexes, this request should return [this result](.assets/bw_sqlserver_CURIE_R1_indexes_number_per_table_aggregation) if the CURIE R1 upgrade successfully worked.  

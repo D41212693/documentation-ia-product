@@ -122,7 +122,7 @@ catalina jpda start
 
 ## Download file
 
-[com.brainwave.theme.template.skin_css.zip](./zip/com.brainwave.theme.template.skin_css.zip)  
+[com.brainwave.theme.template.skin_css.zip](./zip/com.brainwave.theme.template.skin_css)  
 
 ## Interface IPortalSkin
 

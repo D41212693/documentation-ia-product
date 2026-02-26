@@ -20,7 +20,7 @@ The following configuration has been validated:
 
 ## Pre-requisites
 
-First step is to download [this archive](./attachments/http_headers_configuration.zip) in the Web Server (i.e. the server that hosts the iGRC webapp).
+First step is to download [this archive](./attachments/http_headers_configuration) in the Web Server (i.e. the server that hosts the iGRC webapp).
 
 The archive contains:
 
@@ -143,5 +143,5 @@ Ensure the Tomcat is listening only on localhost and reachable only from Apache 
 
 ## Downloads
 
-[http_headers_configuration.zip](./attachments/http_headers_configuration.zip)
+[http_headers_configuration.zip](./attachments/http_headers_configuration)
 

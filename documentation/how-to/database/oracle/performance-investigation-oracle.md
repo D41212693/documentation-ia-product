@@ -24,7 +24,7 @@ An Oracle system account to retrieve all information as all parameters of databa
 
 The attached file include all the necessary scripts provided by Identity Analytics :
 
-- [DBCheck_Oracle_V5.zip](./assets/DBcheck_Oracle_v5.zip)
+- [DBCheck_Oracle_V5.zip](./assets/DBcheck_Oracle_v5)
 
 In order to run the provided SQL scripts it is necessary to :
 
