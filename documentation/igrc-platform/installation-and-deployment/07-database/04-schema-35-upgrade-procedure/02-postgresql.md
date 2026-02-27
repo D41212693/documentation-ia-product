@@ -57,10 +57,10 @@ Depending on the version of the script displayed after the previous SQL request 
 
 |                                        Script                                         |
 | :-----------------------------------------------------------------------------------: |
-|   [postgresql\_2017R2\_to\_Curie.sql](./sqlscripts/postgresql_2017R2_to_Curie)    |
-|   [postgresql\_2017R3\_to\_Curie.sql](./sqlscripts/postgresql_2017R3_to_Curie)    |
-|   [postgresql\_AderR1\_to\_Curie.sql](./sqlscripts/postgresql_AderR1_to_Curie)    |
-| [postgresql\_BrailleR1\_to_Curie.sql](./sqlscripts/postgresql_BrailleR1_to_Curie) |
+|   [postgresql\_2017R2\_to\_Curie.sql](./sqlscripts/postgresql_2017R2_to_Curie.sql)    |
+|   [postgresql\_2017R3\_to\_Curie.sql](./sqlscripts/postgresql_2017R3_to_Curie.sql)    |
+|   [postgresql\_AderR1\_to\_Curie.sql](./sqlscripts/postgresql_AderR1_to_Curie.sql)    |
+| [postgresql\_BrailleR1\_to_Curie.sql](./sqlscripts/postgresql_BrailleR1_to_Curie.sql) |
 
 ### Execute the script
 
@@ -131,4 +131,4 @@ GROUP BY name
 ORDER BY name ASC;
 ```
 
-In CURIE R1, and without project indexes, this request should return [this result](./assets/bw_postgresql_CURIE_R1_indexes_number_per_table_aggregation) if the CURIE R1 upgrade successfully worked.
+In CURIE R1, and without project indexes, this request should return [this result](./assets/bw_postgresql_CURIE_R1_indexes_number_per_table_aggregation.csv) if the CURIE R1 upgrade successfully worked.
