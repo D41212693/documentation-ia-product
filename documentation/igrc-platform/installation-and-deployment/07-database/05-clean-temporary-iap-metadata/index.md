@@ -42,7 +42,7 @@ Please download the correct script from the following list according to your req
 
 |                               Script                                |
 | :-----------------------------------------------------------------: |
-|     [oracle](./sqlscript/orcl_clean_IAP_temporary_metadata.sql)     |
+|     [oracle](../../../../../documentation/igrc-platform/installation-and-deployment/07-database/05-clean-temporary-iap-metadata/sqlscript/orcl_clean_IAP_temporary_metadata.sql)     |
 |    [postgresql](./sqlscript/pg_clean_IAP_temporary_metadata.sql)    |
 | [sqlserver](./sqlscript/sqlserver_clean_IAP_temporary_metadata.sql) |
 
