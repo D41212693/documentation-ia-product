@@ -105,18 +105,18 @@ The following endpoints are available:
 
 #### Breaking change for version 3.5.1 & newer
 
-The previous catch-all `/api/` route (version <= **3.5.0** ) has been renamed to `/api/views/` (version >= **3.5.1**).  
-Existing calls must be updated accordingly.
-
-For example:
-
-> GET /api/my-view-name
-
-Must **be changed** to:
-
-> GET /api/views/my-view-name
-
-Only the `views` endpoint was available for version `3.5.0` & older.
+> [!warning] The previous catch-all `/api/` route (version <= **3.5.0** ) has been renamed to `/api/views/` (version >= **3.5.1**).  
+> Existing calls must be updated accordingly.
+>
+> For example:
+> 
+> `GET /api/my-view-name`
+>
+> Must **be changed** to:
+>
+> `GET /api/views/my-view-name`
+>
+> Only the `views` endpoint was available for version `3.5.0` & older.
 
 #### View results (/api/views/)
 
@@ -125,7 +125,7 @@ You can call a view to get data from the database.
 Sample curl call:
 
 ```bash
-curl -H "Authorization: Bearer $TOKEN" "https://ida.example.com/api/views/<view-name>"
+curl -H "Authorization: Bearer $TOKEN" "https://<EXTERNAL_DNS>/<CONTEXT>/api/views/<view-name>"
 ```
 
 Where `view-name` is the view identifier in the project.
@@ -138,7 +138,7 @@ You can download the compliance report of a campaign.
 Sample curl call:
 
 ```bash
-curl -H "Authorization: Bearer $TOKEN" "https://ida.example.com/api/compliancereport/<campaignInstanceId>"
+curl -H "Authorization: Bearer $TOKEN" "https://<EXTERNAL_DNS>/<CONTEXT>/api/compliancereport/<campaignInstanceId>"
 ```
 
 Where `campaignInstanceId` is the campaign's unique identifier (its ticketlog recorduid).
@@ -161,7 +161,7 @@ Sample curl call:
 
 ```bash
 curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-  "https://ida.example.com/api/workflow/<workflowIdentifier>" -d '{...}'
+  "https://<EXTERNAL_DNS>/<CONTEXT>/api/workflow/<workflowIdentifier>" -d '{...}'
 ```
 
 Where `<workflowIdentifier>` is the workflow identifier in the project.
@@ -201,7 +201,7 @@ Sample curl call:
 
 ```bash
 curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-  "https://ida.example.com/api/workflow/terminate" -d '{...}'
+  "https://<EXTERNAL_DNS>/<CONTEXT>/api/workflow/terminate" -d '{...}'
 ```
 
 The body of the call must contain the following information:
