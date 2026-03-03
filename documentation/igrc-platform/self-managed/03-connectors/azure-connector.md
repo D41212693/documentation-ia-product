@@ -1,17 +1,17 @@
 ---
-title: Azure connector configuration
-description: Configuration of the Azure connector
+title: Azure Active Directory connector configuration
+description: Configuration of the Azure Active Directory connector
 ---
 
-# Azure connector configuration
+# Azure Active Directory (Entra ID) connector configuration
 
-This documentation describes how to use scripts provided by Identity Analytics to extract the objects (groups, accounts ...) from Azure Active Directory environments. The provided script `azureadmain.py` has been designed to simplify the data extraction to obtain the importfiles required for the Identity Analytics AD Azure add-on.
+This documentation describes how to use scripts provided by Identity Analytics to extract the objects (groups, accounts ...) from Azure Active Directory (now known as Entra ID) environments. The provided script `azureadmain.py` has been designed to simplify the data extraction to obtain the importfiles required for the Identity Analytics Azure Active Directory add-on.
 
 The script allows to extract the objects managed in Azure Active Directory such as users, groups, groups members and groups owners.  
 
 The extraction script is stored in `bwconnectors/azureadmain.py`
 
-## Azure configuration
+## Azure Active Directory Configuration
 
 To allow the extraction of data the registration of an application is necessary in Azure. We recommend the creation of a dedicated application for the Identity Analytics service.
 
