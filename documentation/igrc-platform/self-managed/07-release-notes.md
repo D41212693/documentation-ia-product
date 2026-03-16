@@ -2,6 +2,18 @@
 
 Please find below the release notes for Identity Analytics in self-managed. For more information on the contents of the project please refer to Identity Analytics user guides.
 
+See [vulnerability fixes](./08-vulnerability-fixes.md) for the list of fixed vulnerabilities in the images.
+
+## Version 3.5.1
+
+> See [Migration 3.5.1](./06-upgrade/migration-3.5.1.md)
+
+- **BWIPUAR-2563** – [Self-Managed] Allow to configure login page to directly redirect to a preconfigured IDP
+- **BWIPUAR-2562** – [Self-Managed] Access to /ws through authenticated client does not work as of 3.4.1
+- **BWIPUAR-2548** – [Self-Managed] Allow users to easily expand the data-recovery pod with a sidecar dedicated to downloading the export archive
+- **BWIPUAR-2581** – Add AIDA enabled flag
+- **BWIPUAR-2531** – [Self-Managed] data-recovery pod issues after 3.3.1
+
 ## Version 3.5
 
 - **BWIPUAR-2419** – Updated Git Sync in self-managed mode to let users select alternative authentication methods.
@@ -23,8 +35,6 @@ Please find below the release notes for Identity Analytics in self-managed. For 
 - **BWIPUAR-2382:** [AIDA] support of AIDA deployments for OpenShift
 
 ## Version 3.3.2
-
-Updated base images: see [vulnerability fixes](./08-vulnerability-fixes.md) for the full list.
 
 - **BWIPUAR-2264:** [Packaging] Link to the login page in the logout when SaaS deployment
 - **BWIPUAR-2424:** [AIDA] Identity Analytics Self-Managed with AWS Bedrock provided by the customer supported
