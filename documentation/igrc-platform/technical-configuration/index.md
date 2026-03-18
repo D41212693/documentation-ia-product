@@ -11,7 +11,7 @@ description: "The technical configuration description"
 
 This version makes a clear separation between the project configuration (shared by all technical environments) and many technical configurations (for each platform).
 
-The current technical configuration is now selected from the main menu. A project may have several configurations like DEV, TEST, UAT, PROD,... The name of the current configuration is stored in the local workspace (in metadata). When working in a team using GIT or SVN, the selection of a different configuration by one member does not alter any file in the project.  
+The current technical configuration is now selected from the main menu. A project may have several configurations like DEV, TEST, UAT, PROD,... The name of the current configuration is stored in the local workspace (in metadata). When working in a team using GIT or SVN, the selection of a different configuration by one member does not alter any file in the project.
 
 ![Studio configuration menu](./images/studio_config_menu.png "Studio configuration menu")
 
@@ -39,7 +39,7 @@ The legacy properties files (`datasource.properties`,`mail.properties`,...) may 
 
 ### JNDI datasource
 
-Now you can use a JNDI datasource. This means that the datasource to access the Identity Analytics database is declared in the Web container (like Tomcat) and not in `datasource.properties`. The icon is used to export a context.xml file to put in `conf/Catalina/localhost` folder inside Tomcat installation directory. Then this file should be renamed with the name of the webapp  
+Now you can use a JNDI datasource. This means that the datasource to access the Identity Analytics database is declared in the Web container (like Tomcat) and not in `datasource.properties`. The icon is used to export a context.xml file to put in `conf/Catalina/localhost` folder inside Tomcat installation directory. Then this file should be renamed with the name of the webapp
 
 ![Studio export the JNDI context file](./images/studio_config_jndi.png "Studio export the JNDI context file")
 
@@ -50,13 +50,13 @@ This configuration has the following benefits :
 
 ### WAR settings
 
-In the previous version, the only way to point to the studio project from the webapp was to edit the web.xml file. Now this is part of the configuration and you can use different options depending on the configuration (DEV, PROD,...)  
+In the previous version, the only way to point to the studio project from the webapp was to edit the web.xml file. Now this is part of the configuration and you can use different options depending on the configuration (DEV, PROD,...)
 
 ![Studio WAR file configuration](./images/studio_config_war.png "Studio WAR file configuration")
 
 ### Sandbox name template
 
-The name of the sandox can be changed in the configuration. This name will be used by the studio and the batch. This is a kind of template where the current date can be included. The product provides 6 date formats.  
+The name of the sandox can be changed in the configuration. This name will be used by the studio and the batch. This is a kind of template where the current date can be included. The product provides 6 date formats.
 
 ![Studio sandbox name configuration](./images/studio_config_sandbox.png "Studio sandbox name configuration")
 
@@ -66,14 +66,14 @@ To allow better customization of the project, configuration variables can be def
 
 To achieve this a dedicated file with extension `.configvariables` that will hold the definitions of your variables. This type of file has to be put in the `/configurations` folder of the project.
 
-To create such a file, simply choose the **Configuration variables** entry in the **New...** option of the main menu:  
+To create such a file, simply choose the **Configuration variables** entry in the **New...** option of the main menu:
 
 ![New configuration variable file](./images/new-config-var-menu.png "New configuration variable file")
 
 You will then access the configuration variables editor, which looks like this:
 
 Each variable has a name, a type, and a display name. Those display names will be used to explain what the variable stands for and what kind of value is expected.
-The typical value will be used as a default value if the variables are used to build a facet, otherwise it serves as an example that will be displayed when a value for the variable is prompted.  
+The typical value will be used as a default value if the variables are used to build a facet, otherwise it serves as an example that will be displayed when a value for the variable is prompted.
 
 ![Config variables](./images/configvariables.png "Config variables")
 
@@ -86,3 +86,25 @@ A much better name would be for instance `sharepoint_extraction_filename`, and e
 The only exception to this rule is if you use your variables to build a facet, in which case they will automatically be changed at facet installation to avoid conflicting names.
 
 As for the variables defined in the main project file, the variable values will have to be entered in the `Variables` tab of your configuration file(s).
+
+## Secure / encrypted configuration variables
+
+You might want to store sensitive information in configuration variables, like **tokens** and/or **passwords**.
+
+Any configuration variable which **name** contains `password` will be encrypted:
+
+- By the studio when you edit the variable value, directly in the `.configuration` file
+- By the portal or batch in the `.properties` files if the value is in clear text when read
+
+An encrypted variable value will look like this: `nomacro:{crypt2}xxxx`.
+
+### Encryption algorithm
+
+Encryption is performed as follows:
+
+- A 3-character **salt** is randomly generated.
+- This **salt** is combined with an hardcoded 128-bit encryption key.
+- The combined key is used to encrypt the password using **AES**.
+- The information stored in the variable value is the concatenation of the salt and the encrypted password.
+
+> The product **never generates the same encrypted** version of the password because the salt, which is randomly generated, **changes if the password is re-encrypted**.
