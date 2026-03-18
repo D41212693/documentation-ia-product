@@ -12,7 +12,7 @@ FIPS mode is enabled by default in Identity Analytics. Identity Analytics levera
 
 ## Safelogic CryptoComply GO Module
 
-The IDA configuration service has received FIPS certification with the Safelogic CryptoComply GO module. The certificate is available at: [FIPS Certificate](https://csrc.nist.gov/projects/cryptographic-module-validation-programtics application.
+The Identity Analytics Configuration Service is FIPS certified using the Radiant Logic Cryptographic Module for Go. The certificate is available at: [FIPS Certificate](https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4950). 
 
 ## KeyCloak FIPS
 
