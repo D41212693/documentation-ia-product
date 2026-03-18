@@ -1,88 +1,118 @@
 ---
-title: "The technical configuration"
-description: "The technical configuration description"
+title: "Technical configuration"
+description: "Technical configuration"
 ---
 
-# The technical configuration
+# Technical configuration
 
 ## Overview
 
-### Configuration selection
+This page covers how to manage project and technical configurations within the Studio environment, as well as how to securely encrypt sensitive configuration variables such as passwords and tokens. It explains how to select and edit configurations, define variables, and handle environment-specific settings like database connections, mail servers, execution plans, and WAR exports. You’ll also learn how to use JNDI datasources, customize sandbox names, and define your own configuration variables to better organize and adapt your project across multiple environments such as DEV, TEST, UAT, and PROD.
 
-This version makes a clear separation between the project configuration (shared by all technical environments) and many technical configurations (for each platform).
+### Configuration Selection
 
-The current technical configuration is now selected from the main menu. A project may have several configurations like DEV, TEST, UAT, PROD,... The name of the current configuration is stored in the local workspace (in metadata). When working in a team using GIT or SVN, the selection of a different configuration by one member does not alter any file in the project.  
+This version clearly distinguishes between a **project configuration** (shared across all technical environments) and multiple **technical configurations** (defined for each platform).
 
-![Studio configuration menu](./images/studio_config_menu.png "Studio configuration menu")
+The current technical configuration is selected from the **main menu**.  
+A single project can include multiple configurations—for example, **DEV**, **TEST**, **UAT**, and **PROD**.  
 
-### Configuration editor
+The name of the currently active configuration is stored in the **local workspace metadata**. When working as a team using **Git** or **SVN**, each member’s configuration selection is local and does **not** modify any project files.
 
-The configuration is a file with the extension `.configuration` in the new folder `configurations`. Now, when executing batch or running the portal, a configuration must be specified.
-![Studio configuration tabs](./images/studio_config_tabs.png "Studio configuration tabs")
 
-Each configuration file contains the following elements:
+### Configuration Editor
 
-- Values for project variables. The list of declared variables is still located in the project but the values are defined in each configuration
-- Database settings declared as usual (with datasource dialog box) or manually
-- Execution plan parameters (useful to test a new reconciliation policy on DEV without changing the execution plan settings for PROD)
-- List of silos to include in the execution plan
-- Mail server settings
-- Web portal configuration which contains what was available in the `config.properties` in the previous version
-- War export options
-- Workflow settings including calendar and database configuration
-- Mail from the batch
+Each configuration is stored as a `.configuration` file within the `configurations` folder.  
+When running a batch process or launching the portal, an explicit configuration must now be selected.
 
-### Properties export
 
-The legacy properties files (`datasource.properties`,`mail.properties`,...) may still be used to override some values. This icon lets you save these files with only the values usually overridden like database URL, login, password,...
-![Studio Export the configuration](./images/studio_config_export.png "Studio Export the configuration")
 
-### JNDI datasource
+Each configuration file includes:
 
-Now you can use a JNDI datasource. This means that the datasource to access the Identity Analytics database is declared in the Web container (like Tomcat) and not in `datasource.properties`. The icon is used to export a context.xml file to put in `conf/Catalina/localhost` folder inside Tomcat installation directory. Then this file should be renamed with the name of the webapp  
+- Values for **project variables**. (Variables remain declared in the project but get their specific values per configuration.)  
+- **Database settings**, defined as usual through the datasource dialog or manually.  
+- **Execution plan parameters** to test new policies (e.g., on DEV) without affecting other configurations like PROD.  
+- **Silo list** for inclusion in the execution plan.  
+- **Mail server** settings.  
+- **Web portal** configuration (replacing what used to be in `config.properties`).  
+- **WAR export** options.  
+- **Workflow** settings, including calendar and database setup.  
+- **Batch mail** settings.
 
-![Studio export the JNDI context file](./images/studio_config_jndi.png "Studio export the JNDI context file")
+### Properties Export
 
-This configuration has the following benefits :
+Legacy property files (such as `datasource.properties`, `mail.properties`, and others) can still be used to override specific values.  
+The export icon allows you to generate these files with only the commonly overridden entries, such as database URL, login, and password.
 
-- Possibility to use a connection pool with auto-reconnect feature
-- Database configuration is not in the war anymore
 
-### WAR settings
+### JNDI Datasource
 
-In the previous version, the only way to point to the studio project from the webapp was to edit the web.xml file. Now this is part of the configuration and you can use different options depending on the configuration (DEV, PROD,...)  
+You can now configure a **JNDI datasource**, meaning the connection to the Identity Analytics database is defined in the **web container** (e.g., Tomcat) instead of in `datasource.properties`.
 
-![Studio WAR file configuration](./images/studio_config_war.png "Studio WAR file configuration")
+Use the export icon to generate a `context.xml` file for placement in the `conf/Catalina/localhost` folder of your Tomcat installation. Rename this file to match your web application’s name.
 
-### Sandbox name template
 
-The name of the sandox can be changed in the configuration. This name will be used by the studio and the batch. This is a kind of template where the current date can be included. The product provides 6 date formats.  
+**Benefits:**
 
-![Studio sandbox name configuration](./images/studio_config_sandbox.png "Studio sandbox name configuration")
+- Enables connection pooling and automatic reconnect.  
+- Removes database configuration details from the deployed WAR.
 
-## Defining custom configuration variables
 
-To allow better customization of the project, configuration variables can be defined in the main project file, under the 'Project' tab, but this is not always convenient, as you might want to keep the variables defined for a specific purpose (the collection of an application, a workflow process, a facet, etc) separate from each other.
+### WAR Settings
 
-To achieve this a dedicated file with extension `.configvariables` that will hold the definitions of your variables. This type of file has to be put in the `/configurations` folder of the project.
+Previously, linking the web application to the Studio project required editing the `web.xml` file.  
+Now, this mapping is defined within the configuration itself, allowing you to use different parameters for each environment (e.g., DEV, TEST, PROD).
 
-To create such a file, simply choose the **Configuration variables** entry in the **New...** option of the main menu:  
 
-![New configuration variable file](./images/new-config-var-menu.png "New configuration variable file")
+### Sandbox Name Template
 
-You will then access the configuration variables editor, which looks like this:
+The **sandbox name** can be customized per configuration.  
+This name is applied both in the Studio and in batch processes and can include a date stamp.  
+The product supports **six date formats** for use in the template.
 
-Each variable has a name, a type, and a display name. Those display names will be used to explain what the variable stands for and what kind of value is expected.
-The typical value will be used as a default value if the variables are used to build a facet, otherwise it serves as an example that will be displayed when a value for the variable is prompted.  
 
-![Config variables](./images/configvariables.png "Config variables")
+## Defining Custom Configuration Variables
 
-**WARNING:** Please bear in mind that the name of the variable has to be unique in the project. It is therefore **strongly** advised to avoid names like the `filename` given in the above example, as it is:
+To improve flexibility, you can define additional **configuration variables** outside the main project file.  
+Although variables can still be created under the **Project** tab, dedicated configuration variable files help keep context-specific variables (for applications, workflows, facets, etc.) organized.
 
-1. Non descriptive
-2. Guaranteed to clash with another variable of the same name
+Create a new file with the `.configvariables` extension in the `configurations` folder.  
+To do this, select **New… → Configuration variables** from the main menu:
 
-A much better name would be for instance `sharepoint_extraction_filename`, and even better : `myvariables_sharepoint_extraction_filename`.
-The only exception to this rule is if you use your variables to build a facet, in which case they will automatically be changed at facet installation to avoid conflicting names.
 
-As for the variables defined in the main project file, the variable values will have to be entered in the `Variables` tab of your configuration file(s).
+This opens the **configuration variables editor**:
+
+Each variable includes a **name**, **type**, and **display name**.  
+Display names clarify the purpose and expected input for each variable.  
+Typical values serve as defaults (when used in facets) or as examples displayed during input prompts.
+
+> **Warning:** Each variable name must be **unique** within the project. Avoid generic names like `filename`, which can easily conflict with others.
+
+Good examples include:
+- `sharepoint_extraction_filename`  
+- `myvariables_sharepoint_extraction_filename`
+
+If variables are used to build facets, name conflicts are automatically resolved at facet installation.
+
+As with variables defined in the main project file, you can specify their values in the **Variables** tab within your configuration file(s).
+
+## Secure Encrypted Configuration Variables
+
+Sensitive credentials, such as **tokens** or **passwords**, can be safely stored as configuration variables.
+
+Any configuration variable whose **name** includes the word `password` is automatically encrypted in these scenarios:
+
+- In the **studio**, when you edit the variable’s value directly in the `.configuration` file.  
+- In the **portal** or **batch**, when the `.properties` files are read and any plaintext values are detected.
+
+Encrypted values follow this format: `nomacro:{crypt2}xxxx`
+
+### Encryption Algorithm
+
+Encryption works as follows:
+
+- A random **3-character salt** is generated.  
+- This salt is combined with a hardcoded **128-bit encryption key**.  
+- The combined key is used to encrypt the password using **AES**.  
+- The stored variable value is a concatenation of the salt and the encrypted password.
+
+> Because the salt is randomly generated each time, the **same password will never produce the same encrypted value** when re-encrypted.
