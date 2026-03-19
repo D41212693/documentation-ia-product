@@ -133,7 +133,7 @@ https://learn.microsoft.com/en-US/deployedge/microsoft-edge-support-lifecycle
 
 [^1]: As of version Braille, Oracle is only supported in the case of existing and deployed projects. In the case of a new project only Microsoft SQL server and PostgreSQL are supported.
 
-[^2]: all versions of java 17
+[^2]: All versions of java 17
 
 [^debianLTS]: Refer to Debian's official documentation for more information: https://wiki.debian.org/LTS
 
