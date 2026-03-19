@@ -44,7 +44,7 @@ Refer to the table below for details on the supported versions of Java.
 |     **Corretto 17**     |      **X**      |                  |                  |
 | **AdoptOpenJDK 17 LTS** |      **X**      |                  |                  |
 
-> **Note:** When downloading AdoptOpenJDK, ensure that you select the HotSpot JVM, as it is the only supported option.
+> When downloading AdoptOpenJDK, ensure that you select the HotSpot JVM, as it is the only supported option.
 
 ## Database Servers
 
