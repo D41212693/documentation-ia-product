@@ -6,23 +6,23 @@ description: "Certified Operating Environment for Identity Analytics"
 # Certified Operating Environment for Identity Analytics
 
 Following you will find the list of certified operating environments for Identity Analytics.  
-The following operating systems, databases and web browsers are valid for all versions of the Descartes major release.  
+The following operating systems, databases and web browsers are valid for all versions of the Descartes major release.
 
-## Operating Systems  
+## Operating Systems
 
 Operating Systems are Third Party Software not provided with Identity Analytics.
 Identity Analytics is composed of three main modules:
 
 - The studio (or back office)
-- The batch  
-- The web portal  
+- The batch
+- The web portal
 
 The OS support matrix is the following:
 
 | **OS**         | **Version**     | **Studio** | **Batch** | **Webportal** |
 | :------------- | :-------------- | :--------: | :-------: | :-----------: |
-| Windows        | 8               |   **X**    |   **X**   |     **X**     |
 | Windows        | 10              |   **X**    |   **X**   |     **X**     |
+| Windows        | 11              |   **X**    |   **X**   |     **X**     |
 | Windows server | 2012 R2         |   **X**    |   **X**   |     **X**     |
 | Windows server | 2016            |   **X**    |   **X**   |     **X**     |
 | Windows server | 2019            |   **X**    |   **X**   |     **X**     |
@@ -30,33 +30,33 @@ The OS support matrix is the following:
 | RHEL           | 9[^rhel9]       |            |   **X**   |     **X**     |
 | Debian         | LTS[^debianLTS] |            |   **X**   |     **X**     |
 
-Please see footnotes (links available in the above mentioned table) for more information on LTS versions.  
+Please see footnotes (links available in the above mentioned table) for more information on LTS versions.
 
-## Java development kits  
+## Java development kits
 
 Java development kits (JDK) are Third Party Software not provided with Identity Analytics.  
-Please see the following table for more information on the support version of JAVA :  
+Please see the following table for more information on the support version of JAVA :
 
-|                         | **Windows[^2]** |  **Linux  RHEL 9**  |  **Linux  Debian**  |
-| :---------------------: | :-------------: | :-----------------: | :-----------------: |
-|   **Java SE JDK 17**    |      **X**      |                     |                     |
-|     **Open JDK 17**     |                 |        **X**        |        **X**        |
-|     **Corretto 17**     |      **X**      |                     |                     |
-| **AdoptOpenJDK 17 LTS** |      **X**      |                     |                     |
+|                         | **Windows[^2]** | **Linux RHEL 9** | **Linux Debian** |
+| :---------------------: | :-------------: | :--------------: | :--------------: |
+|   **Java SE JDK 17**    |      **X**      |                  |                  |
+|     **Open JDK 17**     |                 |      **X**       |      **X**       |
+|     **Corretto 17**     |      **X**      |                  |                  |
+| **AdoptOpenJDK 17 LTS** |      **X**      |                  |                  |
 
-> **Note:** When downloading AdoptOpenJDK only the HotSpot JVM is supported  
+> **Note:** When downloading AdoptOpenJDK only the HotSpot JVM is supported
 
 ## Database Servers
 
-Database servers are Third Party Software not provided with Identity Analytics.  
+Database servers are Third Party Software not provided with Identity Analytics.
 
-The following database servers are supported by Identity Analytics:  
+The following database servers are supported by Identity Analytics:
 
 - Microsofts SQL server
 - PostgreSQL
 - Oracle[^1]
 
-The database certified support matrix, per operating systems, is as follows:  
+The database certified support matrix, per operating systems, is as follows:
 
 ### Windows environment
 
@@ -65,24 +65,24 @@ The database certified support matrix, per operating systems, is as follows:
 | Microsoft SQL server | 2014        |     **X**     |               |         **X**          |                         |                         |                         |
 | Microsoft SQL server | 2016        |               |               |         **X**          |          **X**          |                         |                         |
 | Microsoft SQL server | 2017        |               |               |                        |          **X**          |                         |                         |
-| Microsoft SQL server | 2019        |               | **X**         |                        |                         |          **X**          |                         |
-| Microsoft SQL server | 2022        |               | **X**         |                        |                         |          **X**          |          **X**          |
-| Oracle[^1]           | 19c         |     **X**     | **X**         |         **X**          |                         |                         |          **X**          |
+| Microsoft SQL server | 2019        |               |     **X**     |                        |                         |          **X**          |                         |
+| Microsoft SQL server | 2022        |               |     **X**     |                        |                         |          **X**          |          **X**          |
+| Oracle[^1]           | 19c         |     **X**     |     **X**     |         **X**          |                         |                         |          **X**          |
 
 ### Linux environment
 
-| **Database**         | **Version** | **RHEL 9** | **Debian** |
-| :------------------- | :---------- | :--------: | :--------: |
-| PostgreSQL           | 13          |   **X**    |   **X**    |
-| PostgreSQL           | 14          |   **X**    |   **X**    |
-| PostgreSQL           | 15          |   **X**    |   **X**    |
-| PostgreSQL           | 16          |   **X**    |   **X**    |
-| PostgreSQL           | 17          |   **X**    |   **X**    |
-| Oracle[^1]           | 19c         |   **X**    |            |
+| **Database** | **Version** | **RHEL 9** | **Debian** |
+| :----------- | :---------- | :--------: | :--------: |
+| PostgreSQL   | 13          |   **X**    |   **X**    |
+| PostgreSQL   | 14          |   **X**    |   **X**    |
+| PostgreSQL   | 15          |   **X**    |   **X**    |
+| PostgreSQL   | 16          |   **X**    |   **X**    |
+| PostgreSQL   | 17          |   **X**    |   **X**    |
+| Oracle[^1]   | 19c         |   **X**    |            |
 
 > [!warning] Please note that oracle is only supported in the case of existing and deployed projects. In the case of a new project only Microsoft SQL server and PostgreSQL are supported.
 
-Please navigate each RMDS support lifecycle for more information:  
+Please navigate each RMDS support lifecycle for more information:
 
 - [postgres](https://www.postgresql.org/support/versioning/)
 - [Microsoft SQL server](https://learn.microsoft.com/en-us/lifecycle/products/?terms=sql%20server)
@@ -90,18 +90,18 @@ Please navigate each RMDS support lifecycle for more information:
 
 > [!warning] Please retrieve the PostgreSQL version for the target distribution. Do NOT recompile the PostgreSQL kernel.
 
-## Database drivers  
+## Database drivers
 
 The used database drivers must be compatible with the corresponding version of JAVA used:  
-The following database drivers have been certified with Identity Analytics:  
+The following database drivers have been certified with Identity Analytics:
 
 - `mssql-jdbc-11.2.1.jre17.jar` and `mssql-jdbc-12.2.0.jre11.jar`
 - `ojdbc11.jar`
 - `postgresql-42.5.1`
 
-> If using an oracle JDBC driver please download the correct driver in accordance to the version of the database engine used. Please see [here](https://www.oracle.com/fr/database/technologies/appdev/jdbc-downloads.html) for more information.  
+> If using an oracle JDBC driver please download the correct driver in accordance to the version of the database engine used. Please see [here](https://www.oracle.com/fr/database/technologies/appdev/jdbc-downloads.html) for more information.
 
-> [!warning] Oracle's OCI driver is not supported by Identity Analytics.  
+> [!warning] Oracle's OCI driver is not supported by Identity Analytics.
 
 Oracle and Microsoft SQL JDBC drivers are Third Party Software not provided with Identity Analytics.
 Please refer to the following pages for information on how to download and install the drivers :
@@ -112,16 +112,16 @@ Please refer to the following pages for information on how to download and insta
 ## Java Application Server
 
 The Java Application Server is Third Party Software not provided with Identity Analytics.  
-Apache Tomcat 9.0 (all Operating Systems) is the only application server supported by Identity Analytics.  
+Apache Tomcat 9.0 (all Operating Systems) is the only application server supported by Identity Analytics.
 
 ## Web browsers
 
-Web Browsers are the only web browsers supported by Identity Analytics are the "long term support" or the "For work" versions. As such, following you will find the list of the supported web browsers.  
+Web Browsers are the only web browsers supported by Identity Analytics are the "long term support" or the "For work" versions. As such, following you will find the list of the supported web browsers.
 
 ### Firefox
 
 The current version of Firefox ESR is supported (Extended Support Release). For more information please refer to the following link:  
-https://www.mozilla.org/en-US/firefox/enterprise/  
+https://www.mozilla.org/en-US/firefox/enterprise/
 
 ### Chrome
 
