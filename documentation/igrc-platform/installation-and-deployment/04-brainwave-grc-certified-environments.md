@@ -36,7 +36,6 @@ Please see footnotes (links available in the above mentioned table) for more inf
 Java Development Kits (JDKs) are third‑party components and are not included with Identity Analytics.
 Refer to the table below for details on the supported versions of Java.
 
-
 |                         | **Windows[^2]** | **Linux RHEL 9** | **Linux Debian** |
 | :---------------------: | :-------------: | :--------------: | :--------------: |
 |   **Java SE JDK 17**    |      **X**      |                  |                  |
@@ -65,6 +64,7 @@ The database support matrix, organized by operating system, is provided below.
 | Microsoft SQL server | 2017        |               |               |                        |          **X**          |                         |                         |
 | Microsoft SQL server | 2019        |               |     **X**     |                        |                         |          **X**          |                         |
 | Microsoft SQL server | 2022        |               |     **X**     |                        |                         |          **X**          |          **X**          |
+| Microsoft SQL server | 2025        |               |     **X**     |                        |                         |          **X**          |          **X**          |
 | Oracle[^1]           | 19c         |     **X**     |     **X**     |         **X**          |                         |                         |          **X**          |
 
 ### Linux environment
@@ -82,20 +82,19 @@ The database support matrix, organized by operating system, is provided below.
 
 For more information, refer to the official RMDS support lifecycles:
 
-- [postgres](https://www.postgresql.org/support/versioning/)
-- [Microsoft SQL server](https://learn.microsoft.com/en-us/lifecycle/products/?terms=sql%20server)
-- [Oracle](https://endoflife.date/oracle-database)
+* [postgres](https://www.postgresql.org/support/versioning/)
+* [Microsoft SQL server](https://learn.microsoft.com/en-us/lifecycle/products/?terms=sql%20server)
+* [Oracle](https://endoflife.date/oracle-database)
 
 > [!warning] Retrieve the PostgreSQL version corresponding to your target distribution. Do not recompile the PostgreSQL kernel.
-
 
 ## Database drivers
 
 The database drivers used must be compatible with the version of Java in use. The following drivers have been certified with Identity Analytics:
 
-- `mssql-jdbc-11.2.1.jre17.jar` and `mssql-jdbc-12.2.0.jre11.jar`
-- `ojdbc11.jar`
-- `postgresql-42.5.1`
+* `mssql-jdbc-11.2.1.jre17.jar` and `mssql-jdbc-12.2.0.jre11.jar`
+* `ojdbc11.jar`
+* `postgresql-42.5.1`
 
 > If you are using an Oracle JDBC driver, download the version that matches your database engine. More details are available [here](https://www.oracle.com/fr/database/technologies/appdev/jdbc-downloads.html).
 
@@ -104,8 +103,8 @@ The database drivers used must be compatible with the version of Java in use. Th
 Oracle and Microsoft SQL Server JDBC drivers are third‑party components and are not included with Identity Analytics.
 For installation instructions, refer to the following guides:
 
-- [How-To install and use Microsoft SQL server official driver](../../how-to/database/sqlserver/install-sqlserver-driver.md)
-- [How-to install and use the official Oracle database driver](../../how-to/database/oracle/install-orcl-driver.md)
+* [How-To install and use Microsoft SQL server official driver](../../how-to/database/sqlserver/install-sqlserver-driver.md)
+* [How-to install and use the official Oracle database driver](../../how-to/database/oracle/install-orcl-driver.md)
 
 ## Java Application Server
 
@@ -118,23 +117,23 @@ Identity Analytics supports only long-term support (LTS) or business editions of
 ### Firefox
 
 The current version of Firefox ESR is supported (Extended Support Release). For more information, refer to the following link:  
-https://www.mozilla.org/en-US/firefox/enterprise/
+<https://www.mozilla.org/en-US/firefox/enterprise/>
 
 ### Chrome
 
-The supported version of chrome is the current version of the Chrome Browser for Businesses. Read the following document for more information: https://chromeenterprise.google/
+The supported version of chrome is the current version of the Chrome Browser for Businesses. Read the following document for more information: <https://chromeenterprise.google/>
 
 ### Microsoft Edge
 
-Refer to Microsoft’s official Edge support lifecycle documentation: 
-https://learn.microsoft.com/en-US/deployedge/microsoft-edge-support-lifecycle
+Refer to Microsoft’s official Edge support lifecycle documentation:
+<https://learn.microsoft.com/en-US/deployedge/microsoft-edge-support-lifecycle>
 
-> Internet explorer is no longer recommended. Refer to: https://techcommunity.microsoft.com/t5/Windows-IT-Pro-Blog/The-perils-of-using-Internet-Explorer-as-your-default-browser/ba-p/331732
+> Internet explorer is no longer recommended. Refer to: <https://techcommunity.microsoft.com/t5/Windows-IT-Pro-Blog/The-perils-of-using-Internet-Explorer-as-your-default-browser/ba-p/331732>
 
 [^1]: As of version Braille, Oracle is only supported in the case of existing and deployed projects. In the case of a new project only Microsoft SQL server and PostgreSQL are supported.
 
 [^2]: All versions of java 17
 
-[^debianLTS]: Refer to Debian's official documentation for more information: https://wiki.debian.org/LTS
+[^debianLTS]: Refer to Debian's official documentation for more information: <https://wiki.debian.org/LTS>
 
-[^rhel9]: Refer to Red Hat's official documentation for more information: https://access.redhat.com/support/policy/updates/errata#Maintenance_Support_2_Phase
+[^rhel9]: Refer to Red Hat's official documentation for more information: <https://access.redhat.com/support/policy/updates/errata#Maintenance_Support_2_Phase>
