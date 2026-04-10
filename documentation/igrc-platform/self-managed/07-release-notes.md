@@ -2,9 +2,11 @@
 
 Please find below the release notes for Identity Analytics in self-managed. For more information on the contents of the project please refer to Identity Analytics user guides.
 
-See [vulnerability fixes](./08-vulnerability-fixes.md) for the list of fixed vulnerabilities in the images.
+See [vulnerability fixes](./08-vulnerability-fixes.md) for the full list patch versions with fixed vulnerabilities in the images.
 
 ## Version 3.5.1
+
+Release date: 2026 March 13
 
 > See [Migration 3.5.1](./06-upgrade/migration-3.5.1.md)
 
@@ -16,6 +18,8 @@ See [vulnerability fixes](./08-vulnerability-fixes.md) for the list of fixed vul
 
 ## Version 3.5
 
+Release date: 2026 February 04
+
 - **BWIPUAR-2419** – Updated Git Sync in self-managed mode to let users select alternative authentication methods.
 - **BWIPUAR-2433** – Resolved an issue preventing Identity Data Management credentials from being saved in configuration.
 - **BWIPUAR-2446** – Added support for adding custom labels to all ida-helm components in self-managed deployments.
@@ -25,6 +29,8 @@ See [vulnerability fixes](./08-vulnerability-fixes.md) for the list of fixed vul
 - **BWIPUAR-2522** – Added support for bearer token authentication when connecting to AWS Bedrock.
 
 ## Version 3.4
+
+Release date: 2025 September 30
 
 - **BWIPUAR-2278:** [Packaging] Saving Project Mashup Dashboard in SaaS
 - **BWIPUAR-2249:** [Packaging] Activate SDC for communication from SaaS to IDDM on-premise
@@ -42,5 +48,7 @@ See [vulnerability fixes](./08-vulnerability-fixes.md) for the list of fixed vul
 - **BWIPUAR-2426:** [AIDA] Identity Analytics Self-Managed with Google Vertex AI provided by the customer
 
 ## Version 3.3.1
+
+Release date: 2025 June 17
 
 - **PP-797:** [Extraction] Decoding issue with Entra ID connector through IDDM
