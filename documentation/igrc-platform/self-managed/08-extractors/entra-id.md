@@ -97,7 +97,7 @@ Once you grant consent, you should see the following status:
 
 Using the controller you can test the configuration of your extractor by performing a test extraction.  
 
-Refer to the controller documentation [here](/containers/controller) for more information.  
+Refer to the controller documentation [Controller](../09-components/controller.md) for more information.  
 
 The execution of the Azure Active Directory script generates 4 `csv` files. These files are:  
 

@@ -1,3 +1,8 @@
+---
+title: "Migration Guide for version 3.5.1"
+description: "Values and procedure changes when upgrading to 3.5.1."
+---
+
 # Migration Guide for version 3.5.1
 
 ## Portal API Route Changes

@@ -1,5 +1,10 @@
+---
+title: "SailPoint IdentityIQ"
+description: "Configure the SailPoint IdentityIQ extractor."
+---
 
-# Sailpoint Identity IIQ
+
+# SailPoint IdentityIQ
 
 ## Introduction
 
@@ -16,7 +21,7 @@ This document provides instructions for integrating identity data from SailPoint
 
   - Add a client name such as "Radiant_integration" and choose the proxy user:
 
-![OAuth client](./images/SPidentityIQ/image2.png)
+![OAuth client](./images/SPIdentityIQ/image2.png)
 
 Please make sure that the
 selected Proxy account has access to at list the entities behind the

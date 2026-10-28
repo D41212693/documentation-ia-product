@@ -1,4 +1,9 @@
-# Non applicable vulnerabilities
+---
+title: "Non-applicable vulnerabilities"
+description: "Reported vulnerabilities assessed as not applicable to Identity Analytics."
+---
+
+# Non-applicable vulnerabilities
 
 ## Version 3.6.1
 

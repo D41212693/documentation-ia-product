@@ -1,4 +1,9 @@
-# Released notes
+---
+title: "Release notes"
+description: "Release notes of Self-Managed Identity Analytics, with chart versions and SBOMs."
+---
+
+# Release notes
 
 This page covers release notes for self-managed Identity Analytics. For more information on the features and changes, refer to the Identity Analytics user guides.
 

@@ -1,4 +1,9 @@
-# How to configure API calls
+---
+title: "API access with OAuth tokens"
+description: "Create a Keycloak client and call the Identity Analytics APIs with an OAuth token."
+---
+
+# API access with OAuth tokens
 
 This guide provides information on the Access Portal API, including instructions for setting up a Client ID and Secret within your Keycloak realm for your self-managed Identity Analytics application.
 
@@ -44,7 +49,7 @@ portal:
 
 By default, the assumed role is "technicaladmin". You can modify the roles if needed by updating the value of the `assumeRoles` field.
 
-Once the values of your helm updated update the deployment of the application using `helm upgrade --install ...`. Refer to the [updating a deployment section](./index.md/#updating-a-deployment) to learn more.
+Once the values of your helm updated update the deployment of the application using `helm upgrade --install ...`. Refer to [Upgrades](../11-operations/04-upgrade/) to learn more.
 
 ### Keycloak client secret
 

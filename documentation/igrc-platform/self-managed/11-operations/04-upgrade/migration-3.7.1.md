@@ -1,3 +1,8 @@
+---
+title: "Migration Guide for version 3.7.1"
+description: "Values and procedure changes when upgrading to 3.7.1."
+---
+
 # Migration Guide for version 3.7.1
 
 ## [DEPR-007] Flat JVM Heap Keys Replaced by `jvm.memory.*`

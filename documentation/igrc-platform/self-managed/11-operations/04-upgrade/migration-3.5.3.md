@@ -1,3 +1,8 @@
+---
+title: "Migration Guide for version 3.5.3"
+description: "Values and procedure changes when upgrading to 3.5.3."
+---
+
 # Migration Guide for version 3.5.3
 
 This procedure describes the removal of the ArgoCD operator previously used by IDA for maintenance operations such as portal restarts and database maintenance. The operator is deployed as part of the Shared Services Helm chart, which is required by IDA.

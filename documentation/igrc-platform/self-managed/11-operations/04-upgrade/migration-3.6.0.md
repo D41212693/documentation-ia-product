@@ -1,3 +1,8 @@
+---
+title: "Migration Guide for version 3.6.0"
+description: "Values and procedure changes when upgrading to 3.6.0."
+---
+
 # Migration Guide for version 3.6.0
 
 ## Upgrade Procedure

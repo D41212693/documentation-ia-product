@@ -1,4 +1,9 @@
-# Sailpoint Identity Now
+---
+title: "SailPoint IdentityNow"
+description: "Configure the SailPoint IdentityNow extractor."
+---
+
+# SailPoint IdentityNow
 
 ## Introduction
 
