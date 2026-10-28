@@ -53,15 +53,15 @@ Change the primary key from UserPrincipalName to ID.
 Once the backend and the schema are updated, navigate to the "Namespace Design" of the "Directory Namespace" to configure the namespace.
 
 - Create a new level, such as o=IDAEntra, and assign the organization objectClass to that level.
-- Select the `o=IDAEntra` entry and create a new label under it based on the name of the Entra tenant pulled, `o=bwdev01` in our example. Add the organization and domain objectClasses to the label.
-- Select the `o=bwdev01` level and create a new content level.  
+- Select the `o=IDAEntra` entry and create a new label under it based on the name of the Entra tenant pulled, `o=<tenant>` in this example. Add the organization and domain objectClasses to the label.
+- Select the `o=<tenant>` level and create a new content level.  
 ![Create content level](./images/IDDM-Entra-content-level.png)
   - Select the configured datasource in the drop down list.
   - Select the datasource schema from the drop down list and click next.
   - Select the `user` object to mount. 
   ![User](./images/IDDM-entra-user-content-selection.png)
   - Navigate to the object build tab and add all necessary attributes (select all if in doubt)
-- Select the `o=bwdev01` level and create a new content level.  
+- Select the `o=<tenant>` level and create a new content level.  
 ![Create content level](./images/IDDM-Entra-content-level.png)
   - Select the configured datasource from the drop down list.
   - Select the datasource schema from the drop down list and click next.
@@ -69,7 +69,7 @@ Once the backend and the schema are updated, navigate to the "Namespace Design" 
   ![User](./images/IDDM-Entra-group-content-selection.png)
   - Navigate to the object build tab and add all necessary attributes (select all if in doubt).
 
-Navigate to the directory browser page and select the `o=bwdev01` level under `o=IDAEntra` and validate the configuration.  
+Navigate to the directory browser page and select the `o=<tenant>` level under `o=IDAEntra` and validate the configuration.  
 
 ### LDAP backend configuration
 

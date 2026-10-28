@@ -139,7 +139,7 @@ Navigate to the place where you unzipped `bw_data_collector.zip` file and open a
 Execute the following command to add authentication attributes to `config.json` and create a secure file containing the copied `Client secret` from `Keycloack`.  
 
 ```powershell
-.\bw_data_collector.ps1 -createCreds $true -hostname "HOSTNAME" -realmname "brainwave" -tls $true -clientid "extractor"
+.\bw_data_collector.ps1 -createCreds $true -hostname "HOSTNAME" -realmname "<REALM>" -tls $true -clientid "extractor"
 ```
 
 Copy paste `Client secret` to the terminal when requested.
@@ -165,7 +165,7 @@ Here is a sample of a configuration file:
 ```json
 {
   "auth_hostname":  "localhost",
-  "auth_realmname":  "brainwave",
+  "auth_realmname":  "<REALM>",
   "auth_tls":  false,
   "disableUpload":  true,
   "outputDirectory":  "C:\\Temp\\onezip",
@@ -179,7 +179,7 @@ Here is a sample of a configuration file:
     {
       "name":  "hr-1",
       "enabled":  true,
-      "file":  "C:/Applications/OneZip/tests/data_copy/hr/*",
+      "file":  "C:/Extraction/data_copy/hr/*",
       "csv_converter_config":  "./tools/bw_csv_converter_*/hr-template.properties",
       "folder":  "hr",
       "action":  "copy"
@@ -187,7 +187,7 @@ Here is a sample of a configuration file:
     {
       "name":  "application-1",
       "enabled":  true,
-      "file":  "C:/Applications/OneZip/tests/data_copy/applications/*.csv",
+      "file":  "C:/Extraction/data_copy/applications/*.csv",
       "folder":  "applications",
       "action":  "copy"
     },
@@ -203,8 +203,8 @@ Here is a sample of a configuration file:
       "enabled":  true,
       "script":  "ad",
       "folder":  "ad",
-      "credential":  "C:/Applications/OneZip/tests/creds/acme_credential.xml",
-      "servers":  "C:/Applications/OneZip/tests/config/domain_controller.txt",
+      "credential":  "C:/Extraction/creds/acme_credential.xml",
+      "servers":  "C:/Extraction/config/domain_controller.txt",
       "action":  "script"
     },
     {
@@ -213,8 +213,8 @@ Here is a sample of a configuration file:
       "enabled":  true,
       "script":  "hr",
       "folder":  "hr",
-      "credential":  "C:/Applications/OneZip/tests/creds/acme_credential.xml",
-      "servers":  "C:/Applications/OneZip/tests/config/domain_controller.txt",
+      "credential":  "C:/Extraction/creds/acme_credential.xml",
+      "servers":  "C:/Extraction/config/domain_controller.txt",
       "csv_converter_config":  "./tools/bw_csv_converter_*/adhr-template.properties",
       "action":  "script"
     }
@@ -225,8 +225,8 @@ Here is a sample of a configuration file:
 
 The main configuration parameters are:  
 
-- `auth_hostname`: Hostname of the server on which to upload the files. This is the server running the docker-compose installation of the solution
-- `auth_realmname`: The authorization realm name as defined in Keycloak. By default this value should be set to `brainwave`
+- `auth_hostname`: Hostname of the server on which to upload the files. This is the DNS name of the Identity Analytics instance (`global.externalDns`)
+- `auth_realmname`: The authorization realm name as defined in Keycloak. In Self-Managed, this is the realm of the instance, named after its namespace
 - `auth_tls`: Upload using https. This is the recommended parameter to use un a Prod environment
 - `disableUpload`: boolean value to disable zip upload, should be false to activate upload.
 - `outputDirectory`: path where the zip will be generated, by default the zip will be stored in root directory under `output` folder, this parameter should be set on decentralized extraction environment to be able to move the generated Zip file to a desired directory (ex:a shared folder).
@@ -240,12 +240,12 @@ The main configuration parameters are:
 
 > [!warning] In the case of an instance running the script to upload to an EOC environment changes are required in the config.json file:  
 >
-> - `auth_hostname`: The base URL of the Keycloak service in the EOC environment. For example: `"auth_hostname": "auth-ia-rlqa-usw2.dev01.radiantlogic.io",`  
-> - `auth_realmname`: The environment name that is used to provision the authorization realm. For example: `"auth_realmname": "rlqa-usw2-mq01",`  
+> - `auth_hostname`: The base URL of the Keycloak service in the EOC environment. For example: `"auth_hostname": "auth-<environment>.<domain>",`  
+> - `auth_realmname`: The environment name that is used to provision the authorization realm. For example: `"auth_realmname": "<environment>",`  
 >
 > An additional parameter is required to allow to upload the files to the correct authorization context:  
 >
-> - `auth_context`: This value should be set to the environment name. For example: `"auth_context": "rlqa-usw2-mq01",`
+> - `auth_context`: This value should be set to the environment name. For example: `"auth_context": "<environment>",`
 
 The `config.json` should contain different sections under **configs** block:  
 

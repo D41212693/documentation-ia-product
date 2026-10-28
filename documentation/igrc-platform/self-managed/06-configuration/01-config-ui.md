@@ -1,19 +1,19 @@
 ---
 title: Identity Analytics configuration interface
-description: Description of the Configuration UI 
+description: Use the configuration interface of a Self-Managed Identity Analytics instance
 ---
 
 # Identity Analytics configuration interface
 
 ## First connection
 
-Once you install self-managed Identity Analytics, you can access the configuration page by navigating to `<hostname>/config`. If you are not logged in, you will be redirected to the login page.
+Once you install self-managed Identity Analytics, you can access the configuration page by navigating to `https://<IDA_DNS><IDA_PATH>/config`. If you are not logged in, you will be redirected to the login page.
+
+> [!note] In Self-Managed, the infrastructure settings (DNS name, TLS, database, resources) come from the Helm values of the instance. Settings saved in this interface that also exist in the values (for example SMTP) are overwritten by the values at the next `helm upgrade`.
 
 ![Login Page](images/config-interface/login.png)
 
-Connect using the default `setup` account and update your password.
-
-Use the default setup account to log in and update your password.
+Connect using the `setup` account, with the password set in `global.technicalAdmin.password`.
 
 Once logged in, you will be redirected to the configuration home page, which displays available configuration sections and any warnings. Click on each section to access its configuration page.
 
@@ -33,17 +33,9 @@ To change the language of the configuration interface, click on the language ico
 
 You can restart the services by clicking on the restart icon in the header menu.
 
-Note that this action will only restart the following services: 
-
-- `bwportal`
-- `bwdatabase`
-- `bwbrainwavedb`
-- `bwauth`
-- `bwcontroller`
-
 > The restart of the services can take a few minutes. Only modified services will be restarted.
 
-If you need to restart a service that is not listed above, you can stop/start it through the CLI.
+To restart a component that the interface does not restart, restart its pod, for example `kubectl rollout restart statefulset/portal -n <IDA_NAMESPACE>`.
 
 ### Logout
 
@@ -67,22 +59,22 @@ The home page displays the configuration sections and any warnings (e.g., missin
 
 ![Global Page](images/config-interface/global.png)
 
-- Domain name: The domain name of the server. It can **only** be changed through Identity Analytics CLI.
+- Domain name: The domain name of the server. In Self-Managed it is set by `global.externalDns` in the Helm values.
 - Timezone: The timezone of the server.
-- TLS enabled: Enable or disable TLS. If you enable TLS, you will have to provide a certificate and a key. Please refer to [SSL configuration page](ssl-configuration) for more information.
-- Debug mode enabled: Enable or disable debug mode. This will add some logs for all services except portal. It shouldn't be used in production. Please refer to the [debug installation page](../installation/preface/#debug-options) for more information on this specific deployment.  
+- TLS enabled: In Self-Managed, TLS is terminated by the ingress controller, with the certificate set in `ingress.tls` of the Shared Services values (see the Installation page).
+- Debug mode enabled: Enable or disable debug mode. This will add some logs for all services except portal. It shouldn't be used in production.
 - Batch memory: The max memory allocated to the batch service.
 - Portal memory: The max memory allocated to the portal service.
 - Controller memory: The max memory allocated to the controller service (useful when uploading large files).
 
 ### Database
 
+> [!caution] In Self-Managed, the database is defined by the `database` block of the Helm values: the built-in PostgreSQL managed by CloudNativePG, or an external PostgreSQL server (see the External database page). Only PostgreSQL is supported. The options below that come from the former container-based installation (database exposure port, SQL Server or Oracle drivers) do not apply.
+
 #### Internal
 
 ![Database Internal Page](images/config-interface/db_internal.png)
 
-- Expose database: Expose the database port outside of the container.
-- Exposure port: The port used to expose the database.
 - Internal database password: The password of the database. Click on `Copy password` to copy the password in your clipboard.
 
 #### External

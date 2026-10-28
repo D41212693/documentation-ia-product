@@ -1,3 +1,8 @@
+---
+title: "Batch log lifecycle management"
+description: "How the batch service archives and purges its execution logs, and how to configure the retention."
+---
+
 # Batch Log Lifecycle Management
 
 ## Overview
@@ -28,7 +33,7 @@ When the batch service starts, it runs a cleanup routine that:
 
 ### 2. During Execution
 
-When a plan d'exécution is triggered:
+When an execution plan is triggered:
 
 1. A new folder `batch/<id>/` is created for the execution logs.
 2. The `current` symlink is updated to point to `batch/<id>/`.
@@ -70,11 +75,18 @@ batch:
 | Value                        | Type     | Default | Description                                                                                                                               |
 | ---------------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `batch.archiveLogs.maxCount` | integer  | `10`    | Maps to `LOG_ARCHIVE_MAX_COUNT`. Set to `0` to disable count-based purging.                                                               |
-| `batch.archiveLogs.maxAge`   | duration | `120h`    | Maps to `LOG_ARCHIVE_MAX_AGE`. Set to `0s` to disable age-based purging. Must be a valid Go `time.Duration` string (e.g. `168h`, `720h`). |
+| `batch.archiveLogs.maxAge`   | duration | `168h`  | Maps to `LOG_ARCHIVE_MAX_AGE`. Set to `0s` to disable age-based purging. Must be a valid Go `time.Duration` string (e.g. `168h`, `720h`). |
 
-These values are injected as environment variables into the `data-ingestion` statefulset (see Environment Variables above for details on each variable).
+These values are injected as environment variables into the `batch-server` statefulset (see Environment Variables above for details on each variable).
 
-> **Warning**: the documentation previously used `5d` as an example for the `batch.archiveLogs.maxAge` value, which is incorrect. Use `120h` instead!
+> [!caution] `batch.archiveLogs.maxAge` takes a Go duration in hours (for example `168h` for 7 days). Day units such as `5d` are not supported.
+
+Two more settings control the cleanup:
+
+| Value | Type | Default | Description |
+| ----- | ---- | ------- | ----------- |
+| `batch.logCleanup.deleteLogsZip` | boolean | `true` | Maps to `DELETE_LOGS_ZIP`. |
+| `batch.logCleanup.startupCleanup` | boolean | `true` | Runs the startup cleanup described above when the batch service starts. |
 
 ### Examples
 

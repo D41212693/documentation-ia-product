@@ -5,12 +5,12 @@ description: Authentication and authorization configuration
 
 # Authentication and authorization configuration
 
-All resources provided by the current Identity analytics solution installed using docker-compose are protected by the Authentication and Authorization server.
+All resources provided by Self-Managed Identity Analytics are protected by the Authentication and Authorization server.
 It is implemented with [RedHat Keycloak](https://www.keycloak.org). This chapter describes how to implement supported use cases. For detailed explanations about options, please refer to the [official documentation](https://www.keycloak.org/docs/latest/server_admin/index.html).
 
 ## Supported Identity Providers
 
-The current Identity analytics solution installed using docker-compose supports:
+Self-Managed Identity Analytics supports:
 
 - **Local Directory**: this the default identity provider. Users, its credentials and groups/roles are stored in the Keycloak's internal repository.
 - **User Federation with Active Directory**: the user federation allows Keycloak to delegate authentication and authorization based on groups to Active Directory through LDAP(s) v3 protocol.
@@ -104,7 +104,7 @@ Once connected to the Keycloak Administration Console:
 1. Select the `Brainwave` realm from the dropdown box.
 2. Click on the `Users` menu.
 3. Then click on the button `Add user`.
-4. Enter values for the `username` (not updatable after creation) and `email` fields. They can have the same values or different values. It depends how your Identity Analytics iGRC project is configured (**TODO**: `make reference to something out of this chapter that explains portal view is configured. br_portal_identity?`). This is the login used by the end-user when accessing the user interfaces such as Governance Portal.
+4. Enter values for the `username` (not updatable after creation) and `email` fields. They can have the same values or different values. It depends how your Identity Analytics iGRC project is configured. This is the login used by the end-user when accessing the user interfaces such as Governance Portal.
 5. Enter other fields like `First name` and `Last name`.
 6. Choose `Update Password` option in the select box `Required user actions` so that end-user must change the initial password during first connection.
 7. Click on the `Create` button.
@@ -278,7 +278,7 @@ In Keycloak, you can integrate with two main types of Identity Provider, dependi
 
 Ask your Azure Active Directory Administrator to create a new `App Registration` with the following properties
 
-- `Redirect URI`: this is the address of Keycloak instance. This URI looks like `PROTOCOL`://`DNS_SERVICE_NAME`/auth/realms/brainwave/broker/`ALIAS`/endpoint where
+- `Redirect URI`: this is the address of Keycloak instance. This URI looks like `PROTOCOL`://`DNS_SERVICE_NAME`/auth/realms/`REALM`/broker/`ALIAS`/endpoint where
   - `PROTOCOL` is http or https depending on your deployment configuration
   - `DNS_SERVICE_NAME` is the DNS of the Identity analytics solution cluster
   - `ALIAS` is the unique identifier set in Keycloak to this identity provider (remember it for later configuration). We suggest to provide a string that represents the Identity Provider without space or special characters. For instance, `bw-aad-oidc` for Identity Analytics Azure Active Directory using OpenID Connect.
@@ -374,8 +374,8 @@ Once connected to the Keycloak Administration Console, do the following steps to
 
 Ask your Azure Active Directory Administrator to create a new `Enterprise Application` for SAML v2 authentication with the following properties:  
 
-- **Entity ID**: `<PROTOCOL>://<DNS_SERVICE_NAME>/auth/realms/brainwave`
-- **Consumer Service URL (ACS)**: `<PROTOCOL>://<DNS_SERVICE_NAME>/auth/realms/brainwave/broker/<ALIAS>/endpoint` where
+- **Entity ID**: `<PROTOCOL>://<DNS_SERVICE_NAME>/auth/realms/<REALM>`
+- **Consumer Service URL (ACS)**: `<PROTOCOL>://<DNS_SERVICE_NAME>/auth/realms/<REALM>/broker/<ALIAS>/endpoint` where `<REALM>` is the realm of the instance (the name of its namespace),
     - `<PROTOCOL>` is http or https depending on your deployment configuration
     - `<DNS_SERVICE_NAME>` is the DNS of the Brainwave package cluster
     - `<ALIAS>` is the unique identifier set in Keycloak to this identity provider (remember it for later configuration). We suggest to provide a string that represents the Identity Provider without space nor special characters. For instance, `bw-aad-saml` for Brainwave Azure Active Directory using SAML.
