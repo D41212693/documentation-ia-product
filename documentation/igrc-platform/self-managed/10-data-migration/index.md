@@ -1,9 +1,20 @@
+---
+title: "Data migration"
+description: "Requirements and steps to migrate an on-premises Identity Analytics installation to Self-Managed."
+---
+
 # Migration procedure
 
-The following documentation details the requirements and the procedure to allow migration from an on-prem installation to a self-managed installation. This documentation includes
+The following documentation details the requirements and the procedure to allow migration from an on-prem installation to a self-managed installation.
 
-- The functional requirements before performing a migration
-- the technical requirements to export and import an existing database.
+## Steps
+
+1. Check the requirements below.
+2. Install the Self-Managed platform: see the Installation page of this guide.
+3. Adapt the project: see [Project migration](./10-data-migration/project-migration.md).
+4. Export the database of the on-premises installation: [Oracle](./10-data-migration/export-oracle-database.md), [Microsoft SQL Server](./10-data-migration/export-sqlserver-database.md) or [PostgreSQL](./10-data-migration/export-postgresql-database.md).
+5. Import it into the Self-Managed database and validate it: see [Import database](./10-data-migration/import-database.md).
+6. Configure authentication, data sources and extractors, then run a first execution plan.
 
 ## Functional requirements
 
@@ -12,7 +23,7 @@ To be eligible to migrate from an on-prem instance to self-managed the following
 - [ ] The project needs to be running the latest version of Descartes
 - [ ] Databases schema version 40 (Descartes R5):
   - [Oracle](./10-data-migration/export-oracle-database.md) and [Microsoft SQL server](./10-data-migration/export-sqlserver-database.md) exports done following their respective procedures.
-  - A Database dump for postgreSQL, see [here](./10-data-migration/export-postgresql-database.md) for the required procedure.
+  - A database dump for PostgreSQL, following the [PostgreSQL export procedure](./10-data-migration/export-postgresql-database.md).
 - [ ] A version of the project running the latest version of IAP
 
 ### Eligible Architectures

@@ -1,16 +1,17 @@
+---
+title: "Export an Oracle database"
+description: "Convert and export an on-premises Oracle Identity Ledger for import into Self-Managed."
+---
+
 # Export an Oracle database
 
 ## Goal
 
-Migrate a Oracle database to PostgreSQL using ora2pg, an open source tool (see [licensing](#licenses)). The tool can export most Oracle objects into SQL code compatible for ingestion in PostgreSQL.
+Migrate an Oracle database to PostgreSQL using ora2pg, an open source tool (see [licensing](#licenses)). The tool can export most Oracle objects into SQL code compatible for ingestion in PostgreSQL.
 
-## Test Environnement
+## Validated configuration
 
-Oracle and PostgreSQL databases on the same host (Windows 11 (64bits)), 32 GB RAM and Core i7
-
-- Target database : PostgreSQL 17.2
-- Oracle 19c Standard Edition
-- Descartes R5 SP4
+This procedure was validated with Oracle 19c Standard Edition, Identity Analytics Descartes R5 SP4 and a PostgreSQL 17 target.
 
 ## Prerequisites
 
@@ -21,7 +22,7 @@ The following are required to execute the procedure:
 
 - The latest version of ora2pg 24.3 see [here](https://github.com/darold/ora2pg/releases/tag/v24.3)
 - Oracle Instant Client or Full Oracle installation
-- The Contents of `support_tools\MigrateDBtoPG` folder (On bitbucket - Project `Support_tools`)
+- The `MigrateDBtoPG` migration scripts, provided by Radiant Logic Support on request
 - An installation of Perl version 5.32 or above including for ORACLE the module `DBD::Oracle`
 
 You'll also need:
