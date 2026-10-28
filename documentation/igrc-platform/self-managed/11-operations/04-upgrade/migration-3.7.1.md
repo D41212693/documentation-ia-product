@@ -44,7 +44,7 @@ When both are set, `jvm.memory.*` wins.
 2. Move each `minRAMPercentage` to `jvm.memory.initialRAMPercentage` and each `maxRAMPercentage` to `jvm.memory.maxRAMPercentage` for every component you configure.
 3. Verify the rendered result:
    ```bash
-   helm template <release> ./igrcanalytics -f my-values.yaml \
+   helm template <release> oci://docker.io/radiantone/ida-helm --version <IDA_CHART_VERSION> -f my-values.yaml \
      -s templates/data-ingestion/statefulset.yaml | grep -A1 "name: JAVA_OPTS"
    ```
 
