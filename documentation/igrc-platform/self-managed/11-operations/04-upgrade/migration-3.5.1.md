@@ -42,7 +42,7 @@ Authentication (bearer token), rate limiting, and upstream (portal:internal) rem
 
 ---
 
-## From `aiservice.*` to `aida.*` + `aiuar.*` + `litellmProxy.*`
+## From aiservice.* to aida.* + aiuar.* + litellmProxy.*
 
 **Version**: 3.5.1+
 
@@ -93,7 +93,7 @@ aida:
   enabled: true
 ```
 
-#### Step 2: Move AI service configuration to `aiuar.*`
+#### Step 2: Move AI service configuration to aiuar.*
 
 **Before:**
 
@@ -155,7 +155,7 @@ aiuar:
     enabled: false
 ```
 
-#### Step 3: Move LiteLLM configuration to `litellmProxy.*`
+#### Step 3: Move LiteLLM configuration to litellmProxy.*
 
 **Before:**
 

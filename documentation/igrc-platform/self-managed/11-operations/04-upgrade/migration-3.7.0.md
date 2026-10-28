@@ -5,7 +5,7 @@ description: "Values and procedure changes when upgrading to 3.7.0."
 
 # Migration Guide for version 3.7.0
 
-## `database.port` Deprecated and Ignored
+## database.port Deprecated and Ignored
 
 **Version**: 3.7.0  
 **Category**: DEPRECATED / CHANGED

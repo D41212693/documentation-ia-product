@@ -5,7 +5,7 @@ description: "Values and procedure changes when upgrading to 3.7.1."
 
 # Migration Guide for version 3.7.1
 
-## [DEPR-007] Flat JVM Heap Keys Replaced by `jvm.memory.*`
+## [DEPR-007] Flat JVM Heap Keys Replaced by jvm.memory.*
 
 **Version**: 3.7.1  
 **Category**: DEPRECATED
@@ -59,7 +59,7 @@ Note: `values.yaml` intentionally ships `jvm: memory: {}` with the effective def
 
 Deprecated in chart version 3.7.1. The flat keys will be removed in a future version.
 
-## [CHG-005] JVM Heap Options Set Outside `jvm.memory` Are Now Ignored
+## [CHG-005] JVM Heap Options Set Outside jvm.memory Are Now Ignored
 
 **Version**: 3.7.1  
 **Category**: CHANGED
@@ -165,7 +165,7 @@ Set `enabled: false` on any probe to omit it from the pod spec. The `enabled` ke
 
 Shipped in chart version 3.7.1.
 
-## [CHG-003] `batch.archiveLogs.maxAge` Default Corrected to Go Duration
+## [CHG-003] batch.archiveLogs.maxAge Default Corrected to Go Duration
 
 **Version**: 3.7.1  
 **Category**: CHANGED / FIXED

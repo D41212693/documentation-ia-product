@@ -11,7 +11,7 @@ A Self-Managed deployment is made of two Helm releases and one operator. Shared 
 
 ## Components
 
-### Shared Services (`ida-shared-helm`)
+### Shared Services (ida-shared-helm)
 
 | Component | Kubernetes object | Port | Storage | Role |
 | :-------- | :---------------- | :--- | :------ | :--- |
@@ -20,7 +20,7 @@ A Self-Managed deployment is made of two Helm releases and one operator. Shared 
 | `keycloak` | StatefulSet | 8080 | - | Identity provider. Each Identity Analytics instance has its own realm, named after the instance namespace. |
 | `keycloak-db` | CloudNativePG cluster | 5432 | 32 Gi data + 32 Gi WAL | Keycloak database (internal database mode only) |
 
-### Identity Analytics instance (`ida-helm`)
+### Identity Analytics instance (ida-helm)
 
 | Component | Kubernetes object | Port | Storage | Role |
 | :-------- | :---------------- | :--- | :------ | :--- |
