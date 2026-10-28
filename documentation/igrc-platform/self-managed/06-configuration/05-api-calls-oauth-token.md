@@ -129,7 +129,7 @@ curl -H "Authorization: Bearer $TOKEN" "https://<EXTERNAL_DNS>/<CONTEXT>/api/vie
 ```
 
 Where `view-name` is the view identifier in the project.
-If you want to know more about calling views, see [Views and WebServices](../views/08-webservices.md)
+If you want to know more about calling views, see [Views and WebServices](../../views/08-webservices.md)
 
 #### Compliance report (/api/compliancereport/)
 

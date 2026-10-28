@@ -211,6 +211,6 @@ When the data extraction test process is complete, the details page will automat
 
 You can download the test results to verify the extracted files.  
 
-For more information on the controller, refer to the [Controller](../04-containers/controller.md) documentation.
+For more information on the controller, refer to the [Controller](../09-components/controller.md) documentation.
 
 

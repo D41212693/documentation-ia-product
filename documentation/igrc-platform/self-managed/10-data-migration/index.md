@@ -11,8 +11,8 @@ To be eligible to migrate from an on-prem instance to self-managed the following
 
 - [ ] The project needs to be running the latest version of Descartes
 - [ ] Databases schema version 40 (Descartes R5):
-  - [Oracle](./export-oracle-database.md) and [Microsoft SQL server](./export-sqlsever-database.md) exports done following their respective procedures.
-  - A Database dump for postgreSQL, see [here](./export-postgesql-database.md) for the required procedure.
+  - [Oracle](./10-data-migration/export-oracle-database.md) and [Microsoft SQL server](./10-data-migration/export-sqlserver-database.md) exports done following their respective procedures.
+  - A Database dump for postgreSQL, see [here](./10-data-migration/export-postgresql-database.md) for the required procedure.
 - [ ] A version of the project running the latest version of IAP
 
 ### Eligible Architectures

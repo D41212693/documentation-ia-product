@@ -1,6 +1,6 @@
 # Other vulnerabilities
 
-The vulnerabilities listed on this page are reported exclusively against images built on ChainGuard base images. These are **probable false positives, currently under investigation**, and are tracked separately from the [non applicable vulnerabilities](09-non-applicable-vulns.md) list until they have been confirmed one way or the other.
+The vulnerabilities listed on this page are reported exclusively against images built on ChainGuard base images. These are **probable false positives, currently under investigation**, and are tracked separately from the [non applicable vulnerabilities](03-non-applicable-vulnerabilities.md) list until they have been confirmed one way or the other.
 
 ## Version 3.7.4
 

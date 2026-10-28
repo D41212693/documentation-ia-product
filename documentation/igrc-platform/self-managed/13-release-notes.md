@@ -2,7 +2,7 @@
 
 This page covers release notes for self-managed Identity Analytics. For more information on the features and changes, refer to the Identity Analytics user guides.
 
-See [vulnerability fixes](./08-vulnerability-fixes.md) for the complete list of patch versions that include vulnerability fixes in the images.
+See [vulnerability fixes](./12-security/02-vulnerability-fixes.md) for the complete list of patch versions that include vulnerability fixes in the images.
 
 ## Version 3.7.4
 
@@ -16,7 +16,7 @@ This release contains vulnerability fixes only; it introduces no additional feat
 > - `CNPG`: 1.29
 > - `PostgreSQL`: 18.3
 
-See [vulnerability fixes](./08-vulnerability-fixes.md) for additional details.
+See [vulnerability fixes](./12-security/02-vulnerability-fixes.md) for additional details.
 
 Software Bill of Materials (CycloneDX 1.5 JSON, all IDA 3.7.4 and Shared Services 3.5.4 container images): [IDA-3.7.4-SBOM.zip](./assets/sbom/IDA-3.7.4-SBOM.zip)
 
@@ -34,7 +34,7 @@ In addition to vulnerability fixes, this release includes the following change:
 > - `CNPG`: 1.29
 > - `PostgreSQL`: 18.3
 
-See [vulnerability fixes](./08-vulnerability-fixes.md) for additional details.
+See [vulnerability fixes](./12-security/02-vulnerability-fixes.md) for additional details.
 
 ## Version 3.7.2
 
@@ -48,7 +48,7 @@ This release contains vulnerability fixes only; it introduces no additional feat
 > - `CNPG`: 1.29
 > - `PostgreSQL`: 18.3
 
-See [vulnerability fixes](./08-vulnerability-fixes.md) for additional details.
+See [vulnerability fixes](./12-security/02-vulnerability-fixes.md) for additional details.
 
 ## Version 3.7.1
 
@@ -61,7 +61,7 @@ In addition to vulnerability fixes, this release includes the following changes:
 - Relaxed the batch-server liveness probe defaults
 - Corrected the default value of `batch.archiveLogs.maxAge` to use Go duration format.
 
-> See [Migration 3.7.1](./06-upgrade/migration-3.7.1.md) for details
+> See [Migration 3.7.1](./11-operations/04-upgrade/migration-3.7.1.md) for details
 
 > Recommended versions:
 >
@@ -73,7 +73,7 @@ In addition to vulnerability fixes, this release includes the following changes:
 
 Release date: 2026 July 29
 
-> See [Migration 3.7.0](./06-upgrade/migration-3.7.0.md)
+> See [Migration 3.7.0](./11-operations/04-upgrade/migration-3.7.0.md)
 
 > Recommended versions:
 >
@@ -93,13 +93,13 @@ Release date: 2026 July 29
 
 ### Vulnerability fixes
 
-See [vulnerability fixes](./08-vulnerability-fixes.md).
+See [vulnerability fixes](./12-security/02-vulnerability-fixes.md).
 
 ## Version 3.6.2
 
 Release date: 2026 June 30
 
-Only includes [vulnerability fixes](./08-vulnerability-fixes.md).
+Only includes [vulnerability fixes](./12-security/02-vulnerability-fixes.md).
 
 > Recommended versions:
 >
@@ -111,13 +111,13 @@ Only includes [vulnerability fixes](./08-vulnerability-fixes.md).
 
 Release date: 2026 June 9
 
-Only includes [vulnerability fixes](./08-vulnerability-fixes.md).
+Only includes [vulnerability fixes](./12-security/02-vulnerability-fixes.md).
 
 ## Version 3.6.0
 
 Release date: 2026 May 19
 
-> See [Migration 3.6.0](./06-upgrade/migration-3.6.0.md)
+> See [Migration 3.6.0](./11-operations/04-upgrade/migration-3.6.0.md)
 
 - **BWIPUAR-2627** - Updated batch log cleanup policy.
 - **BWIPUAR-2563** - Added support for automatically redirecting users from the login page to a preconfigured Identity Provider (IdP) to improve the authentication experience.
@@ -126,15 +126,15 @@ Release date: 2026 May 19
 
 Release date: 2026 March 27
 
-> See [Migration 3.5.3](./06-upgrade/migration-3.5.3.md)
+> See [Migration 3.5.3](./11-operations/04-upgrade/migration-3.5.3.md)
 
-Only includes [vulnerability fixes](./08-vulnerability-fixes.md).
+Only includes [vulnerability fixes](./12-security/02-vulnerability-fixes.md).
 
 ## Version 3.5.1
 
 Release date: 2026 March 13
 
-> See [Migration 3.5.1](./06-upgrade/migration-3.5.1.md)
+> See [Migration 3.5.1](./11-operations/04-upgrade/migration-3.5.1.md)
 
 - **BWIPUAR-2563** – [Self-Managed] Allow to configure login page to directly redirect to a preconfigured IDP
 - **BWIPUAR-2562** – [Self-Managed] Access to /ws through authenticated client does not work as of 3.4.1
