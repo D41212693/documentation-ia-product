@@ -21,7 +21,7 @@ An upgrade installs new chart versions with your existing values files. Always r
 
     helm upgrade rlia oci://docker.io/radiantone/ida-helm \
       --namespace <IDA_NAMESPACE> --version <IDA_CHART_VERSION> \
-      --set-file global.licenseFile=<PATH_TO_LICENSE_FILE> \
+      --set global.license="$(base64 -w0 <PATH_TO_LICENSE_FILE>)" \
       --values ida.values.yaml --timeout 30m
     ```
 

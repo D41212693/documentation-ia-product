@@ -198,12 +198,14 @@ Repeat this step for each instance, each in its own namespace.
     helm upgrade --install rlia oci://docker.io/radiantone/ida-helm \
       --namespace <IDA_NAMESPACE> \
       --version <IDA_CHART_VERSION> \
-      --set-file global.licenseFile=<PATH_TO_LICENSE_FILE> \
+      --set global.license="$(base64 -w0 <PATH_TO_LICENSE_FILE>)" \
       --values ida.values.yaml \
       --timeout 30m
     ```
 
-    The installation runs initialisation jobs (`config-store-init`, `analytics-update-db`, `environment-setup`) and takes a few minutes. Instead of `--set-file`, you can also put the license, base64-encoded, in `global.license`.
+    The installation runs initialisation jobs (`config-store-init`, `analytics-update-db`, `environment-setup`) and takes a few minutes.
+
+    > [!note] The license file is a binary file: pass it base64-encoded in `global.license` (with PowerShell: `[Convert]::ToBase64String([IO.File]::ReadAllBytes("<PATH_TO_LICENSE_FILE>"))`). The chart also accepts `--set-file global.licenseFile=<PATH_TO_LICENSE_FILE>`, but Helm then stores a corrupted copy of the file in the values of the release: pass the file again at each upgrade and never use `--reuse-values`. When both are set, `global.license` wins over `global.licenseFile`.
 
 4. Continue with the [post-installation checks](./05-post-installation.md).
 

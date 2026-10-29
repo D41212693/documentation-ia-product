@@ -28,7 +28,7 @@ Some settings can be set both in the Helm values and in the configuration interf
 | Other Git repository selected in the configuration interface | Configuration interface | Kept: the instance keeps using the repository selected in the interface. |
 | Git synchronisation schedule | Values `gitServer.defaultCron`, first installation only | Not written again. See [Project changes](../11-operations/05-project-changes.md). |
 | Identity Data Management (RadiantOne) connection | Values, first installation only | Not written again: later changes made in the configuration interface are kept. |
-| License | Values `global.licenseFile` (or `global.license`) | The values are applied: to renew the license, run `helm upgrade` with the new file. The portal restarts and loads it. |
+| License | Values `global.license` (base64), or `global.licenseFile` | The values are applied: to renew the license, run `helm upgrade` with the new license. `global.license` wins over `global.licenseFile`: if your values file contains `global.license`, replace it there. The portal, the batch and the configuration service restart and load it. |
 | CPU, memory and Java heap of the pods | Values (`resources`, `jvm.memory` of each component) | The values are applied. |
 | Password of the technical administrator (`setup`) | Values `global.technicalAdmin.password`, first installation only | Not written again: change the password in Keycloak. |
 
