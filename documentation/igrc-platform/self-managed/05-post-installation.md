@@ -5,7 +5,12 @@ description: "Check a new Self-Managed Identity Analytics installation, log in a
 
 # Post-installation
 
-Run these checks after each installation and after each upgrade. An installation is complete when every pod is running, every job is complete and the technical administrator can log in to the portal.
+Run these checks after each installation and after each upgrade. They lead to two milestones:
+
+| Milestone | Criteria | Steps |
+| :-------- | :------- | :---- |
+| **Platform installed** | All pods running and all jobs complete; the technical administrator logs in to the configuration interface and to the controller; the project is synchronised from Git | 1 to 3 |
+| **Platform usable** | A first execution plan is completed and its timeslot is validated: users see their data in the portal | 4 and 5 |
 
 ## 1. Check the platform
 
@@ -52,7 +57,8 @@ At the first login, Keycloak asks the technical administrator to change the pass
 
 ## 3. Check the project and the mail
 
-- In the configuration interface, open **Git Project** and check that the repository and branch of the values are synchronised. To use another branch, change it here: this setting is kept across upgrades.
+- In the configuration interface, open **Git Project** and check the repository and the branch. To use another branch, change it here: this setting is kept across upgrades.
+- Check that the project is synchronised: the `portal-0` pod becomes ready only once a synchronised version of the project is available (otherwise its logs show `No Git hash is available yet`). In case of doubt, read the logs of the `git-server-0` pod. See [Project changes](./11-operations/05-project-changes.md).
 - If SMTP is enabled, check the SMTP settings in the controller (**Configuration**, **Email server** tab, read only) and add the recipients of the execution plan notifications (**Configuration**, **Notifications** tab). Without recipients, the controller does not send these mails.
 
 ## 4. Give users access
@@ -71,4 +77,6 @@ A user also needs an account with the same login in the Identity Ledger (the cur
 
 1. Send the source files of the project to the instance: from the portal (**Data source Management**, **Status**, **Upload data**), with the PowerShell extractor, or with the connectors. They are listed in **Import files** in the controller.
 2. Start the execution plan: **Submit a new execution plan** in the controller (**Execution plans**), or **Launch an execution plan** in the portal. Follow it and download its logs from the controller. See [Controller](./09-components/controller.md).
-3. Once the timeslot is validated, the portal displays the data.
+3. By default, the timeslot is validated automatically at the end of a successful plan, and the portal displays the data: the platform is usable.
+
+See [Data loading](./06-configuration/06-data-loading.md) for the details: data source declaration, folders of the import files, ways to send the files and to start a plan.
