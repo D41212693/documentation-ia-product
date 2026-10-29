@@ -9,7 +9,24 @@ description: Use the configuration interface of a Self-Managed Identity Analytic
 
 Once you install self-managed Identity Analytics, you can access the configuration page by navigating to `https://<IDA_DNS><IDA_PATH>/config`. If you are not logged in, you will be redirected to the login page.
 
-> [!note] In Self-Managed, the infrastructure settings (DNS name, TLS, database, resources) come from the Helm values of the instance. Settings saved in this interface that also exist in the values (for example SMTP) are overwritten by the values at the next `helm upgrade`.
+> [!note] In Self-Managed, the infrastructure settings (DNS name, TLS, database, resources) come from the Helm values of the instance. Settings saved in this interface that also exist in the values (for example SMTP) are overwritten by the values at the next `helm upgrade`. See [Which setting wins](#which-setting-wins).
+
+## Which setting wins
+
+Some settings can be set both in the Helm values and in the configuration interface or another console. At each installation and upgrade, the `config-store-init` job writes the values to the configuration store: some settings are written every time, others only at the first installation.
+
+| Setting | Where to set it | At each `helm upgrade` |
+| :------ | :-------------- | :--------------------- |
+| SMTP (server, port, sender, authentication) | Values `smtp.*` | The values are written again and overwrite changes made in the configuration interface. The controller only displays these settings. The portal and the controller restart when they change. |
+| Git repository of the project | Values `git.default.*` | The values are written again and an immediate Git synchronisation is triggered. |
+| Other Git repository selected in the configuration interface | Configuration interface | Kept: the instance keeps using the repository selected in the interface. |
+| Git synchronisation schedule | Values `gitServer.defaultCron`, first installation only | Not written again. See [Project changes](../11-operations/05-project-changes.md). |
+| Identity Data Management (RadiantOne) connection | Values, first installation only | Not written again: later changes made in the configuration interface are kept. |
+| License | Values `global.licenseFile` (or `global.license`) | The values are applied: to renew the license, run `helm upgrade` with the new file. The portal restarts and loads it. |
+| CPU, memory and Java heap of the pods | Values (`resources`, `jvm.memory` of each component) | The values are applied. |
+| Password of the technical administrator (`setup`) | Values `global.technicalAdmin.password`, first installation only | Not written again: change the password in Keycloak. |
+
+Report in your values files any change of a setting written at each upgrade, before you run the next `helm upgrade`.
 
 ![Login Page](images/config-interface/login.png)
 

@@ -31,7 +31,7 @@ An upgrade installs new chart versions with your existing values files. Always r
 
 > [!warning] Downgrades are not supported: an upgrade migrates the database schemas. To go back, restore the backup taken before the upgrade.
 
-Each upgrade runs the `config-store-init` job again. It applies the values (for example `smtp`) to the configuration store and overwrites the same settings changed by hand in the configuration interface: report such changes in your values files before you upgrade. The Git project chosen in the configuration interface is kept.
+Each upgrade runs the `config-store-init` job again. It applies the values (for example `smtp`) to the configuration store and overwrites the same settings changed by hand in the configuration interface: report such changes in your values files before you upgrade. The Git project chosen in the configuration interface is kept. See [Which setting wins](../06-configuration/01-config-ui.md#which-setting-wins).
 
 ## Version-specific guides
 
