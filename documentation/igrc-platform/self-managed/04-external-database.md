@@ -12,7 +12,7 @@ Both charts can use a PostgreSQL server you operate instead of the built-in Clou
 ## Requirements
 
 - PostgreSQL 17 or later (validated with 17; the built-in database of the same chart versions runs PostgreSQL 18.3), reachable from the cluster nodes on its port (5432 by default). Managed services (Amazon RDS, Azure Database for PostgreSQL, Google Cloud SQL) work like a self-hosted server. Do not use `localhost`: give an address or DNS name the pods can resolve.
-- For `autoInit: true` (recommended): an administration account allowed to create databases and roles (`CREATEDB` and `CREATEROLE`).
+- An administration account allowed to create databases and roles (`CREATEDB` and `CREATEROLE`), used by the initialisation jobs at installation and at each upgrade.
 - TLS: if the server requires it, the CA certificate of the server, stored in a secret (see [Encrypted connections](#encrypted-connections)).
 - The `pg_stat_statements` extension is recommended for performance analysis. It is not created by the charts: ask your DBA to enable it (`shared_preload_libraries`) and to run `CREATE EXTENSION pg_stat_statements;` in `analytics_db`.
 
@@ -60,7 +60,9 @@ database:
       enabled: false
 ```
 
-`port` is required. With `autoInit: true`, the job `external-db-init` creates the objects below on the first installation and checks them on each upgrade.
+> [!warning] `autoInit: true` is required in both values files. Creating the databases, roles and schemas yourself (`autoInit: false`) is not supported.
+
+`port` is required. The job `external-db-init` creates the objects below on the first installation and checks them on each upgrade.
 
 ## What the initialisation creates
 
@@ -75,64 +77,6 @@ database:
 | Group role | `analytics_read_access` | `SELECT` on the tables of the `analytics_db` schemas |
 
 The database, role and schema names can be changed under `database.analytics` and `database.shared` in the Identity Analytics values. The schema `aida` and the role `ai_svc_user` are added only when the AI features are enabled.
-
-## Creating the objects yourself
-
-If your DBA does not grant `CREATEDB` and `CREATEROLE`, create the objects beforehand, set `autoInit: false`, and give the charts the application passwords:
-
-```sql
--- Keycloak (Shared Services)
-CREATE ROLE keycloak_user LOGIN PASSWORD '<KEYCLOAK_DB_PASSWORD>';
-CREATE DATABASE keycloak_db OWNER keycloak_user ENCODING 'UTF8';
-\c keycloak_db
-CREATE SCHEMA keycloak AUTHORIZATION keycloak_user;
-ALTER ROLE keycloak_user IN DATABASE keycloak_db SET search_path TO keycloak;
-
--- Identity Analytics
-CREATE ROLE app_user LOGIN PASSWORD '<ANALYTICS_PASSWORD>';
-CREATE ROLE shared_user LOGIN PASSWORD '<SHARED_PASSWORD>';
-CREATE ROLE analytics_support LOGIN PASSWORD '<SUPPORT_PASSWORD>';
-CREATE ROLE analytics_read_access NOLOGIN;
-CREATE DATABASE analytics_db OWNER app_user ENCODING 'UTF8';
-CREATE DATABASE shared_db OWNER shared_user ENCODING 'UTF8';
-GRANT CONNECT ON DATABASE analytics_db TO analytics_support;
-
-\c analytics_db
-CREATE SCHEMA igrc AUTHORIZATION app_user;
-CREATE SCHEMA activiti AUTHORIZATION app_user;
-CREATE SCHEMA auditlog AUTHORIZATION app_user;
-ALTER ROLE app_user IN DATABASE analytics_db SET search_path TO igrc, activiti, auditlog, public;
-ALTER ROLE analytics_support IN DATABASE analytics_db SET search_path TO igrc, public;
-GRANT USAGE ON SCHEMA igrc, activiti, auditlog TO analytics_read_access;
-ALTER DEFAULT PRIVILEGES FOR ROLE app_user IN SCHEMA igrc GRANT SELECT ON TABLES TO analytics_read_access;
-ALTER DEFAULT PRIVILEGES FOR ROLE app_user IN SCHEMA activiti GRANT SELECT ON TABLES TO analytics_read_access;
-ALTER DEFAULT PRIVILEGES FOR ROLE app_user IN SCHEMA auditlog GRANT SELECT ON TABLES TO analytics_read_access;
-GRANT USAGE ON SCHEMA igrc TO analytics_support;
-ALTER DEFAULT PRIVILEGES FOR ROLE app_user IN SCHEMA igrc GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO analytics_support;
-
-\c shared_db
-CREATE SCHEMA controller AUTHORIZATION shared_user;
-CREATE SCHEMA configuration AUTHORIZATION shared_user;
-CREATE SCHEMA gitsync AUTHORIZATION shared_user;
-ALTER ROLE shared_user IN DATABASE shared_db SET search_path TO controller, configuration, gitsync, public;
-```
-
-Then pass the application credentials, either in clear in the values (`database.analytics.password`, `database.shared.password`, `database.analytics.services.support.password`) or, preferably, through Kubernetes secrets with `username` and `password` keys:
-
-```yaml
-database:
-  type: external
-  external:
-    host: "<DB_HOST>"
-    port: 5432
-    autoInit: false
-    analytics:
-      existingSecret: "<IDA_DB_SECRET>"
-    shared:
-      existingSecret: "<SHARED_DB_SECRET>"
-```
-
-On the Shared Services side, `database.external.existingSecret` holds the Keycloak account in the same way.
 
 ## Encrypted connections
 

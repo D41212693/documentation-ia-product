@@ -60,7 +60,7 @@ The platform needs PostgreSQL for Keycloak and for each Identity Analytics insta
 | Mode | How it works | When to use it |
 | :--- | :----------- | :------------- |
 | `internal` (default) | The CloudNativePG operator creates `keycloak-db` and `shared-db` inside the cluster, with persistent volumes | Standard case. Backups are configured in the chart. |
-| `external` | The charts connect to a PostgreSQL server you provide and, with `autoInit`, create the databases, roles and schemas | Your organisation requires a managed or centrally operated database service. See [External database](./04-external-database.md). |
+| `external` | The charts connect to a PostgreSQL server you provide and create the databases, roles and schemas (`autoInit: true`, required) | Your organisation requires a managed or centrally operated database service. See [External database](./04-external-database.md). |
 
 ## Limits
 
