@@ -137,7 +137,7 @@ Repeat this step for each instance, each in its own namespace.
 
 1. Gather the inputs of the instance:
     - the license file;
-    - the Git repository of the Identity Analytics project, a branch matching the product version (for example `release/3.7` for 3.7.x) and credentials with read access;
+    - the Git repository of the project, its branch and the credentials to read it (see [Project repository](./02-prerequisites.md#project-repository)): for example `https://repository.brainwavegrc.com/Brainwave/identityanalytics.git`, branch `release/3.7` for 3.7.x;
     - the SMTP settings, if the instance sends mail;
     - an email address and an initial password for the technical administrator (`setup`): at least 16 characters with upper case, lower case, digit and special character.
 
@@ -189,7 +189,8 @@ Repeat this step for each instance, each in its own namespace.
     - `apisix.namespace` and `keycloakSettings.namespace` are the **Shared Services** namespace, not the instance namespace.
     - `ingress` is at the root of the file, not under `global`. The ingress is created in the Shared Services namespace and routes `<IDA_PATH>` to the `apisix-gateway` service.
     - Do not set `keycloakSettings.externalDns`: it is reserved for SaaS deployments.
-    - `git.default.authType` also accepts `token`, `ssh`, `githubapp` and `none`.
+    - With `repository.brainwavegrc.com`, keep `authType: "basic"`: `username` is the account name and `password` the access token generated for this account. `git.default.authType` also accepts `token`, `ssh`, `githubapp` and `none` for your own Git server.
+    - `fromFolder` is the folder of the repository that contains the project: `brainwave`, at the root of the repository.
 
 3. Install the chart, passing the license file:
 

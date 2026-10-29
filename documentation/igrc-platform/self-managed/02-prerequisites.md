@@ -14,6 +14,7 @@ Before the installation, decide how the platform is exposed and where its databa
 | Database | Built-in PostgreSQL managed by CloudNativePG, or an external PostgreSQL server | CloudNativePG operator required or not; who backs up the data. See [External database](./04-external-database.md). |
 | Number of instances | One Identity Analytics instance per namespace (for example production and acceptance) | Each instance adds its own pods, volumes and database |
 | Exposure | One DNS name per cluster, one URL path per instance (`/ida`, `/ida-acc`…) | DNS record, certificate and ingress class |
+| Project repository | The Radiant Logic reference repository (read only), a fork of it hosted by Radiant Logic, or your own Git server | Who can change the project, and which account the instance uses. See [Project repository](#project-repository). |
 
 ## Kubernetes cluster
 
@@ -62,10 +63,26 @@ helm template rlia oci://docker.io/radiantone/ida-helm --version <IDA_CHART_VERS
 
 - **DNS**: a name for the platform (`<IDA_DNS>`) pointing to the ingress controller.
 - **TLS**: a certificate for that name, stored as a Kubernetes TLS secret, or issued by your certificate manager.
-- **Git**: the repository of the Identity Analytics project, a branch matching the product version (for example `release/3.7`), and an account or token with read access.
+- **Git** (only if you host the project on your own Git server): the URL of the repository, the branch, and an account or token with read access. See [Project repository](#project-repository).
 - **SMTP**: host, port, security mode and optional credentials of a mail relay, to send notifications.
 - **Identity provider** (optional): the SAML or OIDC settings if users log in with your corporate identity provider.
 - **External database** (optional): host, port and an administration account, see [External database](./04-external-database.md).
+
+## Project repository
+
+Each instance runs an Identity Analytics project: the configuration of the data collection, the data model, the rules and the portal. The instance reads it from a Git repository, in the folder `brainwave` at the root of the repository (`git.default.fromFolder`), and keeps a local copy of it (`git-server` pod).
+
+Choose one of these options:
+
+| Option | Repository and branch | Access | Use it when |
+| :----- | :-------------------- | :----- | :---------- |
+| Reference project | `https://repository.brainwavegrc.com/Brainwave/identityanalytics.git`, branch `release/<MAJOR.MINOR>` of your version (for example `release/3.7`) | Read only | You use the standard project without changes |
+| Fork hosted by Radiant Logic | A fork of the reference project, in an organisation created for you on `repository.brainwavegrc.com` | Read and write | You adapt the project; you usually work on your own branches |
+| Your own Git server | A copy of the reference project that you maintain | Your choice | Your organisation requires its own Git server; you handle the copy and its updates |
+
+For the first two options, you need an account on `repository.brainwavegrc.com`, usually a service account, provided by Radiant Logic on request. Log in to `https://repository.brainwavegrc.com` with this account and generate an access token: the instance uses the account name as username and the token as password (`authType: basic`).
+
+> [!note] When you upgrade to a new minor version, switch the instance to the matching branch (`release/<MAJOR.MINOR>`), or merge it into your own branch if you adapted the project.
 
 ## Network flows
 
