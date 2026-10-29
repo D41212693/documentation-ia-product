@@ -34,6 +34,16 @@ kubectl apply -n <SHARED_NAMESPACE> -f ida-registry-credentials.yaml
 kubectl apply -n <IDA_NAMESPACE> -f ida-registry-credentials.yaml
 ```
 
+If you received a username and a token instead of the file, create the secret in both namespaces. Keep the name `ida-registry-credentials`: the values files below refer to it.
+
+```bash
+for ns in <SHARED_NAMESPACE> <IDA_NAMESPACE>; do
+  kubectl create secret docker-registry ida-registry-credentials -n "$ns" \n    --docker-server=docker.io --docker-username=<REGISTRY_USER> --docker-password=<REGISTRY_TOKEN>
+done
+```
+
+If `helm` cannot pull the charts (`unauthorized`), log in to the registry with the same account first: `helm registry login registry-1.docker.io -u <REGISTRY_USER>`.
+
 If you serve TLS from the ingress, create the certificate secret in the Shared Services namespace (the ingresses of both charts are created there):
 
 ```bash

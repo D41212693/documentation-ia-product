@@ -29,7 +29,7 @@ Before the installation, decide how the platform is exposed and where its databa
 
 ## Information and files from Radiant Logic
 
-- The image pull secret `ida-registry-credentials.yaml`, which gives access to the `docker.io/radiantone` registry.
+- The access to the `docker.io/radiantone` registry: either the image pull secret `ida-registry-credentials.yaml`, or a username and a token to create this secret yourself (see [Installation](./03-installation.md#1-prepare-the-namespaces-and-the-registry-secret)).
 - The Identity Analytics license file.
 
 If the cluster cannot reach Docker Hub, mirror the images to your own registry. For `ida-helm` 3.7.4 and `ida-shared-helm` 3.5.4, the images are:
@@ -39,6 +39,17 @@ If the cluster cannot reach Docker Hub, mirror the images to your own registry. 
 | `ida-shared-helm` 3.5.4 | `radiantone/ida-apisix:3.5.4`, `radiantone/ida-etcd:3.5.4`, `radiantone/ida-keycloak:3.5.4` (`ida-keycloak-fips` in FIPS mode), `radiantone/ida-tools:3.5.4`, `radiantone/kubectl:secure` |
 | `ida-helm` 3.7.4 | `radiantone/ida-portal:3.7.4`, `radiantone/ida-batch-server:3.7.4`, `radiantone/ida-controller:3.7.4`, `radiantone/ida-config-server:3.7.4`, `radiantone/ida-git-server:3.7.4`, `radiantone/ida-extract:3.7.4`, `radiantone/ida-ops-manager:3.7.4`, `radiantone/ida-env-manager:3.7.4`, `radiantone/ida-init-db:3.7.4`, `radiantone/ida-tools:3.7.4`, `radiantone/kubectl:secure` |
 | CloudNativePG (internal database) | `ghcr.io/cloudnative-pg/cloudnative-pg:1.29.1`, `ghcr.io/cloudnative-pg/postgresql:18.3-system-trixie` |
+
+To pull the images from your mirror, add to both values files:
+
+```yaml
+image:
+  registry: "<MIRROR_REGISTRY>"   # replaces docker.io/radiantone
+imageCredentials:
+  - existingSecret: <MIRROR_PULL_SECRET>
+```
+
+The `kubectl` image of the upgrade jobs has its own setting: `tools.kubectl.image.repository` in the Identity Analytics values and `preUpgradeChart.kubectl.image.repository` in the Shared Services values (for example `<MIRROR_REGISTRY>/kubectl`).
 
 To list the images of another version, render the chart and filter the image lines:
 

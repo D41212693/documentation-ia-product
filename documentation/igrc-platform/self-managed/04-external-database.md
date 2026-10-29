@@ -11,7 +11,7 @@ Both charts can use a PostgreSQL server you operate instead of the built-in Clou
 
 ## Requirements
 
-- PostgreSQL 17 or later (validated with 17), reachable from the cluster nodes on its port (5432 by default). Managed services (Amazon RDS, Azure Database for PostgreSQL, Google Cloud SQL) work like a self-hosted server. Do not use `localhost`: give an address or DNS name the pods can resolve.
+- PostgreSQL 17 or later (validated with 17; the built-in database of the same chart versions runs PostgreSQL 18.3), reachable from the cluster nodes on its port (5432 by default). Managed services (Amazon RDS, Azure Database for PostgreSQL, Google Cloud SQL) work like a self-hosted server. Do not use `localhost`: give an address or DNS name the pods can resolve.
 - For `autoInit: true` (recommended): an administration account allowed to create databases and roles (`CREATEDB` and `CREATEROLE`).
 - TLS: if the server requires it, the CA certificate of the server, stored in a secret (see [Encrypted connections](#encrypted-connections)).
 - The `pg_stat_statements` extension is recommended for performance analysis. It is not created by the charts: ask your DBA to enable it (`shared_preload_libraries`) and to run `CREATE EXTENSION pg_stat_statements;` in `analytics_db`.
