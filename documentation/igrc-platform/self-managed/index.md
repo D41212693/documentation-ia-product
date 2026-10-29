@@ -34,7 +34,7 @@ The charts are published in the `docker.io/radiantone` OCI registry (`oci://dock
 | Verify | [Post-installation](./self-managed/05-post-installation.md) | Checks, first login, users and roles |
 | Configure | Configuration, integrations, extractors, components | Day-2 configuration of the platform |
 | Migrate | Data migration | Move an on-premises installation to Self-Managed |
-| Operate | Operations | Backup and restore, troubleshooting, uninstallation, upgrades |
+| Operate | Operations | Backup and restore, troubleshooting, uninstallation, upgrades, project changes |
 | Secure | Security | FIPS mode and vulnerability reports |
 | Reference | [Glossary](./self-managed/14-glossary.md) | Product terms used in this guide |
 

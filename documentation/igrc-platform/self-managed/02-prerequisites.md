@@ -82,6 +82,8 @@ Choose one of these options:
 
 For the first two options, you need an account on `repository.brainwavegrc.com`, usually a service account, provided by Radiant Logic on request. Log in to `https://repository.brainwavegrc.com` with this account and generate an access token: the instance uses the account name as username and the token as password (`authType: basic`).
 
+To change the project of a running instance, push to its branch: see [Project changes](./11-operations/05-project-changes.md).
+
 > [!note] When you upgrade to a new minor version, switch the instance to the matching branch (`release/<MAJOR.MINOR>`), or merge it into your own branch if you adapted the project.
 
 ## Network flows
