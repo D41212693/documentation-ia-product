@@ -53,7 +53,7 @@ At the first login, Keycloak asks the technical administrator to change the pass
 ## 3. Check the project and the mail
 
 - In the configuration interface, open **Git Project** and check that the repository and branch of the values are synchronised. To use another branch, change it here: this setting is kept across upgrades.
-- If SMTP is enabled, check the mail server in the controller configuration (**Email server configuration**) and add the recipients of the execution plan notifications (**Recipients of notification emails**). Without recipients, the controller does not send these mails.
+- If SMTP is enabled, check the SMTP settings in the controller (**Configuration**, **Email server** tab, read only) and add the recipients of the execution plan notifications (**Configuration**, **Notifications** tab). Without recipients, the controller does not send these mails.
 
 ## 4. Give users access
 
@@ -69,6 +69,6 @@ A user also needs an account with the same login in the Identity Ledger (the cur
 
 ## 5. Load the first timeslot
 
-1. Upload the source files of the project in the controller (**Uploads**, listed in **Import files**), in the folder expected by the collectors.
-2. Start the execution plan from the controller, then follow it and download its logs from the same page. See [Controller](./09-components/controller.md).
+1. Send the source files of the project to the instance: from the portal (**Data source Management**, **Status**, **Upload data**), with the PowerShell extractor, or with the connectors. They are listed in **Import files** in the controller.
+2. Start the execution plan: **Submit a new execution plan** in the controller (**Execution plans**), or **Launch an execution plan** in the portal. Follow it and download its logs from the controller. See [Controller](./09-components/controller.md).
 3. Once the timeslot is validated, the portal displays the data.

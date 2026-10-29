@@ -22,7 +22,7 @@ The synchronisation schedule is taken from `gitServer.defaultCron` at the first 
 1. Push the change to the branch of the instance (`git.default.branch`).
 2. Wait for the next synchronisation, or trigger it now (see below).
 3. Execution plans started after the synchronisation use the new project: nothing else to do for the data collection.
-4. If the change affects the portal (pages, views, reports, rules displayed in the portal), restart the portal:
+4. If the change affects the portal (pages, views, reports, rules displayed in the portal), restart the portal: in the configuration interface, click **Restart portal** in the header and confirm, or run:
 
     ```bash
     kubectl rollout restart statefulset/portal -n <IDA_NAMESPACE>
@@ -32,6 +32,8 @@ The synchronisation schedule is taken from `gitServer.defaultCron` at the first 
     If the workflow component is enabled, restart the `workflow` statefulset in the same way: it reads the project like the portal.
 
 ## Trigger a synchronisation now
+
+The configuration interface has no button to synchronise the project.
 
 Running `helm upgrade` of the instance again, with the same values, triggers an immediate synchronisation when the Git settings come from the values.
 

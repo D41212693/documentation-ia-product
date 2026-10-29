@@ -1,117 +1,96 @@
 ---
 title: Controller
-description: Documentation for controller usage and configuration
+description: Follow the uploads, connectors and execution plans of a Self-Managed Identity Analytics instance in the controller.
 ---
 
 # Controller
 
-## Home page
+The controller receives the source files of the instance (uploads from the portal, the PowerShell extractor or the connectors), keeps the files used by the next execution plan, and starts and follows the execution plans.
 
-![Controller home page](images/controller_home.png "Controller home page")
+It is available at `https://<IDA_DNS><IDA_PATH>/controller`. Log in with an account that has the `technicaladmin` role, for example `setup`.
 
-This dashboard shows:  
+All the pages share the same layout:
 
-- the current number of files present in the import files
-- the number of uploads received
-- the number of connectors declared in the portal
-- the number of past execution plans
+- the menu on the left: **Home**, **Import files**, **Uploads**, **Connectors**, **Execution plans** and **Configuration**;
+- in the header, the bell icon opens the [Events](#events) page (a red dot shows new events), and the power icon logs you out;
+- the tables can be sorted by clicking a column header and filtered with the boxes above them.
 
-Moreover, you will see if an execution plan has been submitted or is currently running.  
+Dates are displayed in the time zone of your browser, except the **File date** columns, displayed in UTC.
 
-## Import files page
+## Home
 
-![Import files](images/controller_importfiles.png "Import files")
+![Controller home page](images/controller-home.png "Controller home page")
 
-This page lists all the files that will be part of the next execution plan.  
+The home page shows four tiles, with the number of import files, uploads, connectors and execution plans. Click a tile to open the corresponding page. A banner tells you when an execution plan is submitted or running.
 
-You can use the ![Download](images/download.png "Download") button to download the corresponding file and the ![Delete](images/trashcan.png "Delete") button to delete it.  
+## Import files
 
-> Note that deleting a file only deletes that particular instance of the file.  
-> If a file with the same name (and path) as a previously deleted one is included in a later upload, it will become part of the current list of files to be imported.  
+![Import files page](images/controller-import-files.png "Import files page")
 
-## Uploads page
+This page lists the files that the next execution plan will use, with their name, their path (the folder of the data source under the import files), their date, their size and the upload they come from.
 
-![Upload](images/controller_uploads.png "Upload")
+- The download icon downloads the file.
+- The trash icon deletes the file from the import files, after confirmation. If a later upload contains a file with the same name and path, it becomes part of the import files again.
+- The link icon next to the upload date opens the details of the upload.
 
-This page lists all the received uploads. It also indicates, for each upload, the number of file it contained and the number of files still present in the import files.  
+## Uploads
 
-### Upload detail
+![Uploads page](images/controller-uploads.png "Uploads page")
 
-![Upload details](images/controller_upload_detail.png "Upload details")
+This page lists the uploads received by the instance, with their date, their source (for example `Portal (by Setup)`), the connectors they come from, the number of files they contained and the number of these files still present in the import files.
 
-This shows all the files contained in a particular upload.  
+Click the date of an upload to open its details:
 
-The leftmost column will show a ![Current](images/file_current.png "Current") icon if the file in this upload is still present in the import files or a ![Obsolete](images/file_obsolete.png "Obsolete") if it has been superseded by a later upload (or manually deleted in the import files page).  
+![Upload details](images/controller-upload-details.png "Upload details")
 
-## Connectors page
+The **Active?** column shows whether each file of the upload is still in the import files, or has been replaced by a later upload or deleted.
 
-![Connectors](images/controller_connectors.png "Connectors")
+## Connectors
 
-Shows the connectors declared via the portal.  
+![Connectors page](images/controller-connectors.png "Connectors page")
 
-You can see, for each connector, if it is enabled or not, the date it was last executed (if any), the next date it will be executed and the number of available test files.  
+This page lists the connectors declared in the portal, with their type, their category, whether they are enabled, and the dates of their last and next scheduled runs. The next run date can be in the past when the scheduling of the extractions is disabled in the configuration interface.
 
-> Note that the next execution date can be in the past if the orchestrator has not yet requested an execution of this connector.  
+Click a connector to open its details:
 
-### Connector detail
+![Connector details](images/controller-connector-details.png "Connector details")
 
-![Connector details](images/controller_connector_detail.png "Connector details")
+**Submit a new test execution** runs the connector once and keeps its result as a test, without adding it to the import files. In the table of test results, you can download a result, delete it, or transfer it to the import files so that the next execution plan uses it.
 
-Here you can see the details of a declared connector.  
+## Execution plans
 
-You can also request a test execution of this connector. It will run the connector and collect the resulting zip file but not merging it with the import files.  
+![Execution plans page](images/controller-execution-plans.png "Execution plans page")
 
-In the test results table, you can use the ![Download](images/download.png "Download") button to download the test zip file and the ![Delete](images/trashcan.png "Delete") button to remove it.  
+This page lists the execution plans, with their status, their submission, start and completion dates, their duration and the user who requested them.
 
-## Execution plans page
+- **Submit a new execution plan** starts an execution plan immediately with the current import files, without confirmation. The button is hidden while a plan is submitted or running. You can also start a plan from the portal (**Data source Management**, **Launch an execution plan**).
+- While a plan is running, the orange square button aborts it.
+- The status of a plan is **Submitted** (the batch has not started yet), **Running**, **Completed**, **Error** or **Aborted**.
 
-![Execution plan](images/controller_execplans.png "Execution plan")
+Click the link icon next to a finished plan to open its details:
 
-Lists all the execution plans.  
+![Execution plan details](images/controller-execution-plan-details.png "Execution plan details")
 
-An execution plan can be in one of the following states:  
+The details page shows the status, the user who launched the plan, its dates, its duration and the message of the batch. **Download execution logs** downloads a zip file with the summary of the plan (phases, steps, data files used and Git commit of the project) and the batch report.
 
-- Submitted ![Submitted](images/execplan_submitted.png) (the batch process has not started yet)
-- Running ![Running](images/execplan_running.png) (the batch process is running)
-- Completed successfully ![Completed](images/execplan_completed.png)
-- Finished with errors ![Error](images/execplan_error.png)
+By default, the new timeslot is validated automatically at the end of a successful plan.
+
+## Events
+
+![Events page](images/controller-events.png "Events page")
+
+The bell icon of the header opens the list of the events of the controller: uploads received, connectors created, execution plans submitted, started, completed or failed. Filter them by type (upload, execution plan or connector events) and by date range: the last 7 days are displayed by default.
 
 ## Configuration
 
-### Recipients of notification emails
+### Notifications
 
-![Controller notification configuration](images/controller_config_notifs.png)
+![Notifications configuration](images/controller-config-notifications.png "Notifications configuration")
 
-Here you can configure the recipients of notifications for:  
+Enter the email addresses to notify when an execution plan succeeds, when it fails, and when an extraction fails. Type an address and click (+) to add it. The controller sends these emails only if SMTP is enabled.
 
-- Execution plan success
-- Execution plan failure
-- Extraction failure
+### Email server
 
-### Email server configuration
+![Email server configuration](images/controller-config-email-server.png "Email server configuration")
 
-#### SMTP configuration
-
-![](images/controller_config_smtp.png)
-
-For SMTP emails you must configure:
-- 'SMTP relay': the host name of the STMP relay server
-- 'Port': the port the relay listen to (defaults to 25 if SSL mode is disabled or 465 otherwise)
-- 'Authentication': authentication mode, can be 'If available', 'Always' or 'Never'
-- 'User name': the connection name when authentication is used
-- 'Password secret key': the key of the authentication password as defined in the configuration application
-- 'SSL mode': whether secure SSL connection is used or not, can be 'Yes' or 'No'
-- 'TLS': whether TLS is used or not, can be 'If available', 'Always' or 'Never'
-- 'Sender email': the From address of sent emails
-
-You will also find a section to send a test email to an address using the configuration defined above.  
-
-#### Global SMTP
-
-It is possible to use the SMTP relay parameters defined in the configuration UI for the controller. To do so select the "Global SMTP" option in the Email server configuration tab.  
-
-#### Disabling notification emails
-
-![](images/controller_config_none.png)
-
-You can disable sending emails by selecting 'No email' in the 'Server type' combo box.  
+This tab displays the SMTP settings of the instance. It is read only: the SMTP settings come from the `smtp.*` values of the Helm chart. To change them, update your values file and run `helm upgrade`. See [Which setting wins](../06-configuration/01-config-ui.md#which-setting-wins).

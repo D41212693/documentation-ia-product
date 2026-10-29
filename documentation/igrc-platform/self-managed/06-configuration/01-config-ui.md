@@ -17,7 +17,7 @@ Some settings can be set both in the Helm values and in the configuration interf
 
 | Setting | Where to set it | At each `helm upgrade` |
 | :------ | :-------------- | :--------------------- |
-| SMTP (server, port, sender, authentication) | Values `smtp.*` | The values are written again and overwrite changes made in the configuration interface. The controller only displays these settings. The portal and the controller restart when they change. |
+| SMTP (server, port, sender, authentication) | Values `smtp.*` | The values are written again and overwrite changes made in the configuration interface (**Mail** page). The controller only displays these settings (**Email server** tab). The portal and the controller restart when they change. |
 | Git repository of the project | Values `git.default.*` | The values are written again and an immediate Git synchronisation is triggered. |
 | Other Git repository selected in the configuration interface | Configuration interface | Kept: the instance keeps using the repository selected in the interface. |
 | Git synchronisation schedule | Values `gitServer.defaultCron`, first installation only | Not written again. See [Project changes](../11-operations/05-project-changes.md). |
