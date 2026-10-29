@@ -134,19 +134,17 @@ To enable Keycloak to query your Active Directory, you must declare a read-only 
 
 > Don't forget to allow the service account to follow referrals if you have multiple domains and forests.
 
-Enable Active Directory to support LDAP or LDAPs if not yet available
-
-Open route from the Identity analytics solution cluster to Active Directory on port LDAP port (default is 389) or LDAPs port (default 636).
+Open the route from the cluster to the domain controllers on port 389 (LDAP, or LDAP with StartTLS) or 636 (LDAPS). For LDAPS or StartTLS, the certificate of the domain controller must contain, in its subject alternative names, the host name used in the connection URL, and Keycloak must trust its certificate authority: see [LDAP over SSL and StartTLS](#ldap-over-ssl-and-starttls).
 
 ### User Federation required information
 
 Get from your Active Directory administrator:
 
-- [ ] `LDAP Host`: Domain Controller host name or IP
+- [ ] `LDAP Host`: host name of the domain controller. With LDAPS or StartTLS, use the DNS name present in its certificate, not an IP address.
 - [ ] `Service Account Bind DN`: Service Account distinguished name.
 - [ ] `Service Account Bind Credentials`: Service Account credentials.
 - [ ] `Users DN`: distinguished name from which users are searched for. If users that you will grant to Identity analytics solution are located in distinct nodes, choose the root DN common to those nodes. It is not possible to enter more than one DN to search for users.
-- [ ] `Username LDAP attribute`: name of the LDAP attribute which is mapped to Keycloak username. For instance `cn` or `sAMAccountName`.
+- [ ] `Username LDAP attribute`: name of the LDAP attribute which is mapped to Keycloak username, usually `sAMAccountName`.
 - [ ] `User search scope`: possible values are `One Level` or `Subtree`. First option means that users are search at the `Users DN` level. Second options means that users are searched whatever the level from `Users DN`.
 - [ ] `Groups DN`: distinguished name from which groups are searched for. If groups assigned to LDAP users are located in distinct nodes, choose the root DN common to those nodes. It is not possible to enter more than one DN to search for groups.
 - [ ] `Group name LDAP attribute`: name of the LDAP attribute which is mapped to the Keycloak group name. For instance `cn`.
@@ -159,27 +157,29 @@ Once connected to the Keycloak Administration Console:
 2. Select `User Federation` from the menu.  
 3. Click on `Add new provider`dropdown list and choose `LDAP`.  
 4. Enter **General options** and **Connection settings**  
-    - `Console display name`: a name to identify your Active Directory users repository.
+    - `UI display name`: a name to identify your Active Directory users repository.
     - `Vendor`: choose `Active Directory`
-    - `Connection URL`: LDAP connection URL of ACtive Directory. It is prefixed by `ldap://` or `ldaps://` followed by the `LDAP Host`. See [gathered information](#user-federation-required-information).
-    - `Enable StartTLS`: if you choose LDAPS
-    - `Use Truststore SPI`: choose option `Only for ldaps`
+    - `Connection URL`: LDAP connection URL of Active Directory: `ldap://<LDAP_HOST>:389` (plain LDAP or StartTLS) or `ldaps://<LDAP_HOST>:636` (LDAPS). See [gathered information](#user-federation-required-information).
+    - `Enable StartTLS`: `On` only with an `ldap://` URL, to encrypt the connection. Leave it `Off` with `ldaps://`: the connection is already encrypted and StartTLS fails with `TLS is already enabled on this LDAP session`.
+    - `Use Truststore SPI`: keep `Always` (default).
+    - `Connection pooling`: set to `Off` when StartTLS is `On`: Keycloak refuses to save the provider otherwise (`Can not enable both StartTLS and connection pooling`). It can stay `On` with `ldaps://` or plain `ldap://`.
     - `Connection timeout`: LDAP connection timeout in milliseconds. For instance, 1000.
     - `Bind type`: select `simple` to connect to Active Directory with LDAP service account and password.
     - `Bind DN`: service account distinguished name. See [gathered information](#user-federation-required-information).
-    - `Bind credentials`: service account credentials name. See [gathered information](#user-federation-required-information).
+    - `Bind credentials`: password of the service account. See [gathered information](#user-federation-required-information).
 5. Enter **LDAP searching and updating** fields
     - `Edit mode`: choose the `READ_ONLY` value so that LDAP attributes are one-way synched to Keycloak.
-    - `Users DN`: distinguished name from which users are searched for. See [gathered information](#user-federation-required-information). For example, 
-    - `Username LDAP attribute`: choose the LDAP attribute in Active Directory that fills the Keycloak username. See [gathered information](#user-federation-required-information). For example, the common name `cn`.  
+    - `Users DN`: distinguished name from which users are searched for. See [gathered information](#user-federation-required-information).
+    - `Username LDAP attribute`: the LDAP attribute in Active Directory that fills the Keycloak username. The console proposes `cn` for Active Directory: replace it with `sAMAccountName` (see the warning below).  
   
     > [!warning]  
     > If you are using standard *iGRC project configuration*, `Username LDAP attribute` must be equal to `sAMAccountName` (same as `username` attribute mapper defined later in this section).  
     >
-    > If user dos not connect with `sAMAccountName` or `email`, then you must adapt the configuration *iGRC project configuration*, the provided iGRC view (`br_portal_identity`), for username to match the corresponding login in the right repository.
+    > If users do not connect with `sAMAccountName` or `email`, then you must adapt the configuration *iGRC project configuration*, the provided iGRC view (`br_portal_identity`), for username to match the corresponding login in the right repository.
 
     - `Search scope`: recursive or one level user search. See [gathered information](#user-federation-required-information). For example, `Subtree`.
     - `Pagination`: set to `On` in case of large number of users.
+    - `Referral`: set to `follow` if you have multiple domains or forests and the service account is allowed to follow referrals.
 6. Enter **Synchronization settings** fields
     - `Import users`: set to `On`. Keycloak will import users at after configuration terminated.
     - `Batch size`: import `1000` users per transaction.
@@ -194,22 +194,61 @@ Once connected to the Keycloak Administration Console:
     - `Trust email`: set to `On`. Active Directory is considered as authoritative source for email and verification is not required.
 9. Click `Save` button
 
-### LDAP over SSL
+### LDAP over SSL and StartTLS
 
-> [!warning] This configuration is not yet supported.
+LDAPS (`ldaps://`, port 636) and StartTLS (`ldap://`, port 389, `Enable StartTLS` on) are supported. Keycloak checks the certificate of the domain controller against its truststore, and checks that the host name of the connection URL is in the certificate.
+
+If the certificate of your domain controllers is issued by an internal certificate authority, add this authority to Keycloak:
+
+1. Create a ConfigMap with the root certificate of the authority, in PEM format, in the Shared Services namespace. Add the intermediate certificates to the same file if the domain controllers do not send them.
+
+    ```bash
+    kubectl create configmap ldap-ca -n <SHARED_NAMESPACE> --from-file=ldap-ca.pem=<CA_FILE>.pem
+    ```
+
+2. Add the following block to `shared.values.yaml`, then run the `helm upgrade` of Shared Services. Keycloak restarts (about one minute) and logs `Found the following truststore files in the truststore paths`.
+
+    ```yaml
+    keycloak:
+      extraVolumes:
+        - name: ldap-ca
+          configMap:
+            name: ldap-ca
+      extraVolumeMounts:
+        - name: ldap-ca
+          mountPath: /opt/keycloak/certs/ldap-ca
+          readOnly: true
+      extraEnvVars:
+        - name: KC_TRUSTSTORE_PATHS
+          value: /opt/keycloak/certs/ldap-ca
+    ```
+
+3. In the user federation, use `ldaps://<DC_FQDN>:636`, or `ldap://<DC_FQDN>:389` with `Enable StartTLS` on and `Connection pooling` off. Then click `Test connection` and `Test authentication`.
+
+Keep this block in your values: an upgrade without it removes the authority from Keycloak. If you replace the certificate later, update the ConfigMap and restart Keycloak.
+
+If `Test connection` returns `SSLHandshakeFailed` (or `AuthenticationFailure` with StartTLS), check the Keycloak logs:
+
+| Message in the Keycloak logs | Cause |
+| :--------------------------- | :---- |
+| `PKIX path building failed … unable to find valid certification path to requested target` | Keycloak does not trust the authority of the certificate |
+| `No subject alternative names matching IP address …` or `No subject alternative DNS name matching …` | The host of the connection URL is not in the certificate |
+| `hostname of the server '…' does not match the hostname in the server's certificate` | Same cause, with StartTLS |
+
+> [!note] This procedure was validated without FIPS mode. In FIPS mode, the truststore format accepted by Keycloak may differ.
 
 ### User Federation group mapping
 
 Once connected to the Keycloak Administration Console, do the following steps to map authorizations to Active Directory groups.
 
-When you created the User Federation in the previous section, Keycloak created default mappers.
+When you created the User Federation in the previous section, Keycloak created default mappers. There is no mapper for the groups yet: you create it below.
 
 | Mapper Name           | Mapper Type                      |
 | --------------------- | -------------------------------- |
 | creation date         | user-attribute-ldap-mapper       |
 | email                 | user-attribute-ldap-mapper       |
 | full name             | full-name-ldap-mapper            |
-| groups                | group-ldap-mapper                |
+| Kerberos principal attribute mapper | kerberos-principal-attribute-mapper |
 | last name             | user-attribute-ldap-mapper       |
 | modify date           | user-attribute-ldap-mapper       |
 | MSAD account controls | msad-user-account-control-mapper |
@@ -219,7 +258,7 @@ You will now check the configuration to create a new mapper for the Active Direc
 
 1. Select the realm of the instance (`<IDA_NAMESPACE>`) from the dropdown box.
 2. Select `User Federation` from the menu.
-3. Click on the card with the `Console display name` you have chosen in the previous section.
+3. Click on the card with the `UI display name` you have chosen in the previous section.
 4. Click on `Add mapper` button.
 5. Enter the general mapper fields
   - `Name`: the mapper will be named `groups`.
@@ -236,7 +275,7 @@ Once connected to the Keycloak Administration Console, do the following steps to
 
 1. Select the realm of the instance (`<IDA_NAMESPACE>`) from the dropdown box.
 2. Select `User Federation` from the menu.
-3. Click on the card with the `Console display name` you have chosen in the previous section.
+3. Click on the card with the `UI display name` you have chosen in the previous section.
 4. In the upper right dropdown list, select `Sync changed users` Action.
 
 > When you finished the configuration above, the full synchronization is executed and may take long time depending on number of users and groups to synchronize.  
