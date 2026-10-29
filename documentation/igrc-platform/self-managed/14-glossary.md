@@ -52,4 +52,4 @@ This page explains the product terms used in this guide. Kubernetes and Helm ter
 | Import files | The files used by the next execution plan, stored in `/data/importfiles` (project variable `importfiles`). Each data source reads its files from its own folder under it. |
 | Upload | A set of files sent to the controller, from the portal, the PowerShell extractor or a connector. |
 | PowerShell extractor | The Windows script (`bw_data_collector`) that extracts data from Active Directory and other sources and uploads it to the instance. See [PowerShell extraction](./06-configuration/03-powershell-extraction.md). |
-| Descartes | The name of the on-premises Identity Analytics releases (R5, R6…), the starting point of a [data migration](./10-data-migration/index.md). |
+| Descartes | The name of the on-premises Identity Analytics releases (R5, R6…), the starting point of a [data migration](./10-data-migration/). |
