@@ -5,11 +5,17 @@ description: Use the configuration interface of a Self-Managed Identity Analytic
 
 # Identity Analytics configuration interface
 
+The configuration interface holds the functional and technical settings of an instance that are not set by the Helm values: the project repository, the emails of the portal and the batch, the schedules, the Identity Data Management connection and the portal debugging.
+
 ## First connection
 
-Once you install self-managed Identity Analytics, you can access the configuration page by navigating to `https://<IDA_DNS><IDA_PATH>/config`. If you are not logged in, you will be redirected to the login page.
+The configuration interface is available at `https://<IDA_DNS><IDA_PATH>/config`. Log in with the technical administrator account (`setup`) or another account with the `technicaladmin` role.
 
-> [!note] In Self-Managed, the infrastructure settings (DNS name, TLS, database, resources) come from the Helm values of the instance. Settings saved in this interface that also exist in the values (for example SMTP) are overwritten by the values at the next `helm upgrade`. See [Which setting wins](#which-setting-wins).
+> [!note] In Self-Managed, the infrastructure settings (DNS name, TLS, database, SMTP server, resources, license) come from the Helm values of the instance and are not displayed in this interface. See [Which setting wins](#which-setting-wins).
+
+Open the pages from the menu on the left or from the tiles of the home page. Direct links to a page (for example `<IDA_PATH>/config/git`) are not supported: go through the menu.
+
+> [!warning] Click **Save** (or **Test and save**) before you leave a page: unsaved changes are lost.
 
 ## Which setting wins
 
@@ -28,199 +34,86 @@ Some settings can be set both in the Helm values and in the configuration interf
 
 Report in your values files any change of a setting written at each upgrade, before you run the next `helm upgrade`.
 
-![Login Page](images/config-interface/login.png)
+## Header
 
-Connect using the `setup` account, with the password set in `global.technicalAdmin.password`.
+The header of every page has three controls:
 
-Once logged in, you will be redirected to the configuration home page, which displays available configuration sections and any warnings. Click on each section to access its configuration page.
+- **Restart portal** restarts the portal, for example after a change of the project or of a setting of this interface. Confirm the restart: it interrupts the ongoing processes of the portal. The button is disabled while the **Git Project**, **Batch** or **Scheduling** pages have missing required fields.
 
-> [!warning] Remember to click `Save` to make your changes effective. If you navigate to a new page before saving your changes, you will loose all applied configuration.
+    ![Restart portal confirmation](images/config-interface/config-ui-restart-portal-confirm.png "Restart portal confirmation")
 
-Restart the service after each configuration section to isolate possible errors.
+- **en** / **fr** switches the language of the interface.
+- The red icon logs you out.
 
-## Header Menu
+## Home
 
-![Header Menu](images/config-interface/header-menu.png)
+![Configuration home page](images/config-interface/config-ui-home.png "Configuration home page")
 
-### Change language
+The home page shows one tile per page: **Git Project**, **Mail**, **Batch**, **Scheduling**, **Identity Data Management** and **Portal**. A tile shows a warning when its page has missing or invalid settings.
 
-To change the language of the configuration interface, click on the language icon in the header and select either `fr` or `en`.
+## Git Project
 
-### Restart services
+![Git Project page, default repository](images/config-interface/config-ui-git-project.png "Git Project page, default repository")
 
-You can restart the services by clicking on the restart icon in the header menu.
+This page selects the Git repository of the project.
 
-> The restart of the services can take a few minutes. Only modified services will be restarted.
+- **Use default** on: the instance uses the repository, branch and credentials of the Helm values (`git.default.*`). This is the usual setting.
+- **Use default** off: enter another repository. Your choice is kept across upgrades.
 
-To restart a component that the interface does not restart, restart its pod, for example `kubectl rollout restart statefulset/portal -n <IDA_NAMESPACE>`.
+![Git Project page, other repository](images/config-interface/config-ui-git-project-custom.png "Git Project page, other repository")
 
-### Logout
+- **Git repository URL** and **Branch**: the repository and the branch of the project.
+- **Authentication Type**: **Basic** (username and password or access token) or **GitHub App**.
+- **Username**: the account used to read the repository. The password is requested when you click **Test and save**.
+- **Project directory**: the folder of the repository that contains the project, `brainwave` by default.
+- **Connection test** checks the connection to the branch with these settings. **Test and save** runs the same test and saves the settings only if it succeeds.
 
-Click the logout icon to log out of the configuration interface.
+See [Project repository](../02-prerequisites.md#project-repository) for the available repositories and credentials.
 
-## Pages
+## Mail
 
-![Sidebar Menu](images/config-interface/sidebar-menu.png)
+![Mail page](images/config-interface/config-ui-mail-redirection.png "Mail page")
 
-### Home page
+This page controls the emails sent by the portal and the batch. The SMTP server itself is set by the `smtp.*` values.
 
-![Home Page](images/config-interface/home.png)
+- **Send portal and batch emails**: enables or disables these emails.
+- **Enable email redirection** and **Redirect emails to**: send all the emails to one address instead of their recipients, for example on an acceptance instance.
+- **Recipients as attachment**: when enabled, the list of the recipients is attached to the email.
 
-The home page displays the configuration sections and any warnings (e.g., missing or incorrect settings). Orange boxes with a warning icon will indicate issues. When you click on a configuration section, you will be redirected to the configuration page of this section. For most settings, a service restart is required to make your changes effective.
+## Batch
 
-- Save your changes: Always click `Save` to apply changes.
-- Invalid Configuration: You cannot save an invalid configuration. Red boxes and warning messages will appear for required or invalid fields.
-- Required Fields: Missing fields (like passwords) will be highlighted with an orange box.
+![Batch page](images/config-interface/config-ui-batch.png "Batch page")
 
-### Global
+**Technical Configuration Name** is the technical configuration of the project used to run the execution plans (`docker` by default).
 
-![Global Page](images/config-interface/global.png)
+## Scheduling
 
-- Domain name: The domain name of the server. In Self-Managed it is set by `global.externalDns` in the Helm values.
-- Timezone: The timezone of the server.
-- TLS enabled: In Self-Managed, TLS is terminated by the ingress controller, with the certificate set in `ingress.tls` of the Shared Services values (see the Installation page).
-- Debug mode enabled: Enable or disable debug mode. This will add some logs for all services except portal. It shouldn't be used in production.
-- Batch memory: The max memory allocated to the batch service.
-- Portal memory: The max memory allocated to the portal service.
-- Controller memory: The max memory allocated to the controller service (useful when uploading large files).
+![Scheduling page](images/config-interface/config-ui-scheduling-enabled.png "Scheduling page")
 
-### Database
+Each switch enables a recurring task; set its frequency with **Every** (day or hour) and **at**. The corresponding cron expression is displayed on the right, and **Clear** removes the schedule.
 
-> [!caution] In Self-Managed, the database is defined by the `database` block of the Helm values: the built-in PostgreSQL managed by CloudNativePG, or an external PostgreSQL server (see the External database page). Only PostgreSQL is supported. The options below that come from the former container-based installation (database exposure port, SQL Server or Oracle drivers) do not apply.
+- **batch scheduling**: starts an execution plan.
+- **Extraction scheduling**: runs the connectors declared in the portal.
+- **Portal update scheduling**: restarts the portal, so that it loads the last synchronised version of the project (see [Project changes](../11-operations/05-project-changes.md)).
+- **Secure portal stop timeout (ms)**: when the portal stops, the time given to the ongoing tasks to complete before the portal is forced to stop.
 
-#### Internal
+> [!note] Spread the schedules so that they do not overlap: an execution plan can take a long time, and the portal should not restart during a plan.
 
-![Database Internal Page](images/config-interface/db_internal.png)
+## Identity Data Management
 
-- Internal database password: The password of the database. Click on `Copy password` to copy the password in your clipboard.
+![Identity Data Management page](images/config-interface/config-ui-identity-data-management-enabled.png "Identity Data Management page")
 
-#### External
+This page connects the instance to RadiantOne Identity Data Management. See [Identity Data Management integration](../07-integrations/iddm.md).
 
-![Database External Page 1](images/config-interface/db_external1.png)
+- **Enable Identity Data Management**: enables the connection.
+- **SDC Group**: the group of the RadiantOne Secure Data Connector, if you use one.
+- **Identity Data Management LDAP URL** and **Port**: the LDAP endpoint of Identity Data Management. **Ping test** checks that it can be reached.
+- **Identity Data Management LDAP username**: the account used to connect. **Authentication test** checks the connection with this account and its password.
 
-- Database driver: The driver used to connect to the database. Note that if you are using another database than postgres, you will have to provide the JDBC driver.
-- Hostname: The hostname of the database.
-- Port: The port of the database.
-- Database name: The name of the database.
-- Microsoft SQL Server allows the configuration of **JDBC connection string options:** Those options will be added to the end of JDBC connection string. It can be used to set some ssl parameters for example.
-- Postgres allows the use of **auto init:**. If the database schema doesn't exist, it will be automatically created on startup of the system.
+The settings of this page are saved only when the corresponding test succeeds.
 
-> [!important] For production environments it is recommended to create the required database schemas using the scripts provided in the artifact repository.  
+## Portal
 
-- Reinitialize database: This button is only displayed the database was previously initialized. If you click on it, you will have to provide the passwords of the 3 schemas in order to reinitialize each one of them.  
+![Portal page](images/config-interface/config-ui-portal.png "Portal page")
 
-> [!warning] This option will delete all the data in your schemas. Use at your own risk.  
-
-![Database External Page 2](images/config-interface/db_external2.png)
-
-- Usernames: The usernames used to connect to your different schemas.
-- Passwords: The passwords used to connect to your different schemas.
-- Schema name: The specific namespace within the database where tables, views, and other objects reside.
-
-> When using a SQLserver database. The auditlog schema must be `igrc`, as a result it is not possible to change the value of this parameter.  
-
-- Connection test: This button will test a user's connection to the external database. In order to test the connection, it uses the username you provided in the configuration page and it asks you for a password. **The password you provide to test your connection isn't saved to your configuration!** Please note that the validity of the configured schemas name is not included in the test.
-
-### Git project
-
-> [!warning] Upon first connection to the `/config` endpoint it is necessary to finalise the configuration by updating the `Username` and the connection password.
-
-#### Without proxy
-
-![Git Project Page](images/config-interface/git.png)
-
-- Git project URL: The URL of the git project.
-- Branch: The branch of the git project.
-- Username: The username used to connect to the git project.
-- Password: The **access token** used to connect to the git project.
-- Project directory: the name of the project's directory in the **git repository**, by default `brainwave`:  
-  ![Project directory](images/config-interface/repository_project_folder_name.png)
-- Connection test: This button will test the connection to the specific branch of the git project with the provided credentials. It is highly recommended to test your connection before saving the configuration.
-- Test and save: This button will test like the previous one and save the configuration if the test is conclusive. It ensures that a corrupted configuration is not saved.
-
-#### With proxy
-
-Enabling this option will route Git traffic through an HTTP proxy. Useful if accessing Git over a restricted network or to increase security.
-
-![Git Project Page](images/config-interface/git_proxy.png)
-
-- Use http proxy: Enable or disable the use of http proxy.
-- Proxy host: The host of the proxy.
-- Proxy port: The port of the proxy.
-- Proxy requires authentication: Enable or disable the authentication to the proxy.
-- Proxy username: The username used to connect to the proxy.
-- Proxy password: The password used to connect to the proxy.
-
-### Mail
-
-#### SMTP Settings
-
-![SMTP Page](images/config-interface/smtp.png)
-
-- Enable email sending: Enable or disable the email sending.
-- SMTP Domain Name: The domain name of the SMTP server.
-- Port: The port of the SMTP server.
-- Use SMTP authentication: Enable or disable the SMTP authentication.
-- Username: The username used to connect to the SMTP server.
-- Password: The password used to connect to the SMTP server.
-- Sender email address: The email address used to send the emails.
-- Sender name: The name used to send the emails.
-
-#### Portal and Batch emails Settings
-
-- Send portal and batch emails: Enable or disable the email sending by the portal and the batch.
-- Redirect email to: The email address to which portal and batch emails will be redirected.
-- Email subject prefix: The prefix of the email subject.
-- Recipients in attachment: Enable or disable the recipients in attachment. If false, the receiver will not know who received the email other than him.
-- Maximum number of emails per session: The maximum number of emails per session. If set to 0, there will be no limit.
-- Split size (in megabytes): The split size in megabytes. If the size of the email is greater than the split size, the email will be split in multiple emails. This Field has to be formatted like this `numberM`. e.g `10M`, `4M`, `16M`. The recommended value is `5M`.
-
-### Batch
-
-![Batch Page](images/config-interface/batch.png)
-
-- Technical configuration name: The name of the technical configuration used for the execution of the batch, the data ingestion.
-- JVM configuration Options. JVM options tu use when running the Batch (the execution plan).
-
-### Scheduling
-
-![Scheduling Page](images/config-interface/scheduling.png)
-
-#### Task automation settings
-
-Here, you have the ability to configure whether a task is repeatedly executed and the frequency of those executions.
-
-For each container (Batch, extraction and portal), you can configure the frequency on the left side of the box. On the right side of the box, you can see the corresponding cron expression. You can also choose to disable the task by clicking on the corresponding switch button.
-
-> It is recommended to spread out the different scheduling to avoid overlap of the different actions. This is important in the case data ingestion that can take time to complete.
-
-Secure portal stop timeout (ms): When the portal is stopped, it closes securely by allowing time for ongoing tasks to complete. This parameter sets the waiting time before forcing the portal to stop.
-
-### Identity Data Management
-
-![Identity Data Management Page](images/config-interface/identity_data_management.png)
-
-- Identity Data Management LDAP URL : The url of the LDAP server
-- Identity Data Management LDAP port : The port on which LDAP communication takes place
-- Ping test : This button allows us to check if we can establish a connection with the LDAP server using the url and port provided.
-- Identity Data Management LDAP username : The username used to connect to the LDAP server.
-- Identity Data Management LDAP password : The password used to connect to the LDAP server.
-- Authentication test : With this button we check if we can connect to the LDAP server with the provided information.
-
-> For this part of the configuration, The information are saved only if the corresponding test is successful.
-
-### Portal
-
-![Identity Data Management Page](images/config-interface/portal.png)
-
-- Enable portal debugging: Enable or disable debug mode in the portal. This provides the debug context within the pages. It isn't recommended for production environments.
-
-## Uploads
-
-![Uploads Page](images/config-interface/license-upload.png)
-
-This page allows you to upload your license file.
-
-> The license file has to contain `.lic` extension. (e.g. `license.lic`)
-
-If a license file is already uploaded, you can delete it by clicking on the `Delete` button.
+**Enable portal debugging** displays the debug context in the portal pages. Do not enable it in production.
