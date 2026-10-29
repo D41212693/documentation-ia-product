@@ -48,7 +48,7 @@ If a check fails, see [Troubleshooting](./11-operations/02-troubleshooting.md).
 | Keycloak, instance realm | `https://<IDA_DNS>/auth/admin/<IDA_NAMESPACE>/console/` | `setup` |
 | Keycloak, master realm | `https://<IDA_DNS>/auth/` | `master-admin`, with `keycloak.auth.adminPassword` of the Shared Services values |
 
-At the first login, Keycloak may ask the technical administrator to change the password and to verify the email address.
+At the first login, Keycloak asks the technical administrator to change the password. It may also ask to verify the email address.
 
 ## 3. Check the project and the mail
 

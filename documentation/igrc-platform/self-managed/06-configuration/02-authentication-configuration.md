@@ -179,7 +179,6 @@ Once connected to the Keycloak Administration Console:
     > If user dos not connect with `sAMAccountName` or `email`, then you must adapt the configuration *iGRC project configuration*, the provided iGRC view (`br_portal_identity`), for username to match the corresponding login in the right repository.
 
     - `Search scope`: recursive or one level user search. See [gathered information](#user-federation-required-information). For example, `Subtree`.
-    - `Read timeout`: 
     - `Pagination`: set to `On` in case of large number of users.
 6. Enter **Synchronization settings** fields
     - `Import users`: set to `On`. Keycloak will import users at after configuration terminated.
@@ -190,7 +189,7 @@ Once connected to the Keycloak Administration Console:
     - `Changed users sync period`: synchronize changes in Active Directory to Keycloak every `14400` seconds (4 hours).
 7. Enter **Cache settings** fields
     - `Cache policy`: MAX_LIFESPAN
-    - `Max lifespan`: `3600` milliseconds
+    - `Max lifespan`: `3600000` milliseconds (1 hour)
 8. Enter **Advanced settings** fields
     - `Trust email`: set to `On`. Active Directory is considered as authoritative source for email and verification is not required.
 9. Click `Save` button
