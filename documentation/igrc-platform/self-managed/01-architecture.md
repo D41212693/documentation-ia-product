@@ -42,7 +42,7 @@ Each `helm install` or `helm upgrade` runs jobs that prepare the platform. They 
 
 ### Optional components
 
-These components are disabled by default and enabled in the values: `aida` and `aiuar` (AI features, with `litellmProxy`), `sqlPad` (SQL console), `metricsService` (Prometheus metrics), `dataRecovery` (data import, see Data migration) and `backup.velero`.
+These components are disabled by default and enabled in the values: `aida` and `aiuar` (AI features, with `litellmProxy`), `sqlPad` (SQL console), `metricsService` (Prometheus metrics) and `dataRecovery` (data import, see Data migration).
 
 ## Traffic flow
 

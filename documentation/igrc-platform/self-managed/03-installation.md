@@ -38,7 +38,8 @@ If you received a username and a token instead of the file, create the secret in
 
 ```bash
 for ns in <SHARED_NAMESPACE> <IDA_NAMESPACE>; do
-  kubectl create secret docker-registry ida-registry-credentials -n "$ns" \n    --docker-server=docker.io --docker-username=<REGISTRY_USER> --docker-password=<REGISTRY_TOKEN>
+  kubectl create secret docker-registry ida-registry-credentials -n "$ns" \
+    --docker-server=docker.io --docker-username=<REGISTRY_USER> --docker-password=<REGISTRY_TOKEN>
 done
 ```
 
