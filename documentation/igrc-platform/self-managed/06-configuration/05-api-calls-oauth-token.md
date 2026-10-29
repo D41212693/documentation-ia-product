@@ -28,7 +28,7 @@ portal:
     authorizedEndpoints: /ws,/get_logs
     authorizedPort: 8081
   api:
-    enabled: true # Required -- enables all 3 routes
+    enabled: true # Required -- creates the API routes
     limits:
       concurrency:
         enabled: false # optional
@@ -66,13 +66,14 @@ To authenticate and get an access token, you need to make a POST request to the 
 The token endpoint is:
 
 ```sh
-AUTH_URL="https://<EXTERNAL_DNS>/auth/realms/<CONTEXT>/protocol/openid-connect/token"
+AUTH_URL="https://<EXTERNAL_DNS>/auth/realms/<IDA_NAMESPACE>/protocol/openid-connect/token"
 ```
 
 Where:
 
 - `<EXTERNAL_DNS>` is the `externalDns` parameter configured in your helm values
-- `<CONTEXT>` is the `pathPrefix` configured in your helm values
+- `<IDA_NAMESPACE>` is the namespace of the instance, which is also the name of its Keycloak realm
+- `<IDA_PATH>`, used in the API URLs below, is the `pathPrefix` configured in your helm values (it starts with `/`)
 
 The parameters to pass are:
 
@@ -130,7 +131,7 @@ You can call a view to get data from the database.
 Sample curl call:
 
 ```bash
-curl -H "Authorization: Bearer $TOKEN" "https://<EXTERNAL_DNS>/<CONTEXT>/api/views/<view-name>"
+curl -H "Authorization: Bearer $TOKEN" "https://<EXTERNAL_DNS><IDA_PATH>/api/views/<view-name>"
 ```
 
 Where `view-name` is the view identifier in the project.
@@ -143,7 +144,7 @@ You can download the compliance report of a campaign.
 Sample curl call:
 
 ```bash
-curl -H "Authorization: Bearer $TOKEN" "https://<EXTERNAL_DNS>/<CONTEXT>/api/compliancereport/<campaignInstanceId>"
+curl -H "Authorization: Bearer $TOKEN" "https://<EXTERNAL_DNS><IDA_PATH>/api/compliancereport/<campaignInstanceId>"
 ```
 
 Where `campaignInstanceId` is the campaign's unique identifier (its ticketlog recorduid).

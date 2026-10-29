@@ -25,13 +25,13 @@ This package comes with default configuration (clients, roles, etc.). The roles 
 - **technicaladmin**: allows the Technical Administration in the Governance Portal user interface and miscellaneous technical interfaces (configuration and controller UIs)
 - **functionaladmin**: allows the Functional Administration in the Governance Portal user interface
 
-All these roles are defined in the client `apisix` client of the `Brainwave` realm.
+All these roles are defined in the client `identity-analytics` of the instance realm. Each instance has its own realm, named after the namespace where it is installed (`<IDA_NAMESPACE>`).
 
 > [!warning] If you change the configuration of those roles or delete them, the Identity analytics solution will not work anymore.
 
 ## Keycloak Administration Console
 
-The Keycloak administration console of the Identity Analytics realm is available at `https://{{HOSTNAME}}{{PATH_PREFIX}}/auth/`, where `{{HOSTNAME}}` is the value of `global.externalDns` and `{{PATH_PREFIX}}` the value of `global.pathPrefix`. This URL is also displayed as **User Admin** in the notes printed at the end of the Helm installation (`helm get notes -n <namespace> <release>`).
+The Keycloak administration console of the Identity Analytics realm is available at `https://{{HOSTNAME}}{{PATH_PREFIX}}/auth/`, where `{{HOSTNAME}}` is the value of `global.externalDns` and `{{PATH_PREFIX}}` the value of `global.pathPrefix`. This URL is also displayed as **User Admin** in the notes printed at the end of the Helm installation (`helm get notes -n <namespace> <release>`). You can also open the console of the instance realm directly at `https://{{HOSTNAME}}/auth/admin/<IDA_NAMESPACE>/console/`.
 
 You log in with the technical administrator account, `setup` by default (`global.technicalAdmin.username`). How you get its initial password depends on what was set in the values file at installation time.
 
@@ -85,13 +85,13 @@ When `global.technicalAdmin.password` and `global.technicalAdmin.email` are empt
 ## Self-service user administration
 
 Keycloak can notify end-users related to accounts and credentials lifecycle.  
-The email configuration in Keycloak is managed by the Identity Analytics configuration UI (`https://{{HOSTNAME}}/config`)
+The email configuration in Keycloak is managed by the Identity Analytics configuration UI (`https://{{HOSTNAME}}{{PATH_PREFIX}}/config`)
 
-> Any changes in Keycloak, will be erased at newt platform restart
+> Any changes in Keycloak, will be erased at next platform restart
 
 ## Local Directory configuration
 
-There is nothing to do to use of this directory. Simply, declare users inside the `Brainwave` realm using the [administration console](https://www.keycloak.org/docs/latest/server_admin/index.html#using-the-admin-console).
+There is nothing to do to use of this directory. Simply, declare users inside the realm of the instance (`<IDA_NAMESPACE>`) using the [administration console](https://www.keycloak.org/docs/latest/server_admin/index.html#using-the-admin-console).
 
 All users declared in this directory must authenticate with the email or username and local credentials.
 
@@ -101,7 +101,7 @@ To create a new user granted to this directory, follow the steps below.
 
 Once connected to the Keycloak Administration Console:
 
-1. Select the `Brainwave` realm from the dropdown box.
+1. Select the realm of the instance (`<IDA_NAMESPACE>`) from the dropdown box.
 2. Click on the `Users` menu.
 3. Then click on the button `Add user`.
 4. Enter values for the `username` (not updatable after creation) and `email` fields. They can have the same values or different values. It depends how your Identity Analytics iGRC project is configured. This is the login used by the end-user when accessing the user interfaces such as Governance Portal.
@@ -116,7 +116,7 @@ Once connected to the Keycloak Administration Console:
 13. Click on `Role mapping` tab.
 14. Click on `Assign role` button.
 15. Click on `Filter by role` field and choose `Filter by clients`.
-16. In the field `Search by role name`, enter `apisix` to select Identity Analytics static built-in roles to assign.
+16. In the field `Search by role name`, enter `identity-analytics` to select Identity Analytics static built-in roles to assign.
 17. Check the roles to assign (ex. `user`)
 18. Then click on `Assign` button.
 
@@ -136,7 +136,7 @@ To enable Keycloak to query your Active Directory, you must declare a read-only 
 
 Enable Active Directory to support LDAP or LDAPs if not yet available
 
-Open route from the Identity analytics solution cluster to Active Directory on port LDAP port (default is 389) or LDAPs port (default 686).
+Open route from the Identity analytics solution cluster to Active Directory on port LDAP port (default is 389) or LDAPs port (default 636).
 
 ### User Federation required information
 
@@ -149,13 +149,13 @@ Get from your Active Directory administrator:
 - [ ] `Username LDAP attribute`: name of the LDAP attribute which is mapped to Keycloak username. For instance `cn` or `sAMAccountName`.
 - [ ] `User search scope`: possible values are `One Level` or `Subtree`. First option means that users are search at the `Users DN` level. Second options means that users are searched whatever the level from `Users DN`.
 - [ ] `Groups DN`: distinguished name from which groups are searched for. If groups assigned to LDAP users are located in distinct nodes, choose the root DN common to those nodes. It is not possible to enter more than one DN to search for groups.
-- [ ] `Group name LDAP attribute`: name of the LDAP attribute which is mapped to Keycloak username. For instance `cn` or `sAMAccountName`.
+- [ ] `Group name LDAP attribute`: name of the LDAP attribute which is mapped to the Keycloak group name. For instance `cn`.
 
 ### User Federation authentication
 
 Once connected to the Keycloak Administration Console:
 
-1. Select the `Brainwave` realm from the dropdown box.  
+1. Select the realm of the instance (`<IDA_NAMESPACE>`) from the dropdown box.  
 2. Select `User Federation` from the menu.  
 3. Click on `Add new provider`dropdown list and choose `LDAP`.  
 4. Enter **General options** and **Connection settings**  
@@ -218,7 +218,7 @@ When you created the User Federation in the previous section, Keycloak created d
 
 You will now check the configuration to create a new mapper for the Active Directory groups.
 
-1. Select the `Brainwave` realm from the dropdown box.
+1. Select the realm of the instance (`<IDA_NAMESPACE>`) from the dropdown box.
 2. Select `User Federation` from the menu.
 3. Click on the card with the `Console display name` you have chosen in the previous section.
 4. Click on `Add mapper` button.
@@ -235,7 +235,7 @@ You will now check the configuration to create a new mapper for the Active Direc
 
 Once connected to the Keycloak Administration Console, do the following steps to synchronize Active Directory users and groups to Keycloak.
 
-1. Select the `Brainwave` realm from the dropdown box.
+1. Select the realm of the instance (`<IDA_NAMESPACE>`) from the dropdown box.
 2. Select `User Federation` from the menu.
 3. Click on the card with the `Console display name` you have chosen in the previous section.
 4. In the upper right dropdown list, select `Sync changed users` Action.
@@ -253,13 +253,13 @@ When an Active Directory user is member of an Active Directory group (for instan
 
 Once connected to the Keycloak Administration Console, do the following steps to assign a set of roles when an Active Directory user is member of an Active Directory group.
 
-1. Select the `Brainwave` realm from the dropdown box.
+1. Select the realm of the instance (`<IDA_NAMESPACE>`) from the dropdown box.
 2. Select `Groups` from the menu.
 3. Select the Active Directory group (ex. `BW_USERS`)
 4. Click on `Role mapping` tab.
 5. Click on `Assign role` button.
 6. Click on `Filter by roles` field and choose `Filter by clients`.
-7. In the field `Search by role name`, enter `apisix` to select Identity Analytics static built-in roles to assign.
+7. In the field `Search by role name`, enter `identity-analytics` to select Identity Analytics static built-in roles to assign.
 8. Check the roles to assign (ex. `user`)
 9. Then click on `Assign` button.
 
@@ -279,6 +279,7 @@ In Keycloak, you can integrate with two main types of Identity Provider, dependi
 Ask your Azure Active Directory Administrator to create a new `App Registration` with the following properties
 
 - `Redirect URI`: this is the address of Keycloak instance. This URI looks like `PROTOCOL`://`DNS_SERVICE_NAME`/auth/realms/`REALM`/broker/`ALIAS`/endpoint where
+  - `REALM` is the realm of the instance, named after its namespace (`<IDA_NAMESPACE>`)
   - `PROTOCOL` is http or https depending on your deployment configuration
   - `DNS_SERVICE_NAME` is the DNS of the Identity analytics solution cluster
   - `ALIAS` is the unique identifier set in Keycloak to this identity provider (remember it for later configuration). We suggest to provide a string that represents the Identity Provider without space or special characters. For instance, `bw-aad-oidc` for Identity Analytics Azure Active Directory using OpenID Connect.
@@ -306,7 +307,7 @@ When the administrator finalized the `App Registration` configuration and the gr
 
 Once connected to the Keycloak Administration Console, do the following steps to configure the Identity Provider, either using OpenID connect or SAML protocol.
 
-1. Select the `Brainwave` realm from the dropdown box.
+1. Select the realm of the instance (`<IDA_NAMESPACE>`) from the dropdown box.
 2. Select `Identity providers` from the menu.
 3. Click on `Add provider` button and select `OpenID Connect v1.0` option.
 4. Fill in `General options` section
@@ -335,7 +336,7 @@ Once connected to the Keycloak Administration Console, do the following steps to
         - `Claim`: the claim that contains the Azure Active Directory groups is named `groups`
         - `Claim Value`: this is the group ID of `Technical Administrator` group provided by your Azure Active Directory administrator
         - `Role`
-            - Client role: `apisix`
+            - Client role: `identity-analytics`
             - Name: `technicaladmin`
 
     -  Map `Functional Administrator` group to the role `functionaladmin`. Fill in the mapper form fields
@@ -345,7 +346,7 @@ Once connected to the Keycloak Administration Console, do the following steps to
         - `Claim`: the claim that contains the Azure Active Directory groups is named `groups`
         - `Claim Value`: this is the group ID of `Functional Administrator` group provided by your Azure Active Directory administrator
         - `Role`
-            - Client role: `apisix`
+            - Client role: `identity-analytics`
             - Name: `functionaladmin`
 
     -  Map `Standard User` group to the role `user`. Fill in the mapper form fields
@@ -355,7 +356,7 @@ Once connected to the Keycloak Administration Console, do the following steps to
         - `Claim`: the claim that contains the Azure Active Directory groups is named `groups`
         - `Claim Value`: this is the group ID of `Standard User` group provided by your Azure Active Directory administrator
         - `Role`
-            - Client role: `apisix`
+            - Client role: `identity-analytics`
             - Name: `user`
 
     -  Map `Designer` group to the role `designer`. Fill in the mapper form fields
@@ -365,7 +366,7 @@ Once connected to the Keycloak Administration Console, do the following steps to
         - `Claim`: the claim that contains the Azure Active Directory groups is named `groups`
         - `Claim Value`: this is the group ID of `Designer` group provided by your Azure Active Directory administrator
         - `Role`
-            - Client role: `apisix`
+            - Client role: `identity-analytics`
             - Name: `designer`
 
 ### SAML v2.0 protocol
@@ -377,17 +378,17 @@ Ask your Azure Active Directory Administrator to create a new `Enterprise Applic
 - **Entity ID**: `<PROTOCOL>://<DNS_SERVICE_NAME>/auth/realms/<REALM>`
 - **Consumer Service URL (ACS)**: `<PROTOCOL>://<DNS_SERVICE_NAME>/auth/realms/<REALM>/broker/<ALIAS>/endpoint` where `<REALM>` is the realm of the instance (the name of its namespace),
     - `<PROTOCOL>` is http or https depending on your deployment configuration
-    - `<DNS_SERVICE_NAME>` is the DNS of the Brainwave package cluster
-    - `<ALIAS>` is the unique identifier set in Keycloak to this identity provider (remember it for later configuration). We suggest to provide a string that represents the Identity Provider without space nor special characters. For instance, `bw-aad-saml` for Brainwave Azure Active Directory using SAML.
+    - `<DNS_SERVICE_NAME>` is the DNS of the Identity Analytics solution cluster
+    - `<ALIAS>` is the unique identifier set in Keycloak to this identity provider (remember it for later configuration). We suggest to provide a string that represents the Identity Provider without space nor special characters. For instance, `bw-aad-saml` for Identity Analytics Azure Active Directory using SAML.
 - **Claims**
 
 | Claim name                                                         | Value                       |
 | ------------------------------------------------------------------ | --------------------------- |
 | Unique User Identifier (Name ID)                                   | user.userprincipalname      |
 | name                                                               | user.userprincipalname      |
-| http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenanme    | user.givenname              |
+| http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname    | user.givenname              |
 | http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname      | user.surname                |
-| http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name         | user.userprincaipalname     |
+| http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name         | user.userprincipalname      |
 | http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress | user.mail                   |
 | http://schemas.microsoft.com/ws/2008/06/identity/claims/groups     | user.groups [SecurityGroup] |
 
@@ -409,7 +410,7 @@ When the administrator finalized the `Enterprise Application` configuration and 
 
 Once connected to the Keycloak Administration Console, do the following steps to configure the Identity Provider, either using OpenID connect or SAML protocol.
 
-1. Select the `Brainwave` realm from the dropdown box.
+1. Select the realm of the instance (`<IDA_NAMESPACE>`) from the dropdown box.
 2. Select `Identity providers` from the menu.
 3. Click on `Add provider` button and select `SAML v2.0` option.
 4. Fill in `General options` section
@@ -444,37 +445,37 @@ Once connected to the Keycloak Administration Console, do the following steps to
         - `Attribute Name`: the claim that contains the Azure Active Directory groups is named `http://schemas.microsoft.com/ws/2008/06/identity/claims/groups`
         - `Attribute Value`: this is the group ID of `Technical Administrator` group provided by your Azure Active Directory administrator
         - `Role`
-            - Client role: `apisix`
+            - Client role: `identity-analytics`
             - Name: `technicaladmin`
 
     -  Map `Functional Administrator` group to the role `functionaladmin`. Fill in the mapper form fields
         - `Name`: `Functional Administrator Group Mapper`
         - `Sync mode override`: choose `Force` option to always update Keycloak during login
-        - `Mapper type`: choose `Claim to Role` option
+        - `Mapper type`: choose `SAML Attribute to Role` option
         - `Attribute Name`: the claim that contains the Azure Active Directory groups is named `http://schemas.microsoft.com/ws/2008/06/identity/claims/groups`
         - `Attribute Value`: this is the group ID of `Functional Administrator` group provided by your Azure Active Directory administrator
         - `Role`
-            - Client role: `apisix`
+            - Client role: `identity-analytics`
             - Name: `functionaladmin`
 
     -  Map `Standard User` group to the role `user`. Fill in the mapper form fields
         - `Name`: `Standard User Group Mapper`
         - `Sync mode override`: choose `Force` option to always update Keycloak during login
-        - `Mapper type`: choose `Claim to Role` option
+        - `Mapper type`: choose `SAML Attribute to Role` option
         - `Attribute Name`: the claim that contains the Azure Active Directory groups is named `http://schemas.microsoft.com/ws/2008/06/identity/claims/groups`
         - `Attribute Value`: this is the group ID of `Standard User` group provided by your Azure Active Directory administrator
         - `Role`
-            - Client role: `apisix`
+            - Client role: `identity-analytics`
             - Name: `user`
 
     -  Map `Designer` group to the role `designer`. Fill in the mapper form fields
         - `Name`: `Designer Group Mapper`
         - `Sync mode override`: choose `Force` option to always update Keycloak during login
-        - `Mapper type`: choose `Claim to Role` option
+        - `Mapper type`: choose `SAML Attribute to Role` option
         - `Attribute Name`: the claim that contains the Azure Active Directory groups is named `http://schemas.microsoft.com/ws/2008/06/identity/claims/groups`
         - `Attribute Value`: this is the group ID of `Designer` group provided by your Azure Active Directory administrator
         - `Role`
-            - Client role: `apisix`
+            - Client role: `identity-analytics`
             - Name: `designer`
 
 11. Click on `Add mapper` button. Create mappers for last name, first name and email from Azure Active Directory to Keycloak user attributes
