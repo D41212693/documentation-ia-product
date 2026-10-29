@@ -36,5 +36,6 @@ The charts are published in the `docker.io/radiantone` OCI registry (`oci://dock
 | Migrate | Data migration | Move an on-premises installation to Self-Managed |
 | Operate | Operations | Backup and restore, troubleshooting, uninstallation, upgrades |
 | Secure | Security | FIPS mode and vulnerability reports |
+| Reference | [Glossary](./self-managed/14-glossary.md) | Product terms used in this guide |
 
 > [!note] The same Helm charts are used for all customers. Everything specific to your environment (DNS names, namespaces, storage class, ingress class, passwords) is set in your own values files and is written as `<PLACEHOLDER>` in this guide.

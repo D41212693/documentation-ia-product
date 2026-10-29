@@ -5,7 +5,7 @@ description: "Components, traffic flow and storage of a Self-Managed Identity An
 
 # Architecture
 
-A Self-Managed deployment is made of two Helm releases and one operator. Shared Services are installed once per cluster and provide authentication and the API gateway. Each Identity Analytics instance has its own namespace, its own business services and its own database. All user traffic enters through an ingress, goes through the APISIX gateway, which authenticates it against Keycloak, then reaches the services of the instance.
+A Self-Managed deployment is made of two Helm releases and one operator. Shared Services are installed once per cluster and provide authentication and the API gateway. Each Identity Analytics instance has its own namespace, its own business services and its own database. All user traffic enters through an ingress, goes through the APISIX gateway, which authenticates it against Keycloak, then reaches the services of the instance. The product terms used in this guide are explained in the [Glossary](./14-glossary.md).
 
 ![Self-Managed Identity Analytics architecture](./images/architecture.png "Self-Managed Identity Analytics architecture")
 
