@@ -45,7 +45,7 @@ This page explains the product terms used in this guide. Kubernetes and Helm ter
 | Execution plan | The batch process that loads the import files into a new timeslot. It is started from the controller or the portal, or on a schedule. By default, the new timeslot is validated automatically at the end of a successful plan. |
 | Validated timeslot | A timeslot made available in the portal after a successful execution plan. |
 | Data source | A source of data declared in the project, for example an HR file or a directory. |
-| Data Source Management (DSM) | The portal menu used to declare data sources, map their files to the Identity Ledger, upload files and launch an execution plan. |
+| Datasource Management (DSM) | The portal menu used to declare data sources, map their files to the Identity Ledger, upload files and launch an execution plan. |
 | Collector | The part of the project that reads a source file and loads its content into the Identity Ledger. |
 | Reconciliation | The link between an account and the identity that owns it. |
 | Connector | A standard extraction declared in the portal (for example Entra ID or SailPoint). The platform runs it and adds its result to the import files. |

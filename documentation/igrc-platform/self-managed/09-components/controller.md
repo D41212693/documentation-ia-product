@@ -63,7 +63,7 @@ Click a connector to open its details:
 
 This page lists the execution plans, with their status, their submission, start and completion dates, their duration and the user who requested them.
 
-- **Submit a new execution plan** starts an execution plan immediately with the current import files, without confirmation. The button is hidden while a plan is submitted or running. You can also start a plan from the portal (**Data source Management**, **Launch an execution plan**).
+- **Submit a new execution plan** starts an execution plan immediately with the current import files, without confirmation. The button is hidden while a plan is submitted or running. You can also start a plan from the portal (**Datasource Management**, **Launch an execution plan**).
 - While a plan is running, the orange square button aborts it.
 - The status of a plan is **Submitted** (the batch has not started yet), **Running**, **Completed**, **Error** or **Aborted**.
 

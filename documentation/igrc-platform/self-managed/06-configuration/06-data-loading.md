@@ -25,7 +25,7 @@ In both cases, the folders and file names expected by the collectors come from t
 
 ## 1. Declare the data sources
 
-The data sources are declared in the portal, in **Data source Management**, **Configure**.
+The data sources are declared in the portal, in **Datasource Management**, **Configure**.
 
 - **Standard data sources** (for example **Generic HR - File**, Active Directory or the standard connectors) are declared directly in the portal: **Add...**, choose the model, then configure the mapping of the file to the Identity Ledger.
 - **Custom data sources** (for example with the **Generic bridge - file** model) also need a collection configured in the project with iGRC Studio. Push this change to the Git repository of the project: see [Project changes](../11-operations/05-project-changes.md).
@@ -40,7 +40,7 @@ Send them in one of these ways:
 
 | Method | How | Use it for |
 | :----- | :-- | :--------- |
-| Portal | **Data source Management**, **Status**, select the data source, **Upload data**, **Upload single file**. **Test datasource** checks the file before you load it. | Files you receive by hand, tests |
+| Portal | **Datasource Management**, **Status**, select the data source, **Upload data**, **Upload single file**. **Test datasource** checks the file before you load it. | Files you receive by hand, tests |
 | PowerShell extractor | The extractor builds a ZIP file and uploads it to the instance. The extraction folders (`hr`, `ad`, `applications`…) must be at the root of the ZIP file: each one becomes a folder of the import files. See [PowerShell extraction](./03-powershell-extraction.md). | Active Directory, HR and other sources extracted on a Windows server |
 | Connectors | The connectors declared in the portal run on the platform on a schedule and add their result to the import files. See the extractors pages, for example [Entra ID](../08-extractors/entra-id.md). | Entra ID, SailPoint and the other standard connectors |
 
@@ -51,7 +51,7 @@ Each sending creates an upload in the controller (**Uploads**). A file sent agai
 Start an execution plan in one of these ways:
 
 - in the controller, **Execution plans**, **Submit a new execution plan**;
-- in the portal, **Data source Management**, **Status**, **Launch an execution plan**, then confirm;
+- in the portal, **Datasource Management**, **Status**, **Launch an execution plan**, then confirm;
 - on a schedule, in the **Scheduling** page of the configuration interface.
 
 The plan downloads the last synchronised version of the project, takes the current import files, runs the collection and loads a new timeslot. Follow it in the controller: its status goes from **Submitted** to **Running**, then **Completed** or **Error**. The details page of the plan gives its message and **Download execution logs**. See [Controller](../09-components/controller.md).

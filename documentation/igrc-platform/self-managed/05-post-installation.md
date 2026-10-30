@@ -75,7 +75,7 @@ A user also needs an account with the same login in the Identity Ledger (the cur
 
 ## 5. Load the first timeslot
 
-1. Send the source files of the project to the instance: from the portal (**Data source Management**, **Status**, **Upload data**), with the PowerShell extractor, or with the connectors. They are listed in **Import files** in the controller.
+1. Send the source files of the project to the instance: from the portal (**Datasource Management**, **Status**, **Upload data**), with the PowerShell extractor, or with the connectors. They are listed in **Import files** in the controller.
 2. Start the execution plan: **Submit a new execution plan** in the controller (**Execution plans**), or **Launch an execution plan** in the portal. Follow it and download its logs from the controller. See [Controller](./09-components/controller.md).
 3. By default, the timeslot is validated automatically at the end of a successful plan, and the portal displays the data: the platform is usable.
 
