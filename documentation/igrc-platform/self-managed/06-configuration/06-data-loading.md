@@ -67,5 +67,6 @@ Once the timeslot is validated, the portal displays the data. A user sees the po
 | Problem | What to check |
 | :------ | :------------ |
 | A data source is not loaded | The file name and folder match the data source declaration (case included), and the file is listed in **Import files** |
+| The plan ends in **Error** with `can not find /data/importfiles/<folder>/<file>` | A collector of the project expects a file that the plan did not receive. Send it as described in step 2, in a folder named exactly `<folder>` (case included), and check that it is listed in **Import files**. Only the files listed there are passed to the plan: a file copied directly to the controller volume is ignored |
 | The plan ends in **Error** with `an issue occured with your license` | The license is expired or not valid: see [Troubleshooting](../11-operations/02-troubleshooting.md) |
 | The plan fails at the start with `last synched GIT hash is empty` | The project has not been synchronised yet: check the logs of the `git-server` pod |
