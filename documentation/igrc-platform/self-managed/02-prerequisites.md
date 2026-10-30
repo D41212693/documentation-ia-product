@@ -78,9 +78,16 @@ Choose one of these options:
 | :----- | :-------------------- | :----- | :---------- |
 | Reference project | `https://repository.brainwavegrc.com/Brainwave/identityanalytics.git`, branch `release/<MAJOR.MINOR>` of your version (for example `release/3.7`) | Read only | You use the standard project without changes |
 | Fork hosted by Radiant Logic | A fork of the reference project, in an organisation created for you on `repository.brainwavegrc.com` | Read and write | You adapt the project; you usually work on your own branches |
-| Your own Git server | A copy of the reference project that you maintain | Your choice | Your organisation requires its own Git server; you handle the copy and its updates |
+| Your own Git server | A project based on the Self-Managed reference project, that you maintain (see below) | Your choice | Your organisation requires its own Git server; you handle the project and its updates |
 
 For the first two options, you need an account on `repository.brainwavegrc.com`, usually a service account, provided by Radiant Logic on request. Log in to `https://repository.brainwavegrc.com` with this account and generate an access token: the instance uses the account name as username and the token as password (`authType: basic`).
+
+With your own Git server, the project must contain the Self-Managed reference project of your version: it brings what a Self-Managed instance needs (technical configuration, data source management, connectors). Either:
+
+- start from the reference project, for a new project;
+- or merge the reference project into your existing project, for example when you migrate an on-premises installation to Self-Managed (see [Project migration](./10-data-migration/project-migration.md)).
+
+Your existing on-premises project alone is not enough. To get the reference project, you also need an account on `repository.brainwavegrc.com`, as above.
 
 To change the project of a running instance, push to its branch: see [Project changes](./11-operations/05-project-changes.md).
 
