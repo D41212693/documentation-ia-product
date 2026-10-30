@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1180" viewBox="0 0 1600 1180" font-family="Helonik, Arial, sans-serif">
+  <!-- Radiant Logic documentation palette: rlBlue #2348FF, rlBlue10 #E5EBFF, rlBlue20 #D3DDFD, rlIvory40 #F6F6F4, rlGrey #777777, rlBlack #000000 -->
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#3F3F3F"/>
+    </marker>
+    <style>
+      .ns { fill: #F6F6F4; stroke: #CCCCCC; stroke-width: 2; stroke-dasharray: 10 8; }
+      .box { fill: #FFFFFF; stroke: #3F3F3F; stroke-width: 2; }
+      .key { fill: #E5EBFF; stroke: #2348FF; stroke-width: 3; }
+      .db { fill: #FFFFFF; stroke: #2348FF; stroke-width: 2; }
+      .ext { fill: #F8F8F8; stroke: #CCCCCC; stroke-width: 2; }
+      .t { font-size: 26px; font-weight: 600; fill: #000000; }
+      .s { font-size: 21px; fill: #000000; }
+      .q { font-size: 19px; fill: #777777; }
+      .h { font-size: 22px; font-weight: 600; fill: #505050; letter-spacing: 1px; }
+      .lbl { font-size: 19px; fill: #505050; }
+      .ln { stroke: #3F3F3F; stroke-width: 2.5; fill: none; }
+    </style>
+  </defs>
+
+  <!-- users and ingress -->
+  <rect class="box" x="600" y="30" width="400" height="70" rx="12"/>
+  <text class="t" x="800" y="74" text-anchor="middle">Users (browser, API)</text>
+  <rect class="box" x="600" y="140" width="400" height="84" rx="12"/>
+  <text class="t" x="800" y="176" text-anchor="middle">Ingress controller</text>
+  <text class="q" x="800" y="206" text-anchor="middle">provided by the cluster · TLS</text>
+
+  <!-- shared services namespace -->
+  <rect class="ns" x="30" y="270" width="1540" height="290" rx="16"/>
+  <text class="h" x="1544" y="306" text-anchor="end">SHARED SERVICES NAMESPACE · ida-shared-helm · once per cluster</text>
+
+  <rect class="box" x="60" y="340" width="330" height="180" rx="12"/>
+  <text class="t" x="84" y="384">apisix-etcd</text>
+  <text class="s" x="84" y="420">StatefulSet</text>
+  <text class="s" x="84" y="452">Stores the APISIX routes</text>
+  <text class="q" x="84" y="488">port 2379 · volume 32 Gi</text>
+
+  <rect class="key" x="430" y="340" width="330" height="180" rx="12"/>
+  <text class="t" x="454" y="384">APISIX gateway</text>
+  <text class="s" x="454" y="420">Deployment</text>
+  <text class="s" x="454" y="452">OIDC check, routing</text>
+  <text class="q" x="454" y="488">port 80 · admin 9180</text>
+
+  <rect class="box" x="800" y="340" width="330" height="180" rx="12"/>
+  <text class="t" x="824" y="384">Keycloak</text>
+  <text class="s" x="824" y="420">StatefulSet</text>
+  <text class="s" x="824" y="452">One realm per instance</text>
+  <text class="q" x="824" y="488">port 8080 · FIPS optional</text>
+
+  <rect class="db" x="1170" y="340" width="370" height="180" rx="12"/>
+  <text class="t" x="1194" y="384">keycloak-db</text>
+  <text class="s" x="1194" y="420">PostgreSQL (CloudNativePG)</text>
+  <text class="s" x="1194" y="452">Keycloak database</text>
+  <text class="q" x="1194" y="488">32 Gi + WAL · or external</text>
+
+  <path class="ln" d="M430 430H394" marker-end="url(#a)"/>
+  <path class="ln" d="M760 430H796" marker-end="url(#a)"/>
+  <path class="ln" d="M1130 430H1166" marker-end="url(#a)"/>
+
+
+  <!-- ida namespace -->
+  <rect class="ns" x="30" y="610" width="1540" height="400" rx="16"/>
+  <text class="h" x="1544" y="646" text-anchor="end">IDENTITY ANALYTICS NAMESPACE · ida-helm · one per instance</text>
+
+  <g>
+    <rect class="box" x="60" y="680" width="350" height="140" rx="12"/>
+    <text class="t" x="84" y="722">portal</text>
+    <text class="s" x="84" y="756">Web portal · StatefulSet</text>
+    <text class="q" x="84" y="790">port 80 / 8081 · logs 16 Gi</text>
+
+    <rect class="box" x="430" y="680" width="350" height="140" rx="12"/>
+    <text class="t" x="454" y="722">controller</text>
+    <text class="s" x="454" y="756">Plans, source files · StatefulSet</text>
+    <text class="q" x="454" y="790">4 volumes · 12 Gi</text>
+
+    <rect class="box" x="800" y="680" width="350" height="140" rx="12"/>
+    <text class="t" x="824" y="722">batch-server</text>
+    <text class="s" x="824" y="756">Runs the timeslots · StatefulSet</text>
+    <text class="q" x="824" y="790">logs 16 Gi</text>
+
+    <rect class="box" x="1170" y="680" width="370" height="140" rx="12"/>
+    <text class="t" x="1194" y="722">git-server</text>
+    <text class="s" x="1194" y="756">Copy of the project · StatefulSet</text>
+    <text class="q" x="1194" y="790">32 Gi + logs 16 Gi</text>
+
+    <rect class="box" x="60" y="840" width="350" height="140" rx="12"/>
+    <text class="t" x="84" y="882">config</text>
+    <text class="s" x="84" y="916">Configuration and secrets</text>
+    <text class="q" x="84" y="950">StatefulSet · port 80</text>
+
+    <rect class="box" x="430" y="840" width="350" height="140" rx="12"/>
+    <text class="t" x="454" y="882">extractor</text>
+    <text class="s" x="454" y="916">Data extractors</text>
+    <text class="q" x="454" y="950">Deployment · port 80</text>
+
+    <rect class="box" x="800" y="840" width="350" height="140" rx="12"/>
+    <text class="t" x="824" y="882">ops-manager</text>
+    <text class="s" x="824" y="916">Events and jobs</text>
+    <text class="q" x="824" y="950">Deployment · port 80</text>
+
+    <rect class="db" x="1170" y="840" width="370" height="140" rx="12"/>
+    <text class="t" x="1194" y="882">shared-db</text>
+    <text class="s" x="1194" y="916">analytics_db, shared_db</text>
+    <text class="q" x="1194" y="950">128 Gi + 32 Gi WAL · or external</text>
+  </g>
+
+  <!-- traffic arrows, drawn last so they sit on top of the namespace frames -->
+  <path class="ln" d="M800 100V136" marker-end="url(#a)"/>
+  <path class="ln" d="M800 224V250H595V336" marker-end="url(#a)"/>
+  <text class="lbl" x="814" y="246">HTTPS · /auth and /&lt;pathPrefix&gt;</text>
+  <path class="ln" d="M595 520V586H245V676" marker-end="url(#a)"/>
+  <text class="lbl" x="610" y="574">authenticated requests to /&lt;pathPrefix&gt;</text>
+
+  <!-- dependencies -->
+  <rect class="ext" x="30" y="1040" width="1540" height="110" rx="16"/>
+  <text class="t" x="800" y="1084" text-anchor="middle">Outside the platform</text>
+  <text class="s" x="800" y="1124" text-anchor="middle">Git repository of the project · SMTP server · identity provider (SAML, OIDC) · image registry · CloudNativePG operator · external PostgreSQL (optional)</text>
+</svg>
