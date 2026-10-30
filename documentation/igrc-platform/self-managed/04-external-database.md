@@ -11,10 +11,41 @@ Both charts can use a PostgreSQL server you operate instead of the built-in Clou
 
 ## Requirements
 
-- PostgreSQL 17 or later (validated with 17; the built-in database of the same chart versions runs PostgreSQL 18.3), reachable from the cluster nodes on its port (5432 by default). Managed services (Amazon RDS, Azure Database for PostgreSQL, Google Cloud SQL) work like a self-hosted server. Do not use `localhost`: give an address or DNS name the pods can resolve.
-- An administration account allowed to create databases and roles (`CREATEDB` and `CREATEROLE`), used by the initialisation jobs at installation and at each upgrade.
+- PostgreSQL 17 or later (validated with 17; the built-in database of the same chart versions runs PostgreSQL 18.3), reachable from the cluster nodes on its port (5432 by default). Do not use `localhost`: give an address or DNS name the pods can resolve.
+- An administration account used by the initialisation jobs at installation and at each upgrade: a superuser, or an account prepared as described in [Administration account](#administration-account). `CREATEDB` and `CREATEROLE` alone are not enough.
 - TLS: if the server requires it, the CA certificate of the server, stored in a secret (see [Encrypted connections](#encrypted-connections)).
 - The `pg_stat_statements` extension is recommended for performance analysis. It is not created by the charts: ask your DBA to enable it (`shared_preload_libraries`) and to run `CREATE EXTENSION pg_stat_statements;` in `analytics_db`.
+
+## Administration account
+
+The initialisation jobs connect with the administration account to create the databases and the roles, then they:
+
+- create schemas owned by the roles they created, and give them the databases (`CREATE SCHEMA ... AUTHORIZATION`, `ALTER DATABASE ... OWNER TO`). Since PostgreSQL 16, this needs the rights of these roles, which an account with `CREATEROLE` does not get by default;
+- refresh the collation version of the databases, including `template1` and `postgres` (`ALTER DATABASE ... REFRESH COLLATION VERSION`), which only their owner or a superuser can do.
+
+With an account that only has `CREATEDB` and `CREATEROLE`, the jobs fail with `must be able to SET ROLE "<role>"` (`init-external-keycloak-db`, `external-db-init`) and `must be owner of database template1` (`analytics-update-db`).
+
+If you do not use a superuser, have your DBA run, as a superuser, before the installation:
+
+```sql
+CREATE ROLE <DB_ADMIN_USER> LOGIN CREATEDB CREATEROLE PASSWORD '<DB_ADMIN_PASSWORD>';
+-- Give the account the rights of the roles it creates
+ALTER ROLE <DB_ADMIN_USER> SET createrole_self_grant = 'set, inherit';
+-- Let the account refresh the collation version of these databases
+ALTER DATABASE template1 OWNER TO <DB_ADMIN_USER>;
+ALTER DATABASE postgres OWNER TO <DB_ADMIN_USER>;
+```
+
+`createrole_self_grant` applies only to the roles created afterwards. If the roles already exist, for example after a failed first installation, also give their rights to the account:
+
+```sql
+GRANT <KEYCLOAK_DB_USER>, app_user, shared_user, analytics_support, analytics_read_access
+  TO <DB_ADMIN_USER> WITH SET TRUE, INHERIT TRUE;
+```
+
+Use the role names of your values if you changed them, and add `ai_svc_user` if the AI features are enabled. Then run `helm upgrade` again for the chart whose job failed: the jobs run at each upgrade.
+
+> [!caution] On managed services (Amazon RDS, Azure Database for PostgreSQL, Google Cloud SQL), the administration account is not a superuser and cannot own `template1` and `postgres`: the job `analytics-update-db` fails. Contact Radiant Logic before choosing a managed service.
 
 ## Shared Services values
 
@@ -68,7 +99,7 @@ database:
 
 | Object | Name | Owner or rights |
 | :----- | :--- | :-------------- |
-| Database | `keycloak_db` (Shared Services) | Keycloak account, schema `keycloak` |
+| Database | `keycloak_db` (Shared Services) | Administration account. The schema `keycloak` belongs to the Keycloak account |
 | Database | `analytics_db` | `app_user` |
 | Database | `shared_db` | `shared_user` |
 | Schemas of `analytics_db` | `igrc` (Identity Ledger), `activiti` (workflows), `auditlog` | `app_user` |
