@@ -31,7 +31,7 @@ All these roles are defined in the client `identity-analytics` of the instance r
 
 ## Keycloak Administration Console
 
-The Keycloak administration console of the Identity Analytics realm is available at `https://{{HOSTNAME}}{{PATH_PREFIX}}/auth/`, where `{{HOSTNAME}}` is the value of `global.externalDns` and `{{PATH_PREFIX}}` the value of `global.pathPrefix`. This URL is also displayed as **User Admin** in the notes printed at the end of the Helm installation (`helm get notes -n <namespace> <release>`). You can also open the console of the instance realm directly at `https://{{HOSTNAME}}/auth/admin/<IDA_NAMESPACE>/console/`.
+The Keycloak administration console of the Identity Analytics realm is available at `https://{{HOSTNAME}}{{PATH_PREFIX}}/auth/`, where `{{HOSTNAME}}` is the value of `global.externalDns` and `{{PATH_PREFIX}}` the value of `global.pathPrefix`.
 
 You log in with the technical administrator account, `setup` by default (`global.technicalAdmin.username`). How you get its initial password depends on what was set in the values file at installation time.
 
@@ -105,6 +105,9 @@ Once connected to the Keycloak Administration Console:
 2. Click on the `Users` menu.
 3. Then click on the button `Add user`.
 4. Enter values for the `username` (not updatable after creation) and `email` fields. They can have the same values or different values. It depends how your Identity Analytics iGRC project is configured. This is the login used by the end-user when accessing the user interfaces such as Governance Portal.
+
+    > [!note] Keycloak stores the username in lower case: `JDOE` becomes `jdoe`.
+
 5. Enter other fields like `First name` and `Last name`.
 6. Choose `Update Password` option in the select box `Required user actions` so that end-user must change the initial password during first connection.
 7. Click on the `Create` button.
@@ -115,8 +118,8 @@ Once connected to the Keycloak Administration Console:
 12. Then click save.
 13. Click on `Role mapping` tab.
 14. Click on `Assign role` button.
-15. Click on `Filter by role` field and choose `Filter by clients`.
-16. In the field `Search by role name`, enter `identity-analytics` to select Identity Analytics static built-in roles to assign.
+15. Choose `Client roles` in the menu of the `Assign role` button.
+16. In the search field, enter `identity-analytics` to select Identity Analytics static built-in roles to assign.
 17. Check the roles to assign (ex. `user`)
 18. Then click on `Assign` button.
 
@@ -296,8 +299,8 @@ Once connected to the Keycloak Administration Console, do the following steps to
 3. Select the Active Directory group (ex. `BW_USERS`)
 4. Click on `Role mapping` tab.
 5. Click on `Assign role` button.
-6. Click on `Filter by roles` field and choose `Filter by clients`.
-7. In the field `Search by role name`, enter `identity-analytics` to select Identity Analytics static built-in roles to assign.
+6. Choose `Client roles` in the menu of the `Assign role` button.
+7. In the search field, enter `identity-analytics` to select Identity Analytics static built-in roles to assign.
 8. Check the roles to assign (ex. `user`)
 9. Then click on `Assign` button.
 
