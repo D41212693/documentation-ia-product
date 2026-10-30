@@ -9,10 +9,6 @@ description: "Convert and export an on-premises Oracle Identity Ledger for impor
 
 Migrate an Oracle database to PostgreSQL using ora2pg, an open source tool (see [licensing](#licenses)). The tool can export most Oracle objects into SQL code compatible for ingestion in PostgreSQL.
 
-## Validated configuration
-
-This procedure was validated with Oracle 19c Standard Edition, Identity Analytics Descartes R5 SP4 and a PostgreSQL 17 target.
-
 ## Prerequisites
 
 > Please note that the ledger database schema to migrate is Descartes R5 (schema version 40).  

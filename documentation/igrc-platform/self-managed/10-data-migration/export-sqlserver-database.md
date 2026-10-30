@@ -11,10 +11,6 @@ description: "Convert and export an on-premises SQL Server Identity Ledger for i
 
 Migrate a SQLServer database to PostgreSQL using ora2pg, an open source tool (see [licensing](#licenses)). The tool can export most MSSQL objects into SQL code compatible for ingestion in PostgreSQL.
 
-## Validated configuration
-
-This procedure was validated with SQL Server Standard Edition 2019 and 2022, Identity Analytics Descartes R5 SP4 and a PostgreSQL 17 target.
-
 ## Prerequisites
 
 > Please note that the ledger database schema to migrate is Descartes R5 (schema version 40).  
