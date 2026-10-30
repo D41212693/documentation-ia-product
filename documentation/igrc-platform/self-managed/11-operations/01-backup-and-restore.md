@@ -115,13 +115,15 @@ The Keycloak database holds the realms of all the instances: restore Shared Serv
 
 ### 1. Recreate the namespaces and the secrets
 
-1. Create the namespaces and the registry secret, as for the [installation](../03-installation.md).
+1. Create the namespaces, the registry secret and, if you serve TLS from the ingress, the TLS secret `<TLS_SECRET>`, as for the [installation](../03-installation.md).
 2. Create the secret of the object store (`<S3_SECRET>`, keys `ACCESS_KEY_ID` and `ACCESS_SECRET_KEY`) in both namespaces.
-3. Recreate the generated secrets you saved, **before** installing the charts. Remove the `metadata.resourceVersion`, `uid`, `creationTimestamp` and `managedFields` fields of the exported files, then create them with the `helm` field manager:
+3. Recreate the generated secrets you saved, **before** installing the charts. Remove the `resourceVersion`, `uid` and `creationTimestamp` fields of the exported files, then create them with the `helm` field manager:
 
     ```bash
-    kubectl create --field-manager=helm -f shared-secrets.yaml
-    kubectl create --field-manager=helm -f ida-secrets.yaml
+    grep -v -E '^\s+(resourceVersion|uid|creationTimestamp):' shared-secrets.yaml > shared-secrets.clean.yaml
+    grep -v -E '^\s+(resourceVersion|uid|creationTimestamp):' ida-secrets.yaml > ida-secrets.clean.yaml
+    kubectl create --field-manager=helm -f shared-secrets.clean.yaml
+    kubectl create --field-manager=helm -f ida-secrets.clean.yaml
     ```
 
     With another field manager (a plain `kubectl create` or `kubectl apply`), the `helm install` fails with `conflict occurred while applying object … conflicts with "kubectl-create"`. If this happened, run the `helm upgrade` of the release again with `--force-conflicts`: the saved values are kept.
