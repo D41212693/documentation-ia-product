@@ -40,7 +40,7 @@ This page explains the product terms used in this guide. Kubernetes and Helm ter
 | Project | The configuration of what the instance collects and computes: data sources, collectors, data model, rules, reports and portal pages. It is stored in a Git repository, in the folder `brainwave`. See [Project repository](./02-prerequisites.md#project-repository). |
 | Reference project | The standard project published by Radiant Logic, with one branch per release (`release/<MAJOR.MINOR>`). |
 | iGRC Studio | The desktop application used to edit a project. Changes are committed and pushed to the Git repository of the project. |
-| Identity Ledger | The data model of Identity Analytics: identities, organisations, accounts, groups, applications, permissions and their links. |
+| Identity Ledger | The database that contains all the objects of the Identity Analytics data model ingested during the execution plans: identities, organisations, accounts, groups, applications, permissions… and the links between them. |
 | Timeslot | A dated snapshot of the Identity Ledger, produced by an execution plan. The portal shows the current timeslot. |
 | Execution plan | The batch process that loads the import files into a new timeslot. It is started from the controller or the portal, or on a schedule. By default, the new timeslot is validated automatically at the end of a successful plan. |
 | Validated timeslot | A timeslot made available in the portal after a successful execution plan. |
