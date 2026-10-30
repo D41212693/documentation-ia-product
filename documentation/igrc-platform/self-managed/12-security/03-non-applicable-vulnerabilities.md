@@ -5,6 +5,8 @@ description: "Reported vulnerabilities assessed as not applicable to Identity An
 
 # Non-applicable vulnerabilities
 
+The vulnerabilities listed on this page are reported by image scanners, but cannot be exploited in Identity Analytics, for the reason given for each one. No action is needed on your side.
+
 ## Version 3.6.1
 
 ### CVE-2025-41249: Spring Framework Core Vulnerability
