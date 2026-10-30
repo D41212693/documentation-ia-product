@@ -49,7 +49,7 @@ The **Active?** column shows whether each file of the upload is still in the imp
 
 ![Connectors page](images/controller-connectors.png "Connectors page")
 
-This page lists the connectors declared in the portal, with their type, their category, whether they are enabled, and the dates of their last and next scheduled runs. The next run date can be in the past when the scheduling of the extractions is disabled in the configuration interface.
+This page lists the connectors declared in the portal, with their type, their category, whether they are enabled, the dates of their last and next scheduled runs, and the number of test results available (**Available tests**, see below). The next run date can be in the past when the scheduling of the extractions is disabled in the configuration interface.
 
 Click a connector to open its details:
 
