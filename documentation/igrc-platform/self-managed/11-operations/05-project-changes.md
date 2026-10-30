@@ -35,7 +35,7 @@ The synchronisation schedule is taken from `gitServer.defaultCron` at the first 
 
 The configuration interface has no button to synchronise the project.
 
-Running `helm upgrade` of the instance again, with the same values, triggers an immediate synchronisation when the Git settings come from the values.
+Running `helm upgrade` of the instance again, with the same values, triggers an immediate synchronisation when the Git settings come from the values (**Use default** selected in the configuration interface). If the configuration service does not answer at that moment, the synchronisation fails and is retried 10 minutes later: a new request during these 10 minutes does not start it earlier. Check the result with `/api/sync/latest` (below).
 
 You can also call the API of `git-server` from your workstation:
 
