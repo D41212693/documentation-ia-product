@@ -80,14 +80,15 @@ Choose one of these options:
 | Fork hosted by Radiant Logic | A fork of the reference project, in an organisation created for you on `repository.brainwavegrc.com` | Read and write | You adapt the project; you usually work on your own branches |
 | Your own Git server | A project based on the Self-Managed reference project, that you maintain (see below) | Your choice | Your organisation requires its own Git server; you handle the project and its updates |
 
-For the first two options, you need an account on `repository.brainwavegrc.com`, usually a service account, provided by Radiant Logic on request. Log in to `https://repository.brainwavegrc.com` with this account and generate an access token: the instance uses the account name as username and the token as password (`authType: basic`).
+Whatever the option, you need an account on `repository.brainwavegrc.com`, usually a service account, provided by Radiant Logic on request:
 
-With your own Git server, the project must contain the Self-Managed reference project of your version: it brings what a Self-Managed instance needs (technical configuration, data source management, connectors). Either:
+- with the reference project or a fork hosted by Radiant Logic, the instance reads the project with this account. Log in to `https://repository.brainwavegrc.com` with it and generate an access token: the instance uses the account name as username and the token as password (`authType: basic`);
+- with your own Git server, you use this account to get the reference project. The instance reads the project from your server, with an account of your server.
+
+With your own Git server, the project must contain the Self-Managed reference project of your version: it brings what a Self-Managed instance needs (technical configuration, data source management, connectors). Your existing on-premises project alone is not enough. Either:
 
 - start from the reference project, for a new project;
 - or merge the reference project into your existing project, for example when you migrate an on-premises installation to Self-Managed (see [Project migration](./10-data-migration/project-migration.md)).
-
-Your existing on-premises project alone is not enough. To get the reference project, you also need an account on `repository.brainwavegrc.com`, as above.
 
 To change the project of a running instance, push to its branch: see [Project changes](./11-operations/05-project-changes.md).
 
