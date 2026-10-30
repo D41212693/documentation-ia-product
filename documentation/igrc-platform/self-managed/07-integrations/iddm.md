@@ -5,17 +5,29 @@ parent: "Integrations"
 
 # Identity Data Management Integration
 
-Radiant Logic offers two complementary products in the identity data space: Identity Data Management and Identity Analytics. This guide focuses on creating and configuring Views within Identity Data Management to streamline the integration of identity data into the Identity Analytics repository, requiring minimal configuration within the Identity Data Analytics platform itself.
+RadiantOne Identity Data Management (IDDM, formerly FID or VDS) is the Radiant Logic product that aggregates identity data from several directories and exposes it as an LDAP directory. This page is optional: follow it only if your organisation already uses Identity Data Management and you want Identity Analytics to read its users and groups from there, instead of extracting them from each source with the [PowerShell extractor](../06-configuration/03-powershell-extraction.md) or the [extractors](../08-extractors/entra-id.md).
 
-Currently, Identity Data Management supports the following data sources for direct View integration with Identity Analytics:
+Identity Analytics can read these sources through Identity Data Management:
 
-Active Directory domains – Users and Groups
+- Active Directory domains: users and groups;
+- Entra ID tenants: users and groups;
+- LDAP directories: users and groups.
 
-LDAP directories – Users and Groups
+The integration has three parts:
 
-## Prerequisites
+1. In Identity Data Management, expose each source under a naming context (the root entry of an LDAP tree, for example `o=IDAAD`) with the structure described below.
+2. In the configuration interface of Identity Analytics, set the connection to Identity Data Management.
+3. In the portal, declare one data source per naming context. The extraction runs on a schedule, like the other connectors.
 
-Identity Analytics requires data in Identity Data Management to be configured in a specific way to enable seamless extraction and collection. The following sections outline the necessary configuration steps for Active Directory and LDAP backends.
+## Connection and network flow
+
+The extractions run in the `extractor` pod of the instance, which connects to the LDAP port of Identity Data Management (2636 for LDAPS and 2389 for LDAP by default). Allow this flow from the cluster, or use a RadiantOne Secure Data Connector (SDC) group.
+
+Set the connection in the configuration interface, **Identity Data Management** page: LDAP URL, port and the account used to read the data, then run the ping and authentication tests. See [Configuration interface](../06-configuration/01-config-ui.md#identity-data-management).
+
+## Prerequisites in Identity Data Management
+
+Identity Analytics requires the data in Identity Data Management to be organised in a specific way. The following sections describe the configuration for Active Directory, Entra ID and LDAP backends, in the Identity Data Management control panel.
 
 ### Active Directory backend configuration
 
@@ -31,7 +43,7 @@ The Active Directory domain backend must be configured in the Identity Data Mana
 
 - Configure the mapping of the backend in the label. Select an LDAP backend mapping and point to the desired data source as the backend.  
 
-![Configure the backend LDAp](./images/IDM-backend-mapping.png)
+![Configure the backend LDAP](./images/IDM-backend-mapping.png)
 
 - Remove the DN remapping option for all attributes.  
 
@@ -73,7 +85,7 @@ Navigate to the directory browser page and select the `o=<tenant>` level under `
 
 ### LDAP backend configuration
 
-The LDAP backend should have been configured in the Identity Data Management control panel. The configuration is similar to the configuration for the Active Domain backend. To create the required hierarchy in Identity Data Management, follow these steps:  
+The LDAP backend should have been configured in the Identity Data Management control panel. The configuration is similar to the configuration for the Active Directory backend. To create the required hierarchy in Identity Data Management, follow these steps:  
 
 - In the "Directory Namespace" tab, create a new naming context `o=IDALDAP` based on a virtual tree.
 
@@ -112,18 +124,22 @@ Each datasource requires a sightly different configuration. This is covered in t
 
 ### RadiantOne - Active Directory
 
-This connector is used when connecting to an Active directory backend in Identity Data Manager.  
+Use this data source for an Active Directory backend exposed by Identity Data Management (see [Active Directory backend configuration](#active-directory-backend-configuration)).  
 
 ![RadiantOne - Active Directory datasource configuration](./images/R1-AD-datasource-configuration.png)
 
 Fill out the required fields. Example:
 
 - Datasource name: o=IDAAD
-- Datasource description: Extraction of all AD domains included in the root naming context of o=IDAAD
+- Datasource description: Extraction of all AD domains included in the root naming context o=IDAAD
 
-Options are configured by default and no modification is required. You can adjust your search filter to limit the data extraction.  
+Options:
 
-> If needed, you may change the parameters to correspond to your data structure in Identity Data Management. Note that the `dc` attribute is required.
+- **Search base**: the naming context created in Identity Data Management, `o=IDAAD` in this page. Check this value: depending on the version of the project, the default value can be `o=BWAD`.
+- **AD domains**: keep `(objectClass=domain)`, the object class of the `dc` labels.
+- **Search filter**: keep `(objectClass=*)`, or restrict it to limit the extraction.
+
+> The `dc` attribute of each label is required.
 
 Follow the steps shown in the wizard and complete them.  
 
@@ -131,43 +147,49 @@ Follow the steps shown in the wizard and complete them.
 
 This connector is used when connecting to an Entra backend through Identity Data Management. See [here](#entra-backend-configuration) for the required configuration of the namespace in Identity Data Management.  
 
-![RadiantOne - Active Directory datasource configuration](./images/R1-Entra-datasource-configuration.png)
+![RadiantOne - Entra datasource configuration](./images/R1-Entra-datasource-configuration.png)
 
 Fill out the required fields. Example:
 
 - Datasource Name: o=IDAEntra
-- Datasource description: Extraction of all AD domains included in the root naming context of o=IDAEntra
+- Datasource description: Extraction of the Entra ID tenants included in the root naming context o=IDAEntra
 
-Options are configured by default and no modification is required. You can adjust your search filter to limit the data extraction.  
+Options:
 
-> If needed, you may change the parameters to correspond to your data structure in Identity Data Management. Please keep in mind that the `dc` attribute is required.
+- **Search base**: the naming context created in Identity Data Management, `o=IDAEntra` in this page. Check this value: depending on the version of the project, the default value can be `o=BWAzure`.
+- **Azure AD tenants**: keep `(objectClass=organization)`, the object class of the tenant labels.
+- **Search filter**: keep `(objectClass=*)`, or restrict it to limit the extraction.
 
 Follow the steps shown in the wizard and complete them.  
 
 ### RadiantOne - Generic LDAP
 
-This connector is used when connecting to a generic LDAP backend in Identity Data Management.  
+Use this data source for a generic LDAP backend exposed by Identity Data Management (see [LDAP backend configuration](#ldap-backend-configuration)).  
 
-![RadiantOne - Active Directory datasource configuration](./images/R1-LDAP-datasource-configuration.png)
+![RadiantOne - Generic LDAP datasource configuration](./images/R1-LDAP-datasource-configuration.png)
 
 Fill out the required fields. Example:
 
 - Datasource Name: o=IDALDAP
-- Datasource description: Extraction of all AD domains included in the root naming context of o=IDLDAP
+- Datasource description: Extraction of the LDAP directories included in the root naming context o=IDALDAP
 
-Options are configured by default and no modification is required. You can adjust your search filter to limit the data extraction.  
+Options:
 
-> If needed, you may change the parameters to correspond to your data structure in Identity Data Management. Please keep in mind that the `dc` attribute is required.
+- **Search base**: the naming context created in Identity Data Management, `o=IDALDAP` in this page. Check this value: depending on the version of the project, the default value can be `o=BWLDAP`.
+- **LDAP domains**: `(objectClass=dcObject)`, the object class of the `dc` labels (see [LDAP backend configuration](#ldap-backend-configuration)). Check this value: depending on the version of the project, the default value can be `(objectClass=domain)`.
+- **Search filter**: keep `(objectClass=*)`, or restrict it to limit the extraction.
+
+> The `dc` attribute of each label is required.
 
 Follow the wizard for the final steps.  
 
 ### RadiantOne - Generic Bridge
 
-This connector is used as a bridge between Identity Data Management and Identity Analytics.
+Use this data source to extract any other data exposed by Identity Data Management, with your own LDAP URL, search base and filter. It does not use the connection of the configuration interface.
 
-> This connector requires configuration of a dedicated collector line to leverage the input files.  
+> The files it produces are not loaded by the standard collectors: the project needs a dedicated collector line (configured in iGRC Studio) to load them.  
 
-![Add Generic LDAP](./images/R1-bridge-datasource-configuration.png "Add Generic LDAP")
+![RadiantOne - Generic Bridge datasource configuration](./images/R1-bridge-datasource-configuration.png "RadiantOne - Generic Bridge datasource configuration")
 
 After clicking Next, provide the required information in order to connect to the Identity Data Management LDAP URL: 
 - **LDAP Server URL**
