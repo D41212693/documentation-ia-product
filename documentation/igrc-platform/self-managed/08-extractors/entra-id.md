@@ -5,10 +5,9 @@ description: Configuration of the Entra ID extractor
 
 # Azure Active Directory (Entra ID) extractor configuration
 
-This documentation describes how to use scripts provided by Identity Analytics to extract the objects (groups, accounts, etc.) from Azure Active Directory (now known as Entra ID) environments. The provided script `azureadmain.py` has been designed to simplify the data extraction to obtain the import files required for the Identity Analytics Azure Active Directory add-on.
+The Entra ID extractor (formerly Azure Active Directory) extracts the users, groups, group members and group owners of an Entra ID tenant, and adds the resulting files to the import files used by the Entra ID collectors of the project.
 
-The script enables the extraction of objects managed in Azure Active Directory, such as users, groups, group members, and group owners.
-The extraction script is stored in `bwconnectors/azureadmain.py`
+The extractor is part of the instance: nothing is installed on a server. When you declare an Entra ID data source in the portal, a connector is created in the controller and runs on a schedule in the `extractor` pod. This pod calls the Microsoft APIs over HTTPS: allow outbound access from the cluster to `login.microsoftonline.com` and `graph.microsoft.com` (port 443), through your proxy if you use one.
 
 ## Entra ID Configuration
 
@@ -73,7 +72,7 @@ Once you grant consent, you should see the following status:
 
 ### Configure the extractor
 
-1. Open The 'Datasource Management -> configuration' Menu.
+1. In the portal, open **Datasource Management**, **Configure**.
 2. Click on Add.  
 ![Add connector](images/Picture13.jpg)  
 3. Select Azure Active Directory.

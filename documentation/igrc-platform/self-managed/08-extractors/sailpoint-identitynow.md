@@ -7,16 +7,19 @@ description: "Configure the SailPoint IdentityNow extractor."
 
 ## Introduction
 
-This document provides instructions for integrating identity data from SailPointIdentityNow into Radiant Logic Identity Analytics. This extractor leverages SailPointIdentityNow v3 API.
+This document provides instructions for integrating identity data from SailPoint IdentityNow into Radiant Logic Identity Analytics. This extractor leverages SailPoint IdentityNow v3 API.
 
-## SailPointIdentityNow Configuration  
+## SailPoint IdentityNow Configuration  
 
-- Log into SailPointIdentityNow: Use an account with administrative privileges to access the instance.
+- Log into SailPoint IdentityNow: Use an account with administrative privileges to access the instance.
 - Navigate to your account preferences (drop down menu under your name) and Select "Personal Access Tokens" in the left menu.
 
 ![PAT](./images/SPidentityNow/image1.png)
 
 - Click on "New token" to create a new access token
+
+> [!note] A personal access token belongs to the account that creates it and stops working when this account is disabled. Create it with an account dedicated to the integration rather than with a personal administrator account.
+
 - Add a description such as "RadiantOne Identity Analytics"
 - Select the following Oauth2 scopes:
   - `sp:scopes:default`
@@ -36,8 +39,8 @@ This document provides instructions for integrating identity data from SailPoint
 
 ## Identity Analytics Portal Configuration
 
-- SailPointIdentityNow is part of the Datasource Connectors. Connect to your Identity Analytics portal and navigate to the Datasource page.
-- Create a new datasource: Select "SailPointIdentityNow" in the connector list and fulfill the following fields:  
+- SailPoint IdentityNow is one of the data source connectors. In the Identity Analytics portal, open **Datasource Management**, **Configure**.
+- Create a new datasource: Select "SailPoint IdentityNow" in the connector list and fulfill the following fields:  
   - tenant (it is located here in the URL https://**MYTENANT**.identitynow.com/)
   - clientid
   - secret
@@ -46,32 +49,30 @@ If you have an alternate SailPoint url such as https://MYTENANT.identitynow-demo
 
 This extractor will load the following information in the ledger:  
 
-- "SailPointIdentityNow" Repository and Application
-- SailPointPublic Identities as "SailPointIdentityNow" accounts
-- SailPointRoles as "SailPointIdentityNow" permissions with role type and groups (along with membership to "SailPointIdentityNow" accounts)
-- SailPointaccounts as new Repository/Accounts (SourceName is used as a repository)
-- SailPointAccess profiles and Entitlements as source application permissions with role type (along with Roles \> Access Profiles \> Entitlements and Roles \> Entitlements links)
+- "SailPoint IdentityNow" Repository and Application
+- SailPoint public Identities as "SailPoint IdentityNow" accounts
+- SailPoint roles as "SailPoint IdentityNow" permissions with role type and groups (along with membership to "SailPoint IdentityNow" accounts)
+- SailPoint accounts as new Repository/Accounts (SourceName is used as a repository)
+- SailPoint access profiles and Entitlements as source application permissions with role type (along with Roles \> Access Profiles \> Entitlements and Roles \> Entitlements links)
 
 ## IdentityNow – Identity Analytics mapping configuration
 
-Optionally you can configure the companion "SailPointIdentityNow – Mapping" datasource.
+Optionally you can configure the companion "SailPoint IdentityNow – Mapping" datasource.
 
 ![DSM](./images/SPidentityNow/image5.png)
 
 This allows you to load additional account data, specifically data under the "attributes" field in IdentityNow. This data generally is composed of source attributes exposed by the source, without any additional meaning necessarily attached to it.
 
-To fit this information, we require a mapping file that associates source attributes with IDA data model attributes. This file is required to be a csv with the following header:
+To fit this information, provide a mapping file that associates source attributes with Identity Analytics account attributes. The file is named `idnow_mapping.csv`, uses commas as separators and UTF-8 encoding, and starts with a header line. The columns are read by position, whatever their names in the header:
 
-`source_id`,`source_name`,`source_attribute`,`ida_attribute`
+1. `source_id`: the SailPoint IdentityNow internal unique identifier of the source the attribute comes from;
+2. `source_name`: the name of this source;
+3. `source_attribute`: the name of the source attribute, exactly as returned by the v3 API;
+4. `ida_attribute`: the code of the Identity Analytics attribute to map it to (see the list at the end of this page).
 
-- `source_id`: the SailPointIdentityNow internal unique identifier of the source from which this attribute comes.
-- `source_name`: the name of the above-mentioned source.
-- `source_attribute`: the name of the source attribute mapped, must exactly match the name as presented by the v3 API.
-- `ida_attribute`: the code of the IDA attribute to map the source attribute to. You can find a full list of IDA account attributes at the end of this document.
+Once the data source is configured and the mapping file contains at least one line, activate the collection of the source attributes: set the configuration variable `bw_sailpointidnow_extendschema` to `true` in the technical configuration of the project used by the instance (`docker.configuration`, in iGRC Studio), then push the project. See [Project changes](../11-operations/05-project-changes.md).
 
-Once the datasource is configured and the mapping file provided with a minimum of one line, you can activate the collection of source attributes by setting the bw_sailpointidnow_extendschema configuration variable to true.
-
-Note that any mapped source attribute will take precedence over the SailPointIdentityNow default schema attribute, for example if "id" is mapped to clogin it will take over the default "name" attribute.
+Note that any mapped source attribute will take precedence over the SailPoint IdentityNow default schema attribute, for example if "id" is mapped to clogin it will take over the default "name" attribute.
 
 ## Identity Analytics attributes
 

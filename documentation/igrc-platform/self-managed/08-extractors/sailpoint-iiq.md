@@ -39,7 +39,7 @@ If needed, you can edit or delete the client and generate a new secret using the
 
 ## Identity Analytics Portal Configuration
 
-- SailPoint IdentityIQ is part of the Datasource Connectors. Connect to your Identity Analytics portal and navigate to the Datasource Management page.
+- SailPoint IdentityIQ is one of the data source connectors. In the Identity Analytics portal, open **Datasource Management**, **Configure**.
 - Create a new datasource: Select "Sailpoint IdentityIQ" in the connector list and fulfill the following fields:
   - Datasource Name: the name of this datasource (e.g `SailPoint_Prod_A`).
   - Datasource Description (optional): a description of this datasource.
@@ -77,16 +77,14 @@ Mapping" datasource.
 
 This allows you to load additional account data, specifically data under the specific schemas field in IdentityIQ. This data generally is composed of source attributes exposed by the application, without any additional meaning necessarily attached to it.
 
-To fit this information, we require a mapping file that associates application schemas attributes with IDA data model attributes. This file is required to be a csv with the following header:
+To fit this information, provide a mapping file that associates application schema attributes with Identity Analytics account attributes. The file is named `iiq_mapping.csv`, uses commas as separators and UTF-8 encoding, and starts with a header line. The columns are read by position, whatever their names in the header:
 
-`source_id`,`source_name`,`source_attribute`,`ida_attribute`
+1. `app_id`: the SailPoint IdentityIQ internal unique identifier of the application the attribute comes from;
+2. `app_name`: the name of this application;
+3. `schema_attribute`: the name of the application schema attribute, exactly as returned by the SCIM API;
+4. `ida_attribute`: the code of the Identity Analytics attribute to map it to (see the list at the end of this page).
 
-- `app_id`: the SailPoint IdentityIQ internal unique identifier of the application from which this attribute comes.
-- `app_name`: the name of the above-mentioned application.
-- `schema_attribute`: the name of the application schema attribute mapped, must exactly match the name as presented by the SCIM API.
-- `ida_attribute`: the code of the IDA attribute to map the source attribute to. You can find a full list of IDA account attributes at the end of this document.
-
-Once the datasource is configured and the mapping file provided with a minimum of one line, you can activate the collection of source attributes by setting the `bw_sailpointiiq_extendschema` configuration variable to true.
+Once the data source is configured and the mapping file contains at least one line, activate the collection of the source attributes: set the configuration variable `bw_sailpointiiq_extendschema` to `true` in the technical configuration of the project used by the instance (`docker.configuration`, in iGRC Studio), then push the project. See [Project changes](../11-operations/05-project-changes.md).
 
 Note that any mapped source attribute will take precedence over the SailPoint IdentityIQ default schema attribute, for example if "id" is mapped to clogin it will take over the default "displayname" attribute.
 
