@@ -27,7 +27,7 @@ In both cases, the folders and file names expected by the collectors come from t
 
 The data sources are declared in the portal, in **Datasource Management**, **Configure**.
 
-- **Standard data sources** (for example **Generic HR - File**, Active Directory or the standard connectors) are declared directly in the portal: **Add...**, choose the model, then configure the mapping of the file to the Identity Ledger.
+- **Standard data sources** (for example **Generic HR - File**, Active Directory or the standard connectors) are declared directly in the portal: **Add...**, choose the model, then configure the mapping of the file to the Identity Ledger. The settings of each model, the file definition and the mapping are described in the Datasource Management documentation of the project: `static/bw_dsm/generated_doc/datasource_management_en.html` in the Git repository of the project.
 - **Custom data sources** (for example with the **Generic bridge - file** model) also need a collection configured in the project with iGRC Studio. Push this change to the Git repository of the project: see [Project changes](../11-operations/05-project-changes.md).
 
 > [!warning] The name of a file-based data source must be exactly the name of its input file, including case. For a custom data source, the folder you enter is created under the import files, and the collectors read the file from `/importfiles/<FOLDER_NAME>` in the project.

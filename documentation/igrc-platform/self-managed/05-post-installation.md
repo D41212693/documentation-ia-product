@@ -53,11 +53,13 @@ If a check fails, see [Troubleshooting](./11-operations/02-troubleshooting.md).
 | Keycloak, instance realm | `https://<IDA_DNS>/auth/admin/<IDA_NAMESPACE>/console/` | `setup` |
 | Keycloak, master realm | `https://<IDA_DNS>/auth/` | `master-admin`, with `keycloak.auth.adminPassword` of the Shared Services values |
 
-At the first login, Keycloak asks the technical administrator to change the password. It may also ask to verify the email address.
+At the first login, Keycloak asks the technical administrator to change the password and to verify the email address: it sends a mail with a link, so the SMTP settings must work. Keycloak also asks every new local account to verify its email address.
+
+If the mail cannot be sent, log in to the Keycloak master realm (`https://<IDA_DNS>/auth/`) as `master-admin`, select the realm `<IDA_NAMESPACE>`, then in **Users**, open the account, turn **Email verified** on and remove **Verify Email** from **Required user actions**.
 
 ## 3. Check the project and the mail
 
-- In the configuration interface, open **Git Project** and check the repository and the branch. To use another branch, change it here: this setting is kept across upgrades.
+- Check the repository and the branch of the project. With **Use default** on in **Git Project** (configuration interface), the page shows no repository or branch: they come from `git.default.repository` and `git.default.branch` of your values. To use another branch, turn **Use default** off and enter it there: this setting is kept across upgrades.
 - Check that the project is synchronised: the `portal-0` pod becomes ready only once a synchronised version of the project is available (otherwise its logs show `No Git hash is available yet`). In case of doubt, read the logs of the `git-server-0` pod. See [Project changes](./11-operations/05-project-changes.md).
 - If SMTP is enabled, check the SMTP settings in the controller (**Configuration**, **Email server** tab, read only) and add the recipients of the execution plan notifications (**Configuration**, **Notifications** tab). Without recipients, the controller does not send these mails.
 
