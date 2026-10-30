@@ -57,6 +57,14 @@ Log in to the Keycloak Admin Console, navigate to the Clients section and locate
 
 Retrieve the Client ID and Client Secret within the credentials tab.
 
+You can also read the client secret from the cluster, without the console:
+
+```bash
+kubectl get secret keycloak-app-realm-admin-credentials -n <IDA_NAMESPACE>   -o jsonpath='{.data.portal_api_client_secret}' | base64 -d
+```
+
+> [!warning] The client secret of `ida-portal-api` changes at each `helm upgrade` of the instance and after a restore. Until they use the new secret, the API clients get the error `unauthorized_client`. After each upgrade or restore, read the secret again and update your API clients.
+
 ## Executing an API call
 
 ### Getting the access token
