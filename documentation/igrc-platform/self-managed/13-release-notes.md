@@ -9,6 +9,79 @@ This page covers release notes for self-managed Identity Analytics. For more inf
 
 See [vulnerability fixes](./12-security/02-vulnerability-fixes.md) for the complete list of patch versions that include vulnerability fixes in the images.
 
+## Version 3.8.0
+
+Release date: 2026-11-10
+
+> [!warning]
+> **Upgrading from 3.7.x: follow the [FIPS migration guide](./11-operations/04-upgrade/fips-migration.md) before you upgrade.** Shared Services 3.6.0 and Identity Analytics 3.8.0 run FIPS images only. After the switch, Keycloak can no longer read the passwords stored by the standard Keycloak: users must reset their password unless you prepare the upgrade as described in the guide. Back up your databases first.
+
+Identity Analytics 3.8 runs on a new platform (Eclipse, Java 21 and Tomcat 11) and uses FIPS 140-3 compliant images by default. See the [Identity Analytics 3.8 release notes](https://developer.radiantlogic.com/ia/iap-3.8/identity-analytics/iap-release/04-iap-3.X-release-notes/) for the product changes.
+
+> See [Migration 3.8.0](./11-operations/04-upgrade/migration-3.8.0.md) for details: several changes are BREAKING (Keycloak and database password length, SQL Tools removal).
+
+> Recommended versions:
+>
+> - `Shared Services`: 3.6.0
+> - `CNPG`: 1.30
+> - `PostgreSQL`: 18.6
+
+### New Features
+
+- **BWIPUAR-2956, BWIPUAR-3618** — Images are FIPS 140-3 compliant by default
+
+  All the Identity Analytics images now use FIPS-compliant base images, and the batch server runs in FIPS 140-3 mode.
+
+- **BWIPUAR-3952** — `-fips` suffix removed from the Identity Analytics image names
+
+  The Identity Analytics images only come in one flavor now, so the `-fips` suffix is gone from their names. The Shared Services images keep it (`ida-apisix-fips`, `ida-etcd-fips`, `ida-keycloak-fips`, `ida-tools-fips`). If you copy the images to a private registry, update your image list.
+
+- **BWIPUAR-3958** — Shared Services: upgrade from non-FIPS to FIPS Keycloak
+
+  Upgrading Shared Services from a standard Keycloak to the FIPS Keycloak of Shared Services 3.6 keeps the admin accounts of the chart working. The upgrade stops if it can't do it safely, and lists the application users whose password must be reset.
+
+- **BWIPUAR-2558** — Trigger an execution plan from an external tool, through an authenticated endpoint.
+- **BWIPUAR-2561** — Trigger a purge at will, from the config page or the external endpoint, and schedule it separately from the execution plan.
+- **BWIPUAR-2560** — Update the project from Git and restart the portal from the config page.
+- **BWIPUAR-2570** — Run a DB Check at will from the config page and download its results.
+- **BWIPUAR-2569** — Mark a stuck upload or execution job as completed in the controller admin page.
+- **BWIPUAR-2667** — The controller starts normally when its volumes and its external database are out of sync (e.g. after a cluster rebuild).
+- **BWIPUAR-3043** — PostgreSQL 17 supported for the external database.
+- **BWIPUAR-2543** — Istio support.
+- **BWIPUAR-3355** — Kubernetes probes can be tuned or disabled from the Helm values, and the batch server liveness probe is more tolerant by default.
+- **BWIPUAR-3356** — The JVM heap of the batch server, portal and workflow is set from a single place, based on the container memory limit.
+- **BWIPUAR-3359** — The logs of an execution plan are kept when the batch server stops in the middle of it, and the controller marks the plan as failed right away.
+- **BWIPUAR-3075** — Containers no longer allow privilege escalation, wherever possible.
+- **BWIPUAR-3715** — SQL Tools removed.
+
+### Bug Fixes
+
+- **BWIPUAR-3454** — OIDC client secrets were regenerated on every Helm upgrade, which could break sessions. They are now kept.
+- **BWIPUAR-2755, BWIPUAR-3354** — Keycloak SMTP settings were lost or only partly updated after an upgrade. They are now kept.
+- **BWIPUAR-3353** — Data recovery: the DB maintenance script didn't work.
+
+See [vulnerability fixes](./12-security/02-vulnerability-fixes.md) for additional details.
+
+Software Bill of Materials (CycloneDX 1.5 JSON, all IDA 3.8.0 and Shared Services 3.6.0 container images): [IDA-3.8.0-SBOM.zip](./assets/sbom/IDA-3.8.0-SBOM.zip)
+
+## Version 3.7.5
+
+Release date: 2026-10-29
+
+This release contains vulnerability fixes only; it introduces no additional feature changes.
+
+> See [Migration 3.7.5](./11-operations/04-upgrade/migration-3.7.5.md) for details.
+
+> Recommended versions:
+>
+> - `Shared Services`: 3.5.5
+> - `CNPG`: 1.29
+> - `PostgreSQL`: 18.3
+
+See [vulnerability fixes](./12-security/02-vulnerability-fixes.md) for additional details.
+
+Software Bill of Materials (CycloneDX 1.5 JSON, all IDA 3.7.5 and Shared Services 3.5.5 container images): [IDA-3.7.5-SBOM.zip](./assets/sbom/IDA-3.7.5-SBOM.zip)
+
 ## Version 3.7.4
 
 Release date: 2026-10-12

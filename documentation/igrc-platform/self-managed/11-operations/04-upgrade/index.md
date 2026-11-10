@@ -35,6 +35,9 @@ Each upgrade runs the `config-store-init` job again. It applies the values (for 
 
 ## Version-specific guides
 
+- [FIPS migration: 3.7.x to 3.8.0](./04-upgrade/fips-migration.md) (read it before upgrading from 3.7.x)
+- [Version 3.8.0](./04-upgrade/migration-3.8.0.md)
+- [Version 3.7.5](./04-upgrade/migration-3.7.5.md)
 - [Version 3.7.1](./04-upgrade/migration-3.7.1.md)
 - [Version 3.7.0](./04-upgrade/migration-3.7.0.md)
 - [Version 3.6.0](./04-upgrade/migration-3.6.0.md) (upgrade Identity Analytics before Shared Services)

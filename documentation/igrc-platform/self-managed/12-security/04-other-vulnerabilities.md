@@ -7,6 +7,53 @@ description: "Vulnerabilities reported only against ChainGuard-based images, und
 
 The vulnerabilities listed on this page are reported exclusively against images built on ChainGuard base images. These are **probable false positives, currently under investigation**, and are tracked separately from the [non applicable vulnerabilities](03-non-applicable-vulnerabilities.md) list until they have been confirmed one way or the other.
 
+## Version 3.8.0
+
+| ISSUE SEVERITY | PROBLEM TITLE | CVE | IMAGE(S) |
+| :------------- | :------------ | :-: | :------- |
+| CRITICAL | A buffer overflow in the Brotli decoder (`c/dec/decode.c`, versions 1.0.3 to 1.2.0) lets a remote attacker corrupt adjacent decoder memory with crafted compressed input. | CVE-2026-111497 | radiantone/ida-apisix-fips:3.6.0 |
+| CRITICAL | `ca-certificates`: vulnerability in the Java SE JSSE component (certificate trust), reported against the system certificate bundle. | CVE-2026-91403 | radiantone/ida-apisix-fips:3.6.0 |
+| CRITICAL | `wasmtime`: unvalidated async callback result types let an attacker overwrite return addresses and crash the host or potentially execute code. | CVE-2026-115384 | radiantone/ida-apisix-fips:3.6.0 |
+| CRITICAL | `wasmtime`: insufficient control flow management of the `br_table` instruction in the Cranelift backend on aarch64 with a large number of targets. | CVE-2026-115893 | radiantone/ida-apisix-fips:3.6.0 |
+| HIGH | A flaw was found in libxslt where the attribute type, atype, flags are modified in a way that corrupts internal memory management. When XSLT functions, such as the key() process, result in tree fragments, this corruption... | CVE-2025-7425 | radiantone/ida-apisix-fips:3.6.0 |
+| HIGH | `ca-certificates-bundle`: outdated system root certificates may still be trusted where the system trust store is not updated. | CVE-2026-111943 | radiantone/ida-apisix-fips:3.6.0 |
+| HIGH | Issue summary: QUIC process may keep memory for QUIC packet buffer for much longer period than necessary. | CVE-2026-54873 | radiantone/ida-apisix-fips:3.6.0 |
+| HIGH | Issue summary: A TLS server that calls `SSL_set_SSL_CTX()` part way through a handshake may access memory beyond the end of an internal array. | CVE-2026-72897 | radiantone/ida-apisix-fips:3.6.0 |
+| HIGH | `glibc` 2.44: reported on every image built on the current Wolfi / Chainguard base, no fixed version published yet. | CVE-2026-84243 | radiantone/ida-apisix-fips:3.6.0; radiantone/ida-etcd-fips:3.6.0 |
+| HIGH | `go.etcd.io/etcd/client/pkg/v3`: TLS handshakes on listeners created by `NewTLSListener` do not enforce a handshake deadline. | CVE-2026-73500 | radiantone/ida-etcd-fips:3.6.0 |
+| HIGH | `golang.org/x/net/html`: quadratic memory allocation and copying when parsing input with many short text runs separated by ignored end tags. | CVE-2026-78661 | radiantone/ida-etcd-fips:3.6.0 |
+| HIGH | Perl `Pod::Text` (before 6.1.1): CPU and memory exhaustion when formatting a POD document with deeply nested `=over` blocks. | CVE-2026-82560 | radiantone/ida-apisix-fips:3.6.0 |
+| HIGH | Issue summary: The DTLS retransmission logic does not correctly handle a handshake message write that is suspended part-way through. | CVE-2026-84782 | radiantone/ida-apisix-fips:3.6.0 |
+| HIGH | OpenSSL: the first concurrent use of the same X.509 certificate by several threads may free its cached extension data while another thread still uses it, letting a remote peer crash a multi-threaded TLS client or server. | CVE-2026-84783 | radiantone/ida-apisix-fips:3.6.0 |
+| HIGH | Issue summary: A malicious remote peer may flood the local QUIC stack with NEW_CONNECTION_ID frames. | CVE-2026-84784 | radiantone/ida-apisix-fips:3.6.0 |
+| HIGH | `wasmtime-wasi`: security advisory GHSA-m9f7-9w4p-gv38. | CVE-2026-118688 | radiantone/ida-apisix-fips:3.6.0 |
+
+## Version 3.7.5
+
+| ISSUE SEVERITY | PROBLEM TITLE                                                                                                                                                                                                                    |      CVE       | IMAGE(S)                                                              |
+| :------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------: | :--------------------------------------------------------------------- |
+| CRITICAL | A buffer overflow in the Brotli decoder (`c/dec/decode.c`, versions 1.0.3 to 1.2.0) lets a remote attacker corrupt adjacent decoder memory with crafted compressed input. | CVE-2026-111497 | radiantone/ida-apisix:3.5.5 |
+| CRITICAL | `wasmtime`: unvalidated async callback result types let an attacker overwrite return addresses and crash the host or potentially execute code. | CVE-2026-115384 | radiantone/ida-apisix:3.5.5 |
+| CRITICAL | `wasmtime`: insufficient control flow management of the `br_table` instruction in the Cranelift backend on aarch64 with a large number of targets. | CVE-2026-115893 | radiantone/ida-apisix:3.5.5 |
+| CRITICAL | Issue summary: OpenSSL CMP response validation passed an unexpected response | CVE-2026-63073 | radiantone/ida-apisix:3.5.5 |
+| CRITICAL | Issue summary: ChaCha20-Poly1305 and AES-OCB decryption with an empty | CVE-2026-75803 | radiantone/ida-apisix:3.5.5 |
+| HIGH | A flaw was found in libxslt where the attribute type, atype, flags are modified in a way that corrupts internal memory management. When XSLT functions, such as the key() process, result in tree fragments, this corruption... | CVE-2025-7425 | radiantone/ida-apisix:3.5.5 |
+| HIGH | `ca-certificates-bundle`: outdated system root certificates may still be trusted where the system trust store is not updated. | CVE-2026-111943 | radiantone/ida-apisix:3.5.5 |
+| HIGH | Issue summary: In a server or client configuration with RFC7250 Raw Public Keys (RPKs) | CVE-2026-14457 | radiantone/ida-apisix:3.5.5 |
+| HIGH | Issue summary: QUIC server may double free QRX (QUIC record layer RX) object | CVE-2026-18798 | radiantone/ida-apisix:3.5.5 |
+| HIGH | `glibc` (2.38 to 2.44): `strfmon` and `strfmon_l` can write past the end of the output buffer with right-justified width padding. | CVE-2026-19499 | radiantone/ida-apisix:3.5.5 |
+| HIGH | Issue summary: QUIC process may keep memory for QUIC packet buffer for much longer period than necessary. | CVE-2026-54873 | radiantone/ida-apisix:3.5.5 |
+| HIGH | Issue summary: Receiving a DTLS record for a future epoch while a handshake | CVE-2026-54874 | radiantone/ida-apisix:3.5.5 |
+| HIGH | Issue summary: OpenSSL CMS decryption sizes the key-unwrap output buffer based | CVE-2026-63072 | radiantone/ida-apisix:3.5.5 |
+| HIGH | Issue summary: When OpenSSL processes QUIC traffic from a peer that repeatedly | CVE-2026-63075 | radiantone/ida-apisix:3.5.5 |
+| HIGH | Issue summary: OpenSSL CMP password based protection verification only | CVE-2026-63076 | radiantone/ida-apisix:3.5.5 |
+| HIGH | Issue summary: A TLS server that calls `SSL_set_SSL_CTX()` part way through a handshake may access memory beyond the end of an internal array. | CVE-2026-72897 | radiantone/ida-apisix:3.5.5 |
+| HIGH | `go.etcd.io/etcd/client/pkg/v3`: TLS handshakes on listeners created by `NewTLSListener` do not enforce a handshake deadline. | CVE-2026-73500 | radiantone/ida-etcd:3.5.5 |
+| HIGH | Perl `Pod::Text` (before 6.1.1): CPU and memory exhaustion when formatting a POD document with deeply nested `=over` blocks. | CVE-2026-82560 | radiantone/ida-apisix:3.5.5 |
+| HIGH | Issue summary: The DTLS retransmission logic does not correctly handle a handshake message write that is suspended part-way through. | CVE-2026-84782 | radiantone/ida-apisix:3.5.5 |
+| HIGH | Issue summary: A malicious remote peer may flood the local QUIC stack with NEW_CONNECTION_ID frames. | CVE-2026-84784 | radiantone/ida-apisix:3.5.5 |
+| HIGH | zlib (1.3.1.2 to 1.3.2): heap buffer overflow in `gz_vacate()` during non-blocking `gzwrite()` operations with stale external buffer pointers. | CVE-2026-85091 | radiantone/ida-apisix:3.5.5 |
+
 ## Version 3.7.4
 
 | ISSUE SEVERITY | PROBLEM TITLE                                                                                                                                                                                                                   |      CVE       | IMAGE(S)                                               |

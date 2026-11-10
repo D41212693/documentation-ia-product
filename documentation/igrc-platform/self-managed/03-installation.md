@@ -146,7 +146,7 @@ Repeat this step for each instance, each in its own namespace.
     ```yaml
     global:
       externalDns: "<IDA_DNS>"
-      pathPrefix: "<IDA_PATH>"
+      pathPrefix: "<IDA_PATH>" # Required, with its leading slash (for example /ida)
       technicalAdmin:
         email: "<ADMIN_EMAIL>"
         password: "<ADMIN_INITIAL_PASSWORD>"

@@ -18,7 +18,7 @@ description: "The configuration required to purge data"
 
 The purge feature allows to define selective data removal. By implementing this feature, you gain in storage costs and in the long term in performance. For example, you can choose to keep data uploads (timeslots) on a monthly basis after one year and quarterly basis after two years.  
 
-Note that the purge takes into account the workflow activities, workflow compliance reports are totally independent from the purge and kept in the database for forensic analysis purpose:
+Note that the purge takes into account the workflow activities. When the tickets purge is enabled, the compliance reports of purged review campaigns are no longer available from the portal (see [How to purge tickets and activiti](../../how-to/workflow/purge-tickets-and-activiti.md)):
 
 - Timeslot picking: the old purge system, using the command line `igrc_purge.cmd`, was used to delete a number of timeslots. The purge could only delete the first collected timeslots (the oldest ones). There was no way to delete specific timeslots in the middle of the timeslot history. Now the purge can keep for example one timeslot per week or per month and delete all others
 - Workflow compliant: the old purge could delete a timeslot without checking for workflow. This was impossible to keep a timeslot containing a process of a given type. Now the purge is aware of the process launched and does not allow the deletion of a timeslot used by an active process.
