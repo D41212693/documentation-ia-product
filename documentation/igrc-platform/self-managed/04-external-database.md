@@ -14,6 +14,8 @@ Both charts can use a PostgreSQL server you operate instead of the built-in Clou
 - PostgreSQL 18, or PostgreSQL 17 from Identity Analytics 3.8, reachable from the cluster nodes on its port (5432 by default). Do not use `localhost`: give an address or DNS name the pods can resolve.
 - An administration account, used by the initialisation jobs at installation and at each upgrade (see [Administration account](#administration-account)).
 - TLS: if the server requires it, the CA certificate of the server, stored in a secret (see [Encrypted connections](#encrypted-connections)).
+- Passwords of 14 characters or more for the administration account and the application accounts: from Identity Analytics 3.8, the charts refuse shorter ones.
+- DB Check and DB Maintenance of the controller are not available with an external database.
 - The `pg_stat_statements` extension is recommended for performance analysis. It is not created by the charts: ask your DBA to enable it (`shared_preload_libraries`) and to run `CREATE EXTENSION pg_stat_statements;` in `analytics_db`.
 
 ## Administration account

@@ -21,7 +21,7 @@ Data recovery mode deploys a special pod in IDA namespace and at the same time, 
 
 ## Checks
 
-- [ ] For a PostgreSQL source, the version of the source server must not be newer than the PostgreSQL version of the target database (18.3 with the CloudNativePG chart 0.28.2 of the [compatibility table](../../self-managed)). Do not downgrade the CloudNativePG operator of an existing cluster to match an older source: CloudNativePG does not support operator downgrades.
+- [ ] For a PostgreSQL source, the version of the source server must not be newer than the PostgreSQL version of the target database (18.3 with Identity Analytics 3.7, 18.6 with Identity Analytics 3.8, see the [compatibility table](../../self-managed)). Do not downgrade the CloudNativePG operator of an existing cluster to match an older source: CloudNativePG does not support operator downgrades.
 - [ ] The `/work` volume can hold the archive and its extracted content: set `dataRecovery.persistence.size` to at least twice the size of the uncompressed export.
 - [ ] You must have access to your target Kubernetes cluster as well as network connectivity to upload your exported data files to the data recovery pod
 - [ ] You own the exported data files package

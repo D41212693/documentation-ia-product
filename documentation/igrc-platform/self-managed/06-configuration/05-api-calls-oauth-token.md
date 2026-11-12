@@ -63,7 +63,9 @@ You can also read the client secret from the cluster, without the console:
 kubectl get secret keycloak-app-realm-admin-credentials -n <IDA_NAMESPACE>   -o jsonpath='{.data.portal_api_client_secret}' | base64 -d
 ```
 
-> [!warning] The client secret of `ida-portal-api` changes at each `helm upgrade` of the instance and after a restore. Until they use the new secret, the API clients get the error `unauthorized_client`. After each upgrade or restore, read the secret again and update your API clients.
+From `ida-helm` 3.8.0, the client secret is kept across upgrades and restores. To set its value yourself, use `keycloakSettings.portalAPI.clientSecret` in the Identity Analytics values.
+
+> [!warning] Up to `ida-helm` 3.7.x, the client secret of `ida-portal-api` changes at each `helm upgrade` of the instance and after a restore. Until they use the new secret, the API clients get the error `unauthorized_client`. After each upgrade or restore, read the secret again and update your API clients.
 
 ## Executing an API call
 
