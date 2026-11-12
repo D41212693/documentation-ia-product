@@ -45,7 +45,7 @@ This section applies only to the built-in database.
 
 CloudNativePG backs up the databases with Barman to an object store: Amazon S3 or an S3-compatible store, Azure Blob Storage or Google Cloud Storage. It takes scheduled base backups and archives the write-ahead logs (WAL) continuously, which allows point-in-time restores.
 
-> [!warning] The chart backups use the Barman Cloud support built into CloudNativePG, which CloudNativePG plans to remove in version 1.30.0. Keep the CloudNativePG operator below 1.30 as long as you use these backups.
+> [!warning] The chart backups use the Barman Cloud support built into CloudNativePG, which CloudNativePG plans to remove in version 1.31.0. Keep the CloudNativePG operator below 1.31 as long as you use these backups.
 
 Add the same kind of block to `ida.values.yaml` and to `shared.values.yaml`, with a different destination path for each:
 
