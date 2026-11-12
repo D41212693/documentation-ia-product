@@ -61,11 +61,15 @@ Click a connector to open its details:
 
 ![Execution plans page](images/controller-execution-plans.png "Execution plans page")
 
-This page lists the execution plans, with their status, their submission, start and completion dates, their duration and the user who requested them.
+This page lists the execution plans and the purges, with their status, their type (**Execution plan** or **Purge**), their submission, start and completion dates, their duration and who requested them.
 
-- **Submit a new execution plan** starts an execution plan immediately with the current import files, without confirmation. The button is hidden while a plan is submitted or running. You can also start a plan from the portal (**Datasource Management**, **Launch an execution plan**).
-- While a plan is running, the orange square button aborts it.
-- The status of a plan is **Submitted** (the batch has not started yet), **Running**, **Completed**, **Error** or **Aborted**.
+- **Submit a new execution plan** starts an execution plan immediately with the current import files, without confirmation. You can also start a plan from the portal (**Datasource Management**, **Launch an execution plan**).
+- **Submit a purge** starts a purge of the timeslots. The form is filled with the settings of the configuration interface (**Purge** page, see [Purge](../06-configuration/01-config-ui.md#purge)); a change applies to this run only.
+
+    ![Submit a purge](images/controller-submit-purge.png "Submit a purge")
+
+- An execution plan and a purge cannot run at the same time: while one runs, the page asks you to wait until it finishes or to abort it. The orange square button aborts it.
+- The status is **Submitted** (the batch has not started yet), **Running**, **Completed**, **Error** (the run failed) or **Aborted** (stopped by a user; no email is sent).
 
 Click the link icon next to a finished plan to open its details:
 
@@ -87,7 +91,7 @@ The bell icon of the header opens the list of the events of the controller: uplo
 
 ![Notifications configuration](images/controller-config-notifications.png "Notifications configuration")
 
-Enter the email addresses to notify when an execution plan succeeds, when it fails, and when an extraction fails. Type an address and click (+) to add it. The controller sends these emails only if SMTP is enabled.
+Enter the email addresses to notify when an execution plan or a purge succeeds, when it fails, and when an extraction fails. Type an address and click (+) to add it. The controller sends these emails only if SMTP is enabled.
 
 ### Email server
 

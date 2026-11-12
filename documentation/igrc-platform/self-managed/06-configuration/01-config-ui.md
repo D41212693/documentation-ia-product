@@ -5,7 +5,7 @@ description: Use the configuration interface of a Self-Managed Identity Analytic
 
 # Identity Analytics configuration interface
 
-The configuration interface holds the functional and technical settings of an instance that are not set by the Helm values: the project repository, the emails of the portal and the batch, the schedules, the Identity Data Management connection and the portal debugging.
+The configuration interface holds the functional and technical settings of an instance that are not set by the Helm values: the project repository, the emails of the portal and the batch, the purge of the timeslots, the schedules, the database checks, the Identity Data Management connection and the portal debugging.
 
 ## First connection
 
@@ -27,6 +27,7 @@ Some settings can be set both in the Helm values and in the configuration interf
 | Git repository of the project | Values `git.default.*` | The values are written again and an immediate Git synchronisation is triggered. |
 | Other Git repository selected in the configuration interface | Configuration interface | Kept: the instance keeps using the repository selected in the interface. |
 | Git synchronisation schedule | Values `gitServer.defaultCron`, first installation only | Not written again. See [Project changes](../11-operations/05-project-changes.md). |
+| Purge settings and purge schedule | Values `purge.*` and `scheduling.purge.cron`, first installation only | Not written again: change them on the **Purge** and **Scheduling** pages. |
 | Identity Data Management (RadiantOne) connection | Values, first installation only | Not written again: later changes made in the configuration interface are kept. |
 | License | Values `global.license` (base64), or `global.licenseFile` | The values are applied: to renew the license, run `helm upgrade` with the new license. `global.license` wins over `global.licenseFile`: if your values file contains `global.license`, replace it there. The portal, the batch and the configuration service restart and load it. |
 | CPU, memory and Java heap of the pods | Values (`resources`, `jvm.memory` of each component) | The values are applied. |
@@ -49,7 +50,7 @@ The header of every page has three controls:
 
 ![Configuration home page](images/config-interface/config-ui-home.png "Configuration home page")
 
-The home page shows one tile per page: **Git Project**, **Mail**, **Batch**, **Scheduling**, **Identity Data Management** and **Portal**. A tile shows a warning when its page has missing or invalid settings.
+The home page shows one tile per page: **Database**, **Git Project**, **Mail**, **Batch**, **Purge**, **Scheduling**, **Identity Data Management** and **Portal**. A tile shows a warning when its page has missing or invalid settings.
 
 ## Git Project
 
@@ -67,6 +68,8 @@ This page selects the Git repository of the project.
 - **Username**: the account used to read the repository. The password is requested when you click **Test and save**.
 - **Project directory**: the folder of the repository that contains the project, `brainwave` by default.
 - **Connection test** checks the connection to the branch with these settings. **Test and save** runs the same test and saves the settings only if it succeeds.
+
+**Project synchronization** fetches the project from the repository on a schedule. **Sync now** fetches it at once. **Last synchronized at** shows the commit of the last synchronization. The portal keeps running the version it started with: click **Restart portal** to load the new version.
 
 See [Project repository](../02-prerequisites.md#project-repository) for the available repositories and credentials.
 
@@ -86,6 +89,15 @@ This page controls the emails sent by the portal and the batch. The SMTP server 
 
 **Technical Configuration Name** is the technical configuration of the project used to run the execution plans (`docker` by default).
 
+## Purge
+
+![Purge page](images/config-interface/config-ui-purge.png "Purge page")
+
+This page sets what a purge deletes. It does not start a purge: start one from the controller (**Execution plans**, **Submit a purge**) or on a schedule (**Scheduling** page).
+
+- **Type**: **Purge policy** applies the retention policy of the project; **Legacy arguments** keeps a number of timeslots or days, or deletes the timeslots in given states. It applies to purges started outside an execution plan.
+- **After a scheduled execution plan**: **Purge hidden timeslots** and **Apply the purge policy**, both on by default. Uncheck them so that a scheduled plan does not purge. An execution plan started by hand never purges.
+
 ## Scheduling
 
 ![Scheduling page](images/config-interface/config-ui-scheduling-enabled.png "Scheduling page")
@@ -95,7 +107,10 @@ Each switch enables a recurring task; set its frequency with **Every** (day or h
 - **batch scheduling**: starts an execution plan.
 - **Extraction scheduling**: runs the connectors declared in the portal.
 - **Portal update scheduling**: restarts the portal, so that it loads the last synchronised version of the project (see [Project changes](../11-operations/05-project-changes.md)).
+- **Purge scheduling**: starts a purge, with the settings of the **Purge** page.
 - **Secure portal stop timeout (ms)**: when the portal stops, the time given to the ongoing tasks to complete before the portal is forced to stop.
+
+The times are in UTC: the page shows the current time in UTC and on your computer.
 
 > [!note] Spread the schedules so that they do not overlap: an execution plan can take a long time, and the portal should not restart during a plan.
 
@@ -117,3 +132,17 @@ The settings of this page are saved only when the corresponding test succeeds.
 ![Portal page](images/config-interface/config-ui-portal.png "Portal page")
 
 **Enable portal debugging** displays the debug context in the portal pages. Do not enable it in production.
+
+## Database
+
+These pages are available with the built-in database only. With an external database, they are hidden: your DBA maintains the database.
+
+![Database health check page](images/config-interface/config-ui-db-check.png "Database health check page")
+
+- **Health Check**: **Run a check** takes a read-only snapshot of the analytics database (volumetry, index usage, settings, blocked queries). **Explore** opens the report; the download icon saves it. One check runs at a time.
+
+![Run maintenance confirmation](images/config-interface/config-ui-db-maintenance-confirm.png "Run maintenance confirmation")
+
+- **Maintenance**: **Run maintenance** runs `VACUUM ANALYZE` on the tables of the project, and optionally `VACUUM FULL` and `REINDEX`, then keeps a before/after report. `VACUUM FULL` locks each table while it rewrites it: run it when no execution plan runs and the portal is little used.
+
+> [!note] If these pages show "not available in this deployment" with the built-in database, restart the operations manager: `kubectl rollout restart deployment/ops-manager -n <IDA_NAMESPACE>`.

@@ -54,6 +54,8 @@ Start an execution plan in one of these ways:
 - in the portal, **Datasource Management**, **Status**, **Launch an execution plan**, then confirm;
 - on a schedule, in the **Scheduling** page of the configuration interface.
 
+Starting a plan from a script uses the execution plan API of the operations manager, not published by default: see [ADD-006](../11-operations/04-upgrade/migration-3.8.0.md#add-006-standalone-timeslot-purge-and-post-plan-opt-out).
+
 The plan downloads the last synchronised version of the project, takes the current import files, runs the collection and loads a new timeslot. Follow it in the controller: its status goes from **Submitted** to **Running**, then **Completed** or **Error**. The details page of the plan gives its message and **Download execution logs**. See [Controller](../09-components/controller.md).
 
 To be notified by email at the end of each plan, add recipients in the controller (**Configuration**, **Notifications**).
