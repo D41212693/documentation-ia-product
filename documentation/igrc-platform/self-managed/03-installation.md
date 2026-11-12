@@ -7,7 +7,7 @@ description: "Install CloudNativePG, Shared Services and Identity Analytics with
 
 An installation runs in four steps: prepare the namespaces, install the CloudNativePG operator, install Shared Services, then install one or more Identity Analytics instances. Check the [prerequisites](./02-prerequisites.md) first.
 
-The values shown on this page are minimal and complete: they install a working platform as they are, once the placeholders are replaced. They have been validated with `ida-helm` 3.7.4 and `ida-shared-helm` 3.5.4.
+The values shown on this page are minimal and complete: they install a working platform as they are, once the placeholders are replaced. They have been validated with `ida-helm` 3.8.0 and `ida-shared-helm` 3.6.0.
 
 > [!note] If you use a PostgreSQL server outside the cluster, skip step 2 and follow [External database](./04-external-database.md) for the database values.
 
@@ -21,7 +21,7 @@ The values shown on this page are minimal and complete: they install a working p
 | `<IDA_PATH>` | URL path of the instance, starting with `/` | `/ida` |
 | `<INGRESS_CLASS>` | Ingress class of your ingress controller | `nginx`, `traefik` |
 | `<TLS_SECRET>` | Kubernetes TLS secret holding the certificate of `<IDA_DNS>`, in `<SHARED_NAMESPACE>` | `ida-tls` |
-| `<SHARED_CHART_VERSION>` / `<IDA_CHART_VERSION>` | Chart versions from the [compatibility table](../self-managed) | `3.5.4` / `3.7.4` |
+| `<SHARED_CHART_VERSION>` / `<IDA_CHART_VERSION>` | Chart versions from the [compatibility table](../self-managed) | `3.6.0` / `3.8.0` |
 
 ## 1. Prepare the namespaces and the registry secret
 
@@ -59,6 +59,9 @@ CloudNativePG (CNPG) creates and manages the PostgreSQL clusters used by Keycloa
 
     ```yaml
     fullnameOverride: cnpg
+    image:
+      repository: docker.io/radiantone/rl-cloudnative-pg-fips
+      tag: "1.30"
     config:
       create: true
       name: cnpg-controller-manager-config
@@ -74,7 +77,7 @@ CloudNativePG (CNPG) creates and manages the PostgreSQL clusters used by Keycloa
     helm repo update
     helm upgrade --install cnpg cnpg/cloudnative-pg \
       --namespace cnpg-system --create-namespace \
-      --version 0.28.2 \
+      --version 0.29.1 \
       --values cnpg-custom-values.yaml \
       --wait
     ```
@@ -129,7 +132,7 @@ Shared Services (Keycloak, APISIX gateway and its etcd store) are installed once
 
     Keycloak can restart once or twice while its database starts: this is expected.
 
-The password of the Keycloak `master-admin` account is the one set in `keycloak.auth.adminPassword`. If you left it empty, it is generated and stored in the `keycloak-master-admin` secret of `<SHARED_NAMESPACE>`.
+The password of the Keycloak `master-admin` account is the one set in `keycloak.auth.adminPassword`: 14 characters or more. If you left it empty, it is generated and stored in the `keycloak-master-admin` secret of `<SHARED_NAMESPACE>`.
 
 ## 4. Install Identity Analytics
 
@@ -137,7 +140,7 @@ Repeat this step for each instance, each in its own namespace.
 
 1. Gather the inputs of the instance:
     - the license file;
-    - the Git repository of the project, its branch and the credentials to read it (see [Project repository](./02-prerequisites.md#project-repository)): for example `https://repository.brainwavegrc.com/Brainwave/identityanalytics.git`, branch `release/3.7` for 3.7.x;
+    - the Git repository of the project, its branch and the credentials to read it (see [Project repository](./02-prerequisites.md#project-repository)): for example `https://repository.brainwavegrc.com/Brainwave/identityanalytics.git`, branch `release/3.8` for 3.8.x;
     - the SMTP settings, if the instance sends mail;
     - an email address and an initial password for the technical administrator (`setup`): at least 16 characters with upper case, lower case, digit and special character.
 

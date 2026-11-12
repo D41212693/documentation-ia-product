@@ -13,7 +13,7 @@ Install the chart versions that match your Identity Analytics release. Always pa
 
 | Release | `ida-helm` chart | `ida-shared-helm` chart | CloudNativePG chart (internal database) |
 | :------ | :--------------: | :---------------------: | :-------------------------------------: |
-| 3.8     |      3.8.0       |          3.6.0          |              operator 1.30              |
+| 3.8     |      3.8.0       |          3.6.0          |         0.29.1 (operator 1.30)          |
 | 3.7     |      3.7.5       |          3.5.5          |       0.28.2 (operator 1.29.1)          |
 | 3.6     |      3.6.2       |          3.4.2          |                    -                    |
 | 3.5     |      3.5.3       |          3.3.2          |                    -                    |

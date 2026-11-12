@@ -33,13 +33,13 @@ Before the installation, decide how the platform is exposed and where its databa
 - The access to the `docker.io/radiantone` registry: either the image pull secret `ida-registry-credentials.yaml`, or a username and a token to create this secret yourself (see [Installation](./03-installation.md#1-prepare-the-namespaces-and-the-registry-secret)).
 - The Identity Analytics license file.
 
-If the cluster cannot reach Docker Hub, mirror the images to your own registry. For `ida-helm` 3.7.4 and `ida-shared-helm` 3.5.4, the images are:
+If the cluster cannot reach Docker Hub, mirror the images to your own registry. For `ida-helm` 3.8.0 and `ida-shared-helm` 3.6.0, the images are:
 
 | Chart | Images |
 | :---- | :----- |
-| `ida-shared-helm` 3.5.4 | `radiantone/ida-apisix:3.5.4`, `radiantone/ida-etcd:3.5.4`, `radiantone/ida-keycloak:3.5.4` (`ida-keycloak-fips` in FIPS mode), `radiantone/ida-tools:3.5.4`, `radiantone/kubectl:secure` |
-| `ida-helm` 3.7.4 | `radiantone/ida-portal:3.7.4`, `radiantone/ida-batch-server:3.7.4`, `radiantone/ida-controller:3.7.4`, `radiantone/ida-config-server:3.7.4`, `radiantone/ida-git-server:3.7.4`, `radiantone/ida-extract:3.7.4`, `radiantone/ida-ops-manager:3.7.4`, `radiantone/ida-env-manager:3.7.4`, `radiantone/ida-init-db:3.7.4`, `radiantone/ida-tools:3.7.4`, `radiantone/kubectl:secure` |
-| CloudNativePG (internal database) | `ghcr.io/cloudnative-pg/cloudnative-pg:1.29.1`, `ghcr.io/cloudnative-pg/postgresql:18.3-system-trixie` |
+| `ida-shared-helm` 3.6.0 | `radiantone/ida-apisix-fips:3.6.0`, `radiantone/ida-etcd-fips:3.6.0`, `radiantone/ida-keycloak-fips:3.6.0`, `radiantone/ida-tools-fips:3.6.0`, `radiantone/cgr-postgres-cloudnative-pg-fips:18.4` (internal database) |
+| `ida-helm` 3.8.0 | `radiantone/ida-portal:3.8.0`, `radiantone/ida-batch-server:3.8.0`, `radiantone/ida-controller:3.8.0`, `radiantone/ida-config-server:3.8.0`, `radiantone/ida-git-server:3.8.0`, `radiantone/ida-extract:3.8.0`, `radiantone/ida-ops-manager:3.8.0`, `radiantone/ida-env-manager:3.8.0`, `radiantone/ida-init-db:3.8.0`, `radiantone/ida-tools-fips:3.8.0`, `radiantone/rl-postgres-cloudnative-pg-fips:18.6` (internal database) |
+| CloudNativePG operator (internal database) | `radiantone/rl-cloudnative-pg-fips:1.30` |
 
 To pull the images from your mirror, add to both values files:
 
@@ -50,7 +50,7 @@ imageCredentials:
   - existingSecret: <MIRROR_PULL_SECRET>
 ```
 
-The `kubectl` image of the upgrade jobs has its own setting: `tools.kubectl.image.repository` in the Identity Analytics values and `preUpgradeChart.kubectl.image.repository` in the Shared Services values (for example `<MIRROR_REGISTRY>/kubectl`).
+For the CloudNativePG operator, set `image.repository` to `<MIRROR_REGISTRY>/rl-cloudnative-pg-fips` in `cnpg-custom-values.yaml` (see [Installation](./03-installation.md#2-install-the-cloudnativepg-operator)).
 
 To list the images of another version, render the chart and filter the image lines:
 
@@ -76,7 +76,7 @@ Choose one of these options:
 
 | Option | Repository and branch | Access | Use it when |
 | :----- | :-------------------- | :----- | :---------- |
-| Reference project | `https://repository.brainwavegrc.com/Brainwave/identityanalytics.git`, branch `release/<MAJOR.MINOR>` of your version (for example `release/3.7`) | Read only | You use the standard project without changes |
+| Reference project | `https://repository.brainwavegrc.com/Brainwave/identityanalytics.git`, branch `release/<MAJOR.MINOR>` of your version (for example `release/3.8`) | Read only | You use the standard project without changes |
 | Fork hosted by Radiant Logic | A fork of the reference project, in an organisation created for you on `repository.brainwavegrc.com` | Read and write | You adapt the project; you usually work on your own branches |
 | Your own Git server | A project based on the Self-Managed reference project, that you maintain (see below) | Your choice | Your organisation requires its own Git server; you handle the project and its updates |
 
