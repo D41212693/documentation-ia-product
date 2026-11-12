@@ -190,7 +190,7 @@ Repeat this step for each instance, each in its own namespace.
 
     Points to check in this file:
     - `apisix.namespace` and `keycloakSettings.namespace` are the **Shared Services** namespace, not the instance namespace.
-    - `ingress` is at the root of the file, not under `global`. The ingress is created in the Shared Services namespace and routes `<IDA_PATH>` to the `apisix-gateway` service.
+    - `ingress` is at the root of the file, not under `global`. The ingress is created in the Shared Services namespace and routes `<IDA_PATH>` to the `apisix-gateway` service. It is served with the `<TLS_SECRET>` certificate of the Shared Services ingress, declared for the same host.
     - Do not set `keycloakSettings.externalDns`: it is reserved for SaaS deployments.
     - With `repository.brainwavegrc.com`, keep `authType: "basic"`: `username` is the account name and `password` the access token generated for this account. `git.default.authType` also accepts `token`, `ssh`, `githubapp` and `none` for your own Git server.
     - `fromFolder` is the folder of the repository that contains the project: `brainwave`, at the root of the repository.

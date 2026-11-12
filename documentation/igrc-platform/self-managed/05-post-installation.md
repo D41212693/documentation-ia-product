@@ -53,7 +53,7 @@ If a check fails, see [Troubleshooting](./11-operations/02-troubleshooting.md).
 | Keycloak, instance realm | `https://<IDA_DNS><IDA_PATH>/auth/` | `setup` |
 | Keycloak, master realm | `https://<IDA_DNS>/auth/` | `master-admin`, with `keycloak.auth.adminPassword` of the Shared Services values |
 
-At the first login, Keycloak asks the technical administrator to change the password and to verify the email address: it sends a mail with a link, so the SMTP settings must work. Keycloak also asks every new local account to verify its email address.
+At the first login, Keycloak asks the technical administrator to change the password, to choose a language and to verify the email address: it sends a mail with a link, so the SMTP settings must work. Keycloak also asks every new local account to verify its email address.
 
 If the mail cannot be sent, log in to the Keycloak master realm (`https://<IDA_DNS>/auth/`) as `master-admin`, select the realm `<IDA_NAMESPACE>`, then in **Users**, open the account, turn **Email verified** on and remove **Verify Email** from **Required user actions**.
 
