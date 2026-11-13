@@ -15,7 +15,7 @@ Both charts can use a PostgreSQL server you operate instead of the built-in Clou
 - An administration account, used by the initialisation jobs at installation and at each upgrade (see [Administration account](#administration-account)).
 - TLS: if the server requires it, the CA certificate of the server, stored in a secret (see [Encrypted connections](#encrypted-connections)).
 - Passwords of 14 characters or more for the administration account and the application accounts: from Identity Analytics 3.8, the charts refuse shorter ones.
-- DB Check and DB Maintenance of the controller are not available with an external database.
+- DB Check and DB Maintenance of the configuration interface are not available with an external database.
 - The `pg_stat_statements` extension is recommended for performance analysis. It is not created by the charts: ask your DBA to add it to `shared_preload_libraries` and, after the installation (the charts create `analytics_db`), to run `CREATE EXTENSION pg_stat_statements;` in `analytics_db` as a superuser.
 
 ## Administration account
