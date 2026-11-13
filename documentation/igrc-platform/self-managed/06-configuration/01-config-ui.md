@@ -143,6 +143,6 @@ These pages are available with the built-in database only. With an external data
 
 ![Run maintenance confirmation](images/config-interface/config-ui-db-maintenance-confirm.png "Run maintenance confirmation")
 
-- **Maintenance**: **Run maintenance** runs `VACUUM ANALYZE` on the tables of the project, and optionally `VACUUM FULL` and `REINDEX`, then keeps a before/after report. `VACUUM FULL` locks each table while it rewrites it: run it when no execution plan runs and the portal is little used.
+- **Maintenance**: **Run maintenance** runs `VACUUM ANALYZE` on the tables of the project, and `VACUUM FULL` and `REINDEX`, both checked by default, then keeps a before/after report. `VACUUM FULL` locks each table while it rewrites it: uncheck it unless no execution plan runs and the portal is little used.
 
 > [!note] If these pages show "not available in this deployment" with the built-in database, restart the operations manager: `kubectl rollout restart deployment/ops-manager -n <IDA_NAMESPACE>`.

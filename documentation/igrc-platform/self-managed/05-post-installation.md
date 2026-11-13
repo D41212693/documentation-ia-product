@@ -73,7 +73,7 @@ To create a local user:
 2. Create the user under **Users**, then set a password under **Credentials**. Leave **Temporary** on to make the user choose a new password at the first login.
 3. Under **Role mapping**, assign one or more client roles of the `identity-analytics` client, for example `user`, `functionaladmin`, `designer` or `technicaladmin`.
 
-A user also needs an account with the same login in the Identity Ledger (the current timeslot) to see the portal. A user without any client role gets `HTTP Status 401 – User not authenticated or not authorized`.
+A user also needs an account with the same login in the Identity Ledger (the current timeslot) to see the portal. A user without any client role gets `HTTP Status 401 – User not authenticated or not authorized`. A user with a role but no matching account (for example before the first timeslot is loaded) gets `The account '<login>' is unknown on this platform!`.
 
 ## 5. Load the first timeslot
 

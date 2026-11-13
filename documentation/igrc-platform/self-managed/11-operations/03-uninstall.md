@@ -57,6 +57,13 @@ Remove the Identity Analytics instances first, then Shared Services. Shared Serv
     helm uninstall cnpg --namespace cnpg-system
     ```
 
+    The chart keeps the CloudNativePG CRDs. To remove them and the namespace:
+
+    ```bash
+    kubectl get crds -o name | grep postgresql.cnpg.io | xargs kubectl delete
+    kubectl delete namespace cnpg-system
+    ```
+
 ## External database
 
 With an external database, uninstalling the charts does not delete the databases: `analytics_db`, `shared_db` and `keycloak_db` and their roles stay on the PostgreSQL server. Only the realm of the instance is deleted from `keycloak_db` by the `helm uninstall` of the instance, with its users, role assignments and identity provider settings: a reinstallation creates a new realm.

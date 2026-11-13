@@ -25,6 +25,8 @@ This package comes with default configuration (clients, roles, etc.). The roles 
 - **technicaladmin**: allows the Technical Administration in the Governance Portal user interface and miscellaneous technical interfaces (configuration and controller UIs)
 - **functionaladmin**: allows the Functional Administration in the Governance Portal user interface
 
+The other roles of the client (`auditor`, `pam*`) are used by optional features: do not assign them unless a feature asks for it, and do not delete them.
+
 All these roles are defined in the client `identity-analytics` of the instance realm. Each instance has its own realm, named after the namespace where it is installed (`<IDA_NAMESPACE>`).
 
 > [!warning] If you change the configuration of those roles or delete them, the Identity analytics solution will not work anymore.
@@ -158,7 +160,7 @@ Once connected to the Keycloak Administration Console:
 
 1. Select the realm of the instance (`<IDA_NAMESPACE>`) from the dropdown box.  
 2. Select `User Federation` from the menu.  
-3. Click on `Add new provider`dropdown list and choose `LDAP`.  
+3. Click **Add Ldap providers** (or **Add new provider** > **LDAP** when a provider already exists).  
 4. Enter **General options** and **Connection settings**  
     - `UI display name`: a name to identify your Active Directory users repository.
     - `Vendor`: choose `Active Directory`
