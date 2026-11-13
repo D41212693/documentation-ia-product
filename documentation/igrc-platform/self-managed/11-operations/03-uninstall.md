@@ -61,4 +61,13 @@ Remove the Identity Analytics instances first, then Shared Services. Shared Serv
 
 With an external database, uninstalling the charts does not delete the databases: `analytics_db`, `shared_db` and `keycloak_db` and their roles stay on the PostgreSQL server. Only the realm of the instance is deleted from `keycloak_db` by the `helm uninstall` of the instance, with its users, role assignments and identity provider settings: a reinstallation creates a new realm.
 
-To remove the platform completely, have your DBA drop these databases and roles. To reinstall on them, keep them: see [External database](../04-external-database.md).
+To reinstall on them, keep them: see [External database](../04-external-database.md). To remove the platform completely, have your DBA run, with the default names:
+
+```sql
+DROP DATABASE analytics_db;
+DROP DATABASE shared_db;
+DROP DATABASE keycloak_db;
+DROP ROLE app_user, shared_user, analytics_support, analytics_read_access, <KEYCLOAK_DB_USER>;
+```
+
+Then remove the administration account, or its privileges, if it is no longer needed.
