@@ -106,6 +106,8 @@ connect to PostgreSQL.
   - `keycloak.auth.adminPassword`.
 - A realm password policy that requires 14 characters or more. A realm set to fewer still locks its users out after a
   reset.
+- A window of about 30 minutes: users cannot sign in while Keycloak restarts, and no execution plan must run during
+  the upgrade.
 
 ## Procedure
 
@@ -156,6 +158,7 @@ images, **not** the deleted passwords: only a database backup does.
      javaOptions: "-Dmy.option=value"
    ```
    If your values have none of these settings, there is nothing to change.
+4. **Merge** the 3.8 reference project into your project and **set** `git.default.branch` to `release/3.8`.
 
 ### 3. Optional: let users keep their password
 
@@ -196,15 +199,17 @@ for the users until the Shared Services upgrade.
 
 1. **Run** the upgrade:
    ```bash
-   helm upgrade <SHARED_RELEASE> oci://registry-1.docker.io/radiantone/ida-shared-helm \
-     --version 3.6.0 --namespace <SHARED_NAMESPACE> --values <shared-values.yaml>
+   helm upgrade <SHARED_RELEASE> oci://docker.io/radiantone/ida-shared-helm \
+     --version 3.6.0 --namespace <SHARED_NAMESPACE> \
+     --values <shared-values.yaml> --wait --timeout 20m
    ```
-   The `keycloak-fips-rehash` Job runs first, then Keycloak restarts on the FIPS image.
+   The `keycloak-fips-rehash` Job runs first and can take several minutes, then Keycloak restarts on the FIPS image.
 2. **Check the logs** of the `keycloak-fips-rehash` Job. A successful run shows:
    - `passwordPolicy updated to include pbkdf2-sha512` for each realm, or `already uses` when the rule was set in
      [step 3](#3-optional-let-users-keep-their-password);
    - `argon2 -> pbkdf2-sha512` for `master-admin` and `svc-realms-admin`;
    - one `purged password algorithm=argon2` line per Pre-FIPS user;
+   - `purged password-history` lines, also for users who keep their password: they are expected;
    - a last line `CAUSE=none OUTCOME=DONE usersRehashed=2 … credentialsPurged=<n>`.
 
    On `OUTCOME=FAIL` the upgrade has stopped and nothing changed: see [Troubleshooting](#troubleshooting).
@@ -215,12 +220,19 @@ for the users until the Shared Services upgrade.
 
 1. **Run** the upgrade:
    ```bash
-   helm upgrade <RELEASE> oci://registry-1.docker.io/radiantone/ida-helm \
-     --version 3.8.0 --namespace <NAMESPACE> --values <ida-values.yaml>
+   helm upgrade <RELEASE> oci://docker.io/radiantone/ida-helm \
+     --version 3.8.0 --namespace <NAMESPACE> \
+     --set global.license="$(base64 -w0 <PATH_TO_LICENSE_FILE>)" \
+     --values <ida-values.yaml> --timeout 30m
    ```
+   The pre-upgrade Job moves the database to its FIPS image and can take several minutes. If the command fails on a
+   timeout, run it again.
 2. **Check** that the `environment-setup`, `config-store-init` and `analytics-update-db` Jobs completed. The logs of
    `environment-setup` end with `environment setup terminated successfully`.
 3. **Check** that the `portal` and `batch-server` services are running and ready.
+4. On the internal database, **upgrade** the CloudNativePG operator to chart 0.29.1 (operator 1.30) with
+   [step 2 of the installation](../../03-installation.md#2-install-the-cloudnativepg-operator). The database pods
+   restart once.
 
 ### 6. Give the users their password back
 
