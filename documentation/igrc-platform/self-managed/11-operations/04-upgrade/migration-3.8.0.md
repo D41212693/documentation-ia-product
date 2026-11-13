@@ -99,10 +99,11 @@ Set keycloakSettings.passwordMinLength to "14" or higher (chart default is "16")
 1. Search your values for `keycloakSettings.passwordMinLength`. If it is
    missing, you already get `"16"` and nothing changes.
 2. If it is below 14, set it to `"14"` or higher (or remove the key).
-3. Dry-run before upgrade:
+3. Dry-run before upgrade. Add the other options of your upgrade command (license):
 
 ```bash
-helm upgrade --dry-run <release> ./igrcanalytics -n <ns> -f <your-values>
+helm upgrade --dry-run=server <release> oci://docker.io/radiantone/ida-helm \
+  --version 3.8.0 -n <ns> -f <your-values>
 ```
 
 4. After a successful upgrade, check the live tenant `passwordPolicy` in
@@ -892,10 +893,11 @@ done
 ```
 
 3. Dry-run the 3.8.0 chart so a short password in values fails before you
-   touch the cluster:
+   touch the cluster. Add the other options of your upgrade command (license):
 
 ```bash
-helm upgrade --dry-run <release> ./igrcanalytics -n <ns> -f <your-values>
+helm upgrade --dry-run=server <release> oci://docker.io/radiantone/ida-helm \
+  --version 3.8.0 -n <ns> -f <your-values>
 ```
 
 ### Before the upgrade: rotate on the current (pre-FIPS) release
@@ -1197,8 +1199,8 @@ No PVC or secret change. Disable the key to roll back.
 A purge is now a run of its own. Until 3.8.0 timeslots were deleted only as the
 tail of a **scheduled** execution plan; 3.8.0 adds a purge that an operator, a
 cron or an authenticated script can start at any time, and makes the two
-post-plan steps optional. Full operator manual:
-Timeslot Purge.
+post-plan steps optional. See the [Purge page](../../06-configuration/01-config-ui.md#purge)
+of the configuration interface.
 
 **No action is required on upgrade.** The shipped defaults reproduce 3.7
 behaviour exactly: a scheduled execution plan still removes hidden timeslots and
@@ -1268,12 +1270,14 @@ refused calls as well as accepted ones.
 helm template <release> ./igrcanalytics -f my-values.yaml | grep -A6 igrc_purge
 
 # what is in force after the upgrade
-kubectl -n <ns> exec config-0 -c config -- \
-  wget -qO- http://localhost:8080/api/get_config/igrc_purge
+kubectl -n <ns> port-forward pod/config-0 18080:8080
+# in another terminal
+curl -s http://localhost:18080/api/get_config/igrc_purge
 ```
 
-Expected on an upgrade from 3.7 with no action: `igrc_purge_after_plan_hidden`
-and `igrc_purge_after_plan_policy` both `true`.
+After an upgrade from 3.7, the store has no purge keys (`{}`) until you save the
+**Purge** page of the configuration interface. Until then the defaults apply:
+both post-plan steps on.
 
 ## [CHG-008] Batch-Server Defaults to Non-Root 65532 and Read-Only Root
 
