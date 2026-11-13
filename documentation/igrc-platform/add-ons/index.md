@@ -15,7 +15,7 @@ A facet is basically a part of a project that can be installed and uninstalled a
 - the possibility to repeat the same installation on any number of iGRCanalytics instances  
 - the possibility to track file modifications and to apply upgrades
 - the possibility to provide out-of-the-box functionalities to people that will not need to understand every detail of the content, thanks to advanced features like variables usage or conditional installation of files
-- the possibility to make your work available to others through Radiant Logic marketplace.
+- the possibility to make your work available to others.
 
 You can check out our [Tips for designing a facet collecting data](add-on-creation) if you are interested in creating a facet dedicated to a given application.
 

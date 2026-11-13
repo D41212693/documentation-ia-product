@@ -586,7 +586,7 @@ Any dashboard developer can edit any project dashboard, even without being its a
 
 **Note:** The **designer** and **developer** roles, dedicated to dashboards, are provided in the `bw_dashboards` facet, which is included in the **Identity Analytics version 1.4** add-on.
 
-[Download Identity Analytics add-on](https://marketplace.brainwavegrc.com/package/bw_ias/)
+The Identity Analytics add-on is available on the [Radiant Logic file sharing site](../../downloads/01-downloads#add-ons-facets) (Customer Downloads > Facets > IAP).
 
 ### Working with Project Dashboards
 

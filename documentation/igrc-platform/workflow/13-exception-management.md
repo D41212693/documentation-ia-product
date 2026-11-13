@@ -34,7 +34,7 @@ Exception can be managed in two different ways:
 
 ## Add-ons
 
-Some examples of views, pages and workflows definitions are available in the facet [on the marketplace](https://marketplace.brainwavegrc.com/package/bw_exception_manager/):  
+Some examples of views, pages and workflows definitions are available in the facet `bw_exception_manager`, on the [Radiant Logic file sharing site](../../downloads/01-downloads#add-ons-facets) (Customer Downloads > Facets > bw_exception_manager):  
 
 ![Exception facet](./images/Exception_facet.png "Exception facet")  
 

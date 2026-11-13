@@ -94,7 +94,7 @@ This will open a new wizard to configure a new project:
 ![installation project wizard 1](./images/installation-projectwizard-1.png)  
 ![installation project wizard 2](./images/installation-projectwizard-2.png)  
 
-- upload the IAP Addon previously downloaded [here](https://marketplace.radiantlogic.com/package/bw_ias/) using the first option
+- upload the IAP Addon previously downloaded from the [Radiant Logic file sharing site](../../downloads/01-downloads#add-ons-facets) (Customer Downloads > Facets > IAP) using the first option
 
 ![installation project wizard 3](./images/installation-projectwizard-3.png)
 

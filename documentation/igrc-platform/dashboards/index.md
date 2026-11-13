@@ -56,7 +56,7 @@ To use and create dashboards in the web portal, you must first install certain c
 1. Install the Radiant Logic Identity Analytics core product version - Descartes (see installation instructions).
 2. Launch IGRC Studio and open or create an Audit project.
 3. Install the required "Mashup Dashboards Support" facet:
-    a. Click on the link [Mashup dashboards support](https://marketplace.radiantlogic.com/) to download the Add-on from the **RadiantOne MarketPlace**. This add-on includes a large set of predefined views and rules for commonly used data and two predefined resource templates (default and flatcolors) to be used in your dashboard.
+    a. Download the Mashup dashboards support Add-on (`bw_dashboard`) from the [Radiant Logic file sharing site](../../downloads/01-downloads#add-ons-facets) (Customer Downloads > Facets > bw_dashboard). This add-on includes a large set of predefined views and rules for commonly used data and two predefined resource templates (default and flatcolors) to be used in your dashboard.
     b. Install the facet file in your project.
 5. Declare the dashboard resource templates to be used in your dashboards. Resource templates include chart styles and dashboard layout templates.
     a. Navigate to your project’s **Technical Configuration**, open the **Web Portal** tab, and go to **Dashboard Resource Templates**. Ensure at least the **Default** template is selected.  

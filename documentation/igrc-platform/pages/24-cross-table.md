@@ -536,5 +536,4 @@ dynCrosstab = Page {
 
 ## Downloads
 
-To download crosstab usage example please use the following link to the marketplace:
-[Marketplace](https://marketplace.brainwavegrc.com/package/bw_crosstab_docs/)
+The crosstab usage examples (`bw_crosstab_docs`) are available on the [Radiant Logic file sharing site](../../downloads/01-downloads#add-ons-facets) (Customer Downloads > Facets > bw_crosstab_docs).

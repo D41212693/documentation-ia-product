@@ -223,12 +223,14 @@ For customers under maintenance/subscription contract as well as official partne
 
 <tabpanel>
   
-# Identity Analytics Data Extractor Marketplace
+# Identity Analytics Marketplace
+
+> [!note] The Marketplace website is offline for now. The add-ons (facets), including the data extractors, are available on the Radiant Logic file sharing site, next to the product installers.
 
  <section>
 
-> [Data Extractor Marketplace](https://marketplace.radiantlogic.com/)
-> Browse all available Identity Analytics Extractors by visiting the Marketplace.
+> [Add-ons (facets) downloads](/ia/descartes/downloads/01-downloads#add-ons-facets)
+> How to get the Identity Analytics add-ons (facets) and data extractors while the Marketplace is offline.
 
  </section>
   

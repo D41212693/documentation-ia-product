@@ -638,7 +638,7 @@ The procedure will modify the personal data of the designated users on all times
 
 ![Anonymization component](./images/2018-05-22_17_55_32-iGRC_Properties_-_demo_workflow_custom_anonymization.workflow_-_iGRC_Analytics.png "Anonymization component")  
 
-This workflow is available for download in the Marketplace and ready for use with a page that allows to execute the anonymisation from the web portal: [here](https://marketplace.brainwavegrc.com/package/bw_gdpr_anonymisation/)  
+This workflow is available for download, ready for use with a page that allows to execute the anonymisation from the web portal, on the [Radiant Logic file sharing site](../../downloads/01-downloads#add-ons-facets) (Customer Downloads > Facets > bw_gdpr_anonymisation).  
 
 By default, you need to have the role igrc\_administrator to access to this page from your admin menu.  
 

@@ -16,7 +16,7 @@ Release date: 2026-11-10
 > [!warning]
 > **Upgrading from 3.7.x: follow the [FIPS migration guide](./11-operations/04-upgrade/fips-migration.md) before you upgrade.** Shared Services 3.6.0 and Identity Analytics 3.8.0 run FIPS images only. After the switch, Keycloak can no longer read the passwords stored by the standard Keycloak: users must reset their password unless you prepare the upgrade as described in the guide. Back up your databases first.
 
-Identity Analytics 3.8 runs on a new platform (Eclipse, Java 21 and Tomcat 11) and uses FIPS 140-3 compliant images by default. See the [Identity Analytics 3.8 release notes](https://developer.radiantlogic.com/ia/iap-3.8/identity-analytics/iap-release/04-iap-3.X-release-notes/) for the product changes.
+Identity Analytics 3.8 runs on a new platform (Eclipse, Java 21 and Tomcat 11) and uses FIPS 140-3 compliant images by default. See the [Identity Analytics 3.8 release notes](../../../iap-3.8/identity-analytics/iap-release/04-iap-3.X-release-notes/) for the product changes.
 
 > See [Migration 3.8.0](./11-operations/04-upgrade/migration-3.8.0.md) for details: several changes are BREAKING (Keycloak and database password length, SQL Tools removal).
 

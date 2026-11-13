@@ -796,7 +796,7 @@ Here you can define how to find accounts and groups who are members of a group. 
 
 ### Group target Example
 
-ActiveDirectory add-on is a good example for collecting accounts, groups and groups members, it is available in RadiantOne Marketplace.
+ActiveDirectory add-on is a good example for collecting accounts, groups and groups members, it is available on the [Radiant Logic file sharing site](../../../downloads/01-downloads#add-ons-facets) (Customer Downloads > Facets > bw_activedirectory).
 
 ## Group members target
 
@@ -863,7 +863,7 @@ Here you can define how to found accounts and groups who are member of a group b
 
 ### Group members target Example
 
-Active Directory add-on is a good example for collecting accounts, groups and groups members, it is available in RadiantOne Marketplace.  
+Active Directory add-on is a good example for collecting accounts, groups and groups members, it is available on the [Radiant Logic file sharing site](../../../downloads/01-downloads#add-ons-facets) (Customer Downloads > Facets > bw_activedirectory).  
 
 ### Resolution of groups and accounts during data collection
 
@@ -1847,11 +1847,7 @@ For each missing application or permission, an event will be written to an event
 
 ### Theoretical rights target tab Examples
 
-Download theoretical rights examples from RadiantOne Identity Analytics Marketplace at the following location:
-
-[Theoretical rights examples - collect](https://marketplace.brainwavegrc.com/package/bw_theoreticalrights/)  
-
-(You must be a registered user to download)
+Download the theoretical rights examples (`bw_theoreticalrights`) from the [Radiant Logic file sharing site](../../../downloads/01-downloads#add-ons-facets) (Customer Downloads > Facets > bw_theoreticalrights).
 
 ## Usage target
 

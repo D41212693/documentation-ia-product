@@ -38,7 +38,7 @@ Let's examine this process in details.
 Before starting the wizard, you must ensure that all add-ons needed to run the whole process are installed.
 
 The wizard uses an add-on called `bw_reviewtemplates`.
-This add-on is not packaged in the product but can be downloaded in the [marketplace](https://marketplace.brainwavegrc.com/).
+This add-on is not packaged in the product but can be downloaded from the [Radiant Logic file sharing site](../../downloads/01-downloads#add-ons-facets) (Customer Downloads > Facets > bw_reviewtemplates).
 This way, new features or bug fixes can happen very often without waiting for the next product release to be delivered.
 
 This add-on needs the following ones:

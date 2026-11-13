@@ -26,7 +26,7 @@ The following paragraphs detail the process from the design of the application m
 
 The data collection wizard is included in an add-on called `bw_appmodeltemplates`.
 
-This add-on is not included by default in the product and must be downloaded from the marketplace [here](https://marketplace.brainwavegrc.com/).
+This add-on is not included by default in the product and must be downloaded from the [Radiant Logic file sharing site](../../downloads/01-downloads#add-ons-facets) (Customer Downloads > Facets > bw_appmodeltemplates).
 
 The installation of the add-on provide the access to the data collection wizard.
 
