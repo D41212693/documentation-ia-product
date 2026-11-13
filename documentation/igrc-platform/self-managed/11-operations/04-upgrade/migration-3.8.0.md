@@ -51,7 +51,7 @@ Chart and env-manager ship on the same release train.
 4. Plan password resets for users still on argon2 before a FIPS-strict
    Keycloak switch.
 
-## [CHG-022] Keycloak `passwordMinLength` Must Be at Least 14
+## [CHG-022] Keycloak passwordMinLength Must Be at Least 14
 
 **Version**: 3.8.0
 **Category**: BREAKING
@@ -277,7 +277,7 @@ Revert the chart and the previous batch image together.
 
 Shipped in chart version 3.8.0.
 
-## [DEPR-010] `batch.technicalConfig` Moved to `batch.technicalConfiguration.name`
+## [DEPR-010] batch.technicalConfig Moved to batch.technicalConfiguration.name
 
 **Version**: 3.8.0
 **Category**: DEPRECATED
@@ -402,7 +402,7 @@ Revert the chart and the previous Environment Manager image together.
 
 Shipped in chart version 3.8.0.
 
-## [CHG-019] Portal and Workflow Log Volume `fsGroup` 65532
+## [CHG-019] Portal and Workflow Log Volume fsGroup 65532
 
 **Version**: 3.8.0
 **Category**: CHANGED / Security
@@ -510,7 +510,7 @@ Rollback requires both the earlier chart and matching Environment Manager
 image. Re-enable `sqlPad.enabled` in the earlier chart if the SQL Tool is
 required after rollback.
 
-## [CHG-018] Chart-Owned FIPS Tokens in `JAVA_OPTS` (BWIPUAR-3726)
+## [CHG-018] Chart-Owned FIPS Tokens in JAVA_OPTS (BWIPUAR-3726)
 
 **Version**: 3.8.0
 **Category**: CHANGED
@@ -745,7 +745,7 @@ Set `database.postgres.image.from: catalog` to point the cluster at an ImageCata
 
 See CNPG ImageCatalog.
 
-## [DEPR-009] `tools.kubectl` Ignored
+## [DEPR-009] tools.kubectl Ignored
 
 **Version**: 3.8.0  
 **Category**: DEPRECATED
@@ -971,7 +971,7 @@ change may add a `lookup`-based NOTES warning for that case.
 
 Shipped in chart version 3.8.0.
 
-## [CHG-011] `JDK_JAVA_OPTIONS` Refused in Component env Maps
+## [CHG-011] JDK_JAVA_OPTIONS Refused in Component env Maps
 
 **Version**: 3.8.0  
 **Category**: CHANGED
@@ -1441,7 +1441,7 @@ kubectl get secret -n <namespace> keycloak-app-realm-admin-credentials \
   -o jsonpath="{.data.technical_admin_initial_password}" | base64 -d
 ```
 
-## [DEPR-008] `operationsManager.enabled` Deprecated and Ignored
+## [DEPR-008] operationsManager.enabled Deprecated and Ignored
 
 **Version**: 3.8.0  
 **Category**: DEPRECATED / CHANGED
@@ -1490,7 +1490,7 @@ operationsManager:
 Deprecated and ignored in chart version 3.8.0. The key will be removed from
 the documented configuration surface in a future release.
 
-## [ADD-005] `ops` Schema in `shared_db` for DB Check
+## [ADD-005] ops Schema in shared_db for DB Check
 
 **Version**: 3.8.0  
 **Category**: ADDED
