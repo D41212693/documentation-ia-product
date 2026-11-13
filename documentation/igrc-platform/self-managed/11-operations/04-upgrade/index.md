@@ -25,9 +25,10 @@ An upgrade installs new chart versions with your existing values files. Always r
       --values ida.values.yaml --timeout 30m
     ```
 
-    Always give a `--timeout`: pre-upgrade jobs can run for several minutes.
+    Always give a `--timeout`: pre-upgrade jobs can run for several minutes. Plan a window of about 30 minutes: users cannot sign in while Keycloak restarts, and no execution plan must run during the upgrade.
 
-5. Run the [post-installation checks](../05-post-installation.md).
+5. If the compatibility table gives a new CloudNativePG chart for the target release, upgrade the operator with [step 2 of the installation](../03-installation.md#2-install-the-cloudnativepg-operator). The database pods restart once.
+6. Run the [post-installation checks](../05-post-installation.md).
 
 > [!warning] Downgrades are not supported: an upgrade migrates the database schemas. To go back, restore the backup taken before the upgrade.
 
