@@ -132,6 +132,8 @@ Shared Services (Keycloak, APISIX gateway and its etcd store) are installed once
 
     Keycloak can restart once or twice while its database starts: this is expected.
 
+    > [!note] With an external database, there is no `keycloak-db-1` pod.
+
 The password of the Keycloak `master-admin` account is the one set in `keycloak.auth.adminPassword`: 14 characters or more. If you left it empty, it is generated and stored in the `keycloak-master-admin` secret of `<SHARED_NAMESPACE>`.
 
 ## 4. Install Identity Analytics

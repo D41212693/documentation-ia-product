@@ -16,7 +16,7 @@ Both charts can use a PostgreSQL server you operate instead of the built-in Clou
 - TLS: if the server requires it, the CA certificate of the server, stored in a secret (see [Encrypted connections](#encrypted-connections)).
 - Passwords of 14 characters or more for the administration account and the application accounts: from Identity Analytics 3.8, the charts refuse shorter ones.
 - DB Check and DB Maintenance of the controller are not available with an external database.
-- The `pg_stat_statements` extension is recommended for performance analysis. It is not created by the charts: ask your DBA to enable it (`shared_preload_libraries`) and to run `CREATE EXTENSION pg_stat_statements;` in `analytics_db`.
+- The `pg_stat_statements` extension is recommended for performance analysis. It is not created by the charts: ask your DBA to add it to `shared_preload_libraries` and, after the installation (the charts create `analytics_db`), to run `CREATE EXTENSION pg_stat_statements;` in `analytics_db` as a superuser.
 
 ## Administration account
 
@@ -31,6 +31,7 @@ The administration account is a superuser, or an account with these privileges:
 To give them to an account, run as a superuser, before the installation:
 
 ```sql
+CREATE ROLE <DB_ADMIN_USER> LOGIN PASSWORD '<DB_ADMIN_PASSWORD>';  -- if the account does not exist yet
 ALTER ROLE <DB_ADMIN_USER> CREATEDB CREATEROLE;
 ALTER ROLE <DB_ADMIN_USER> SET createrole_self_grant = 'set, inherit';
 ALTER DATABASE template1 OWNER TO <DB_ADMIN_USER>;
@@ -93,9 +94,12 @@ database:
 | Database | `analytics_db` | `app_user` |
 | Database | `shared_db` | `shared_user` |
 | Schemas of `analytics_db` | `igrc` (Identity Ledger), `activiti` (workflows), `auditlog` | `app_user` |
-| Schemas of `shared_db` | `controller`, `configuration`, `gitsync` | `shared_user` |
+| Schemas of `shared_db` | `controller`, `configuration`, `gitsync`, `ops` | `shared_user` |
+| Login role | `<KEYCLOAK_DB_USER>` (Shared Services) | Password from `database.external.password` |
 | Login roles | `app_user`, `shared_user`, `analytics_support` | Passwords generated, or taken from your secrets |
 | Group role | `analytics_read_access` | `SELECT` on the tables of the `analytics_db` schemas |
+
+The generated passwords are stored in the secrets `analytics-credentials`, `shared-credentials` and `analytics-support-credentials` of the instance namespace. A reinstallation generates new ones and sets them on the server.
 
 The database, role and schema names can be changed under `database.analytics` and `database.shared` in the Identity Analytics values. The schema `aida` and the role `ai_svc_user` are added only when the AI features are enabled.
 
