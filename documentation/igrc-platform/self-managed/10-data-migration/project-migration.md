@@ -5,28 +5,34 @@ description: "Adapt an on-premises Identity Analytics project to run on Self-Man
 
 # Project migration
 
-A project that runs on-premises must be adapted before it runs on Self-Managed: the platform expects configuration elements and file locations that an on-premises project does not have. The simplest way is to merge the reference project of the target Self-Managed version into your project.
+Before running an on-premises Identity Analytics project on Self-Managed, update it to use the configuration settings and file locations required by the platform. The simplest approach is to merge the reference project for your target Self-Managed version into your existing project.
 
 ## Steps
 
-1. **Check the `.gitignore` files** of your project. Restrictive rules (for example ignoring the whole configuration folder) prevent a proper merge: relax them first.
-2. **Create a branch** in the Git repository of your project, holding the reference project of the target Self-Managed version provided by Radiant Logic.
-3. **Merge** that branch into the latest version of your project, in the Studio. Conflicts are usually few and simple to solve.
-4. **Set the new configuration variables** brought by the merge. In Self-Managed, source files are read from fixed folders inside the platform:
+1. Review your project's `.gitignore` files. Adjust any rules that could prevent required files from being merged, such as rules that exclude the entire configuration folder.
+
+2. Create a branch in your project's Git repository containing the reference project provided by Radiant Logic for your target Self-Managed version.
+
+3. In iGRC Studio, merge the reference project branch into the latest version of your project. Resolve any merge conflicts, which are usually limited and straightforward.
+
+4. Configure the variables introduced by the merge. Self-Managed uses the following locations for source and working files:
 
     | Variable | Value | Purpose |
     | :------- | :---- | :------ |
-    | `importfiles` | `/data/importfiles` | Folder of the final source files, read by the collectors |
-    | `bwdsm_sourcepath` | `/data/sourcefiles` | Folder the data source manager reads its source files from |
-    | `bwdsm_workpath` | `{config.importfiles}/bw_dsm/work` | Work folder of the data source manager |
-    | `bwdsm_genericapp_sourceFolder` | `{config.importfiles}/bwdsm_generic_app` | Applications mapped in the data source manager |
+    | `importfiles` | `/data/importfiles` | Source files read by collectors |
+    | `bwdsm_sourcepath` | `/data/sourcefiles` | Source files read by the data source manager |
+    | `bwdsm_workpath` | `{config.importfiles}/bw_dsm/work` | Working folder for the data source manager |
+    | `bwdsm_genericapp_sourceFolder` | `{config.importfiles}/bwdsm_generic_app` | Application data mapped in the data source manager |
     | `bw_generic_hr_sourceFolder` | `{config.importfiles}/bwdsm_generic_hr` | HR data mapped in the data source manager |
     | `ad_sourceFolder` | `{config.importfiles}/bw_activedirectory/` | Active Directory data |
     | `aad_sourceFolder` | `{config.importfiles}/bw_aad_connector/` | Microsoft Entra ID data |
 
-    Compare with the reference project of your version: new variables can appear between releases.
-5. **Update the collectors and discoveries** so that they read their files from `{config.importfiles}` instead of on-premises paths.
-6. **Replace the on-premises extractions** (`igrc_extract`, scheduled scripts on the server) by the Self-Managed extractors or by uploads to the controller. See the Configuration and Extractors pages.
-7. **Commit and push** the branch, and set it in the `git.default` values of the instance (or in the configuration interface, **Git Project**).
+    Check the reference project for your target version, as new releases may introduce additional variables.
 
-Then migrate the database if you keep the history (see [Import database](./import-database.md)), and configure the authentication of the instance.
+5. Update collectors and discoveries to read files from `{config.importfiles}` instead of on-premises paths.
+
+6. Replace on-premises extraction methods, such as `igrc_extract` and scheduled server scripts, with Self-Managed extractors or file uploads to the controller. See the Configuration and Extractors pages.
+
+7. Commit and push the migrated project branch. Configure the instance to use this branch through the `git.default` Helm values or the Git Project page in the configuration interface.
+
+After migrating the project, import the database if you want to retain historical data (see [Import database](./import-database.md)), then configure authentication for the instance.
