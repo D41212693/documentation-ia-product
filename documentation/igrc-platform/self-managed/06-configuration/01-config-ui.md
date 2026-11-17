@@ -1,148 +1,167 @@
 ---
-title: Identity Analytics configuration interface
-description: Use the configuration interface of a Self-Managed Identity Analytics instance
+title: Identity Analytics Configuration 
+description: Configure and manage a Self-Managed Identity Analytics instance using the configuration interface.
 ---
 
-# Identity Analytics configuration interface
+# Identity Analytics Configuration
 
-The configuration interface holds the functional and technical settings of an instance that are not set by the Helm values: the project repository, the emails of the portal and the batch, the purge of the timeslots, the schedules, the database checks, the Identity Data Management connection and the portal debugging.
+Use the configuration interface to manage instance settings that are not controlled by Helm values. These include the project repository, portal and batch emails, timeslot purging, schedules, database checks, the Identity Data Management connection, and portal debugging.
 
-## First connection
+## Access the interface
 
 The configuration interface is available at `https://<IDA_DNS><IDA_PATH>/config`. Log in with the technical administrator account (`setup`) or another account with the `technicaladmin` role.
 
-> [!note] In Self-Managed, the infrastructure settings (DNS name, TLS, database, SMTP server, resources, license) come from the Helm values of the instance and are not displayed in this interface. See [Which setting wins](#which-setting-wins).
+> [!note]
+> In Self-Managed deployments, Helm values control infrastructure settings such as the DNS name, TLS, database, SMTP server, resources, and license. These settings are not displayed in this interface. See [Configuration precedence](#configuration-precedence).
 
-Open the pages from the menu on the left or from the tiles of the home page. Direct links to a page (for example `<IDA_PATH>/config/git`) are not supported: go through the menu.
+Use the menu on the left or the home page tiles to navigate between pages. Direct links to individual pages, such as `<IDA_PATH>/config/git`, are not supported.
 
-> [!warning] Click **Save** (or **Test and save**) before you leave a page: unsaved changes are lost.
+> [!warning]
+> Select Save or Test and save before leaving a page. Unsaved changes are lost.
 
-## Which setting wins
+## Configuration settings
 
-Some settings can be set both in the Helm values and in the configuration interface or another console. At each installation and upgrade, the `config-store-init` job writes the values to the configuration store: some settings are written every time, others only at the first installation.
+Some settings can be configured through both Helm values and the configuration interface or another console. During installation and upgrades, the `config-store-init` job writes Helm values to the configuration store. Some values are written every time; others are written only during the initial installation. Refer to the table below for further details.
 
-| Setting | Where to set it | At each `helm upgrade` |
-| :------ | :-------------- | :--------------------- |
-| SMTP (server, port, sender, authentication) | Values `smtp.*` | The values are written again and overwrite changes made in the configuration interface (**Mail** page). The controller only displays these settings (**Email server** tab). The portal and the controller restart when they change. |
-| Git repository of the project | Values `git.default.*` | The values are written again and an immediate Git synchronisation is triggered. |
-| Other Git repository selected in the configuration interface | Configuration interface | Kept: the instance keeps using the repository selected in the interface. |
-| Git synchronisation schedule | Values `gitServer.defaultCron`, first installation only | Not written again. See [Project changes](../11-operations/05-project-changes.md). |
-| Purge settings and purge schedule | Values `purge.*` and `scheduling.purge.cron`, first installation only | Not written again: change them on the **Purge** and **Scheduling** pages. |
-| Identity Data Management (RadiantOne) connection | Values, first installation only | Not written again: later changes made in the configuration interface are kept. |
-| License | Values `global.license` (base64), or `global.licenseFile` | The values are applied: to renew the license, run `helm upgrade` with the new license. `global.license` wins over `global.licenseFile`: if your values file contains `global.license`, replace it there. The portal, the batch and the configuration service restart and load it. |
-| CPU, memory and Java heap of the pods | Values (`resources`, `jvm.memory` of each component) | The values are applied. |
-| Password of the technical administrator (`setup`) | Values `global.technicalAdmin.password`, first installation only | Not written again: change the password in Keycloak. |
+| Setting | Where to configure it | Behavior during `helm upgrade` |
+| :------ | :-------------------- | :----------------------------- |
+| SMTP server, port, sender, and authentication | Helm values: `smtp.*` | Helm values overwrite changes made on the Mail page. The controller displays these settings as read-only on the Email server tab. The portal and controller restart when these values change. |
+| Default project Git repository | Helm values: `git.default.*` | Helm values are written again, and Git synchronization starts immediately. |
+| Alternative Git repository selected in the configuration interface | Configuration interface | The selection is preserved. The instance continues to use the repository selected in the interface. |
+| Git synchronization schedule | Helm value: `gitServer.defaultCron`, during initial installation only | The value is not written again. See [Project changes](../11-operations/05-project-changes.md). |
+| Purge settings and schedule | Helm values: `purge.*` and `scheduling.purge.cron`, during initial installation only | The values are not written again. Make subsequent changes on the Purge and Scheduling pages. |
+| Identity Data Management (RadiantOne) connection | Helm values, during initial installation only | The values are not written again. Changes made in the configuration interface are preserved. |
+| License | Helm values: `global.license` (base64) or `global.licenseFile` | Helm values are applied. To renew the license, run `helm upgrade` with the new license. `global.license` takes precedence over `global.licenseFile`. If your values file contains `global.license`, replace its value. The portal, batch, and configuration service restart to load the license. |
+| Pod CPU, memory, and Java heap | Helm values: each component's `resources` and `jvm.memory` settings | Helm values are applied. |
+| Technical administrator (`setup`) password | Helm value: `global.technicalAdmin.password`, during initial installation only | The value is not written again. Make subsequent password changes in Keycloak. |
 
-Report in your values files any change of a setting written at each upgrade, before you run the next `helm upgrade`.
+For settings that Helm reapplies during upgrades, update your values files before running the next `helm upgrade`.
 
 ## Header
 
-The header of every page has three controls:
+The header on every page provides three controls:
 
-- **Restart portal** restarts the portal, for example after a change of the project or of a setting of this interface. Confirm the restart: it interrupts the ongoing processes of the portal. The button is disabled while the **Git Project**, **Batch** or **Scheduling** pages have missing required fields.
-
-    ![Restart portal confirmation](images/config-interface/config-ui-restart-portal-confirm.png "Restart portal confirmation")
-
-- **en** / **fr** switches the language of the interface.
+- Restart portal restarts the portal, for example to apply project or configuration changes. You must confirm the restart because it interrupts ongoing portal processes. The button is disabled if required fields are missing on the Git Project, Batch, or Scheduling pages.
+- en / fr changes the interface language.
 - The red icon logs you out.
+
+![Restart portal confirmation](images/config-interface/config-ui-restart-portal-confirm.png "Restart portal confirmation")
 
 ## Home
 
 ![Configuration home page](images/config-interface/config-ui-home.png "Configuration home page")
 
-The home page shows one tile per page: **Database**, **Git Project**, **Mail**, **Batch**, **Purge**, **Scheduling**, **Identity Data Management** and **Portal**. A tile shows a warning when its page has missing or invalid settings.
+The home page provides a tile for each configuration page: Database, Git Project, Mail, Batch, Purge, Scheduling, Identity Data Management, and Portal. A tile displays a warning if its page contains missing or invalid settings.
 
 ## Git Project
 
 ![Git Project page, default repository](images/config-interface/config-ui-git-project.png "Git Project page, default repository")
 
-This page selects the Git repository of the project.
+Use this page to select the project's Git repository.
 
-- **Use default** on: the instance uses the repository, branch and credentials of the Helm values (`git.default.*`). This is the usual setting.
-- **Use default** off: enter another repository. Your choice is kept across upgrades.
+- With Use default enabled, the instance uses the repository, branch, and credentials specified in the Helm values (`git.default.*`). This is the usual configuration.
+- With Use default disabled, you can specify another repository. This selection is preserved across upgrades.
 
 ![Git Project page, other repository](images/config-interface/config-ui-git-project-custom.png "Git Project page, other repository")
 
-- **Git repository URL** and **Branch**: the repository and the branch of the project.
-- **Authentication Type**: **Basic** (username and password or access token) or **GitHub App**.
-- **Username**: the account used to read the repository. The password is requested when you click **Test and save**.
-- **Project directory**: the folder of the repository that contains the project, `brainwave` by default.
-- **Connection test** checks the connection to the branch with these settings. **Test and save** runs the same test and saves the settings only if it succeeds.
+When specifying another repository, configure the following settings:
 
-**Project synchronization** fetches the project from the repository on a schedule. **Sync now** fetches it at once. **Last synchronized at** shows the commit of the last synchronization. The portal keeps running the version it started with: click **Restart portal** to load the new version.
+- Git repository URL and Branch: the repository and branch that contain the project.
+- Authentication Type: Basic authentication, using a username and password or access token, or GitHub App authentication.
+- Username: the account used to read the repository. You are prompted for the password when you select Test and save.
+- Project directory: the repository folder that contains the project. The default is `brainwave`.
 
-See [Project repository](../02-prerequisites.md#project-repository) for the available repositories and credentials.
+Connection test checks access to the specified branch using these settings. Test and save performs the same test and saves the settings only if the test succeeds.
+
+Project synchronization fetches the project from the repository on a schedule. Select Sync now to fetch it immediately. Last synchronized at identifies the commit fetched during the most recent synchronization.
+
+The portal continues to use the project version loaded at startup. Select Restart portal to load the newly synchronized version.
+
+See [Project repository](../02-prerequisites.md#project-repository) for available repositories and credentials.
 
 ## Mail
 
 ![Mail page](images/config-interface/config-ui-mail-redirection.png "Mail page")
 
-This page controls the emails sent by the portal and the batch. The SMTP server itself is set by the `smtp.*` values.
+Use this page to control emails sent by the portal and batch. The SMTP server is configured through the `smtp.*` Helm values.
 
-- **Send portal and batch emails**: enables or disables these emails.
-- **Enable email redirection** and **Redirect emails to**: send all the emails to one address instead of their recipients, for example on an acceptance instance.
-- **Recipients as attachment**: when enabled, the list of the recipients is attached to the email.
+- Send portal and batch emails: enables or disables these emails.
+- Enable email redirection and Redirect emails to: redirect all emails to a single address instead of their intended recipients, for example on an acceptance instance.
+- Recipients as attachment: attaches the list of intended recipients to each email when enabled.
 
 ## Batch
 
 ![Batch page](images/config-interface/config-ui-batch.png "Batch page")
 
-**Technical Configuration Name** is the technical configuration of the project used to run the execution plans (`docker` by default).
+Technical Configuration Name specifies the project technical configuration used to run execution plans. The default is `docker`.
 
 ## Purge
 
 ![Purge page](images/config-interface/config-ui-purge.png "Purge page")
 
-This page sets what a purge deletes. It does not start a purge: start one from the controller (**Execution plans**, **Submit a purge**) or on a schedule (**Scheduling** page).
+Use this page to define what a purge deletes. Saving these settings does not start a purge. To start one, go to Execution plans > Submit a purge in the controller, or configure a schedule on the Scheduling page.
 
-- **Type**: **Purge policy** applies the retention policy of the project; **Legacy arguments** keeps a number of timeslots or days, or deletes the timeslots in given states. It applies to purges started outside an execution plan.
-- **After a scheduled execution plan**: **Purge hidden timeslots** and **Apply the purge policy**, both on by default. Uncheck them so that a scheduled plan does not purge. An execution plan started by hand never purges.
+- Type controls purges started outside an execution plan:
+  - Purge policy applies the project's retention policy.
+  - Legacy arguments retains timeslots by count or age, or deletes timeslots in specified states.
+- After a scheduled execution plan controls automatic purging after scheduled plans. Purge hidden timeslots and Apply the purge policy are both enabled by default. Clear both options to prevent scheduled plans from purging timeslots.
+
+Manually started execution plans never purge timeslots.
 
 ## Scheduling
 
 ![Scheduling page](images/config-interface/config-ui-scheduling-enabled.png "Scheduling page")
 
-Each switch enables a recurring task; set its frequency with **Every** (day or hour) and **at**. The corresponding cron expression is displayed on the right, and **Clear** removes the schedule.
+Use each switch to enable a recurring task, then set its frequency using Every (day or hour) and at. The corresponding cron expression appears on the right. Select Clear to remove a schedule.
 
-- **batch scheduling**: starts an execution plan.
-- **Extraction scheduling**: runs the connectors declared in the portal.
-- **Portal update scheduling**: restarts the portal, so that it loads the last synchronised version of the project (see [Project changes](../11-operations/05-project-changes.md)).
-- **Purge scheduling**: starts a purge, with the settings of the **Purge** page.
-- **Secure portal stop timeout (ms)**: when the portal stops, the time given to the ongoing tasks to complete before the portal is forced to stop.
+- batch scheduling: starts an execution plan.
+- Extraction scheduling: runs the connectors configured in the portal.
+- Portal update scheduling: restarts the portal to load the latest synchronized project version. See [Project changes](../11-operations/05-project-changes.md).
+- Purge scheduling: starts a purge using the settings on the Purge page.
+- Secure portal stop timeout (ms): specifies how long ongoing tasks can continue during portal shutdown before the portal is forced to stop.
 
-The times are in UTC: the page shows the current time in UTC and on your computer.
+Schedules use UTC. The page displays both the current UTC time and your computer's local time.
 
-> [!note] Spread the schedules so that they do not overlap: an execution plan can take a long time, and the portal should not restart during a plan.
+> [!note]
+> Stagger schedules to avoid overlapping tasks. Execution plans can take a long time, and the portal should not restart while a plan is running.
 
 ## Identity Data Management
 
 ![Identity Data Management page](images/config-interface/config-ui-identity-data-management-enabled.png "Identity Data Management page")
 
-This page connects the instance to RadiantOne Identity Data Management. See [Identity Data Management integration](../07-integrations/iddm.md).
+Use this page to connect the instance to RadiantOne Identity Data Management. See [Identity Data Management integration](../07-integrations/iddm.md).
 
-- **Enable Identity Data Management**: enables the connection.
-- **SDC Group**: the group of the RadiantOne Secure Data Connector, if you use one.
-- **Identity Data Management LDAP URL** and **Port**: the LDAP endpoint of Identity Data Management. **Ping test** checks that it can be reached.
-- **Identity Data Management LDAP username**: the account used to connect. **Authentication test** checks the connection with this account and its password.
+- Enable Identity Data Management: enables the connection.
+- SDC Group: specifies the RadiantOne Secure Data Connector group, if you use one.
+- Identity Data Management LDAP URL and Port: specify the Identity Data Management LDAP endpoint. Select Ping test to check whether the endpoint is reachable.
+- Identity Data Management LDAP username: specifies the account used to connect. Select Authentication test to check the connection using this account and its password.
 
-The settings of this page are saved only when the corresponding test succeeds.
+Settings are saved only after the corresponding test succeeds.
 
 ## Portal
 
 ![Portal page](images/config-interface/config-ui-portal.png "Portal page")
 
-**Enable portal debugging** displays the debug context in the portal pages. Do not enable it in production.
+Enable portal debugging displays debug context on portal pages. Do not enable this option in production.
 
 ## Database
 
-These pages are available with the built-in database only. With an external database, they are hidden: your DBA maintains the database.
+The database pages are available only when the instance uses the built-in database. With an external database, these pages are hidden, and your database administrator is responsible for maintenance.
+
+### Health Check
 
 ![Database health check page](images/config-interface/config-ui-db-check.png "Database health check page")
 
-- **Health Check**: **Run a check** takes a read-only snapshot of the analytics database (volumetry, index usage, settings, blocked queries). **Explore** opens the report; the download icon saves it. One check runs at a time.
+Select Run a check to capture a read-only snapshot of the analytics database, including data volumes, index usage, settings, and blocked queries. Only one check can run at a time.
+
+Select Explore to open the report, or use the download icon to save it.
+
+### Maintenance
 
 ![Run maintenance confirmation](images/config-interface/config-ui-db-maintenance-confirm.png "Run maintenance confirmation")
 
-- **Maintenance**: **Run maintenance** runs `VACUUM ANALYZE` on the tables of the project, and `VACUUM FULL` and `REINDEX`, both checked by default, then keeps a before/after report. `VACUUM FULL` locks each table while it rewrites it: uncheck it unless no execution plan runs and the portal is little used.
+Select Run maintenance to run `VACUUM ANALYZE` on the project's tables. The `VACUUM FULL` and `REINDEX` options are also selected by default. A report records the database state before and after maintenance.
 
-> [!note] If these pages show "not available in this deployment" with the built-in database, restart the operations manager: `kubectl rollout restart deployment/ops-manager -n <IDA_NAMESPACE>`.
+`VACUUM FULL` locks each table while rewriting it. Clear this option unless no execution plan is running and portal activity is low.
+
+> [!note] If these pages display "not available in this deployment" when the instance uses the built-in database, restart the operations manager: `kubectl rollout restart deployment/ops-manager -n <IDA_NAMESPACE>`
