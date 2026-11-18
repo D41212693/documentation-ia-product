@@ -1,127 +1,157 @@
 ---
 title: "Prerequisites and sizing"
-description: "Cluster, tools, network, DNS, TLS, registry and sizing requirements for Self-Managed Identity Analytics."
----
+description: "Kubernetes, tools, network, DNS, TLS, registry, and resource requirements for Self-Managed Identity Analytics."
+***
 
 # Prerequisites and sizing
 
-Before the installation, decide how the platform is exposed and where its database runs, then check the items below. Everything listed here is generic: the values that depend on your environment go into your values files.
+Before installing, decide how users will access the platform and where the databases will run. Then review the requirements below and add your environment-specific settings to your values files.
 
-## Decisions to make first
+## Deployment decisions
 
 | Decision | Options | Impact |
 | :------- | :------ | :----- |
-| Database | Built-in PostgreSQL managed by CloudNativePG, or an external PostgreSQL server | CloudNativePG operator required or not; who backs up the data. See [External database](./04-external-database.md). |
-| Number of instances | One Identity Analytics instance per namespace (for example production and acceptance) | Each instance adds its own pods, volumes and database |
-| Exposure | One DNS name per cluster, one URL path per instance (`/ida`, `/ida-acc`…) | DNS record, certificate and ingress class |
-| Project repository | The Radiant Logic reference repository (read only), a fork of it hosted by Radiant Logic, or your own Git server | Who can change the project, and which account the instance uses. See [Project repository](#project-repository). |
+| Database | Built-in PostgreSQL managed by CloudNativePG, or an external PostgreSQL server | Determines whether the CloudNativePG operator is required and who manages database backups. See [External database](./04-external-database.md). |
+| Number of instances | One Identity Analytics instance per namespace, such as production and acceptance | Each instance requires its own pods, volumes, and database. |
+| Exposure | One DNS name per cluster, with a separate URL path for each instance, such as `/ida` or `/ida-acc` | Determines the DNS record, TLS certificate, and ingress class to configure. |
+| Project repository | The read-only Radiant Logic reference repository, a fork hosted by Radiant Logic, or your own Git server | Determines who can modify the project and which credentials the instance uses. See [Project repository](#project-repository). |
 
 ## Kubernetes cluster
 
-- A conformant Kubernetes cluster, for example Amazon EKS, Azure Kubernetes Service, Google Kubernetes Engine, Red Hat OpenShift or RKE2. Use a Kubernetes version supported both by your provider and by the CloudNativePG version of the [compatibility table](../self-managed).
-- A default storage class, or one you name in `global.storageClass`, providing `ReadWriteOnce` volumes (for example gp3 on AWS or managed-csi on Azure).
-- An ingress controller with an ingress class (for example ingress-nginx or Traefik). The charts create standard Kubernetes `Ingress` objects.
-- Permission to create namespaces, and cluster-wide permission to install the CloudNativePG operator and its CRDs if you use the built-in database.
+Your cluster must meet the following requirements:
 
-## Tools on the administration workstation
+- A conformant Kubernetes distribution, such as Amazon EKS, Azure Kubernetes Service, Google Kubernetes Engine, Red Hat OpenShift, or RKE2. Use a Kubernetes version supported by both your provider and the CloudNativePG version listed in the [compatibility table](../self-managed).
+- A default storage class, or a storage class specified in `global.storageClass`, that provides `ReadWriteOnce` volumes. Examples include `gp3` on AWS and `managed-csi` on Azure.
+- An ingress controller with an ingress class, such as ingress-nginx or Traefik. The charts create standard Kubernetes `Ingress` resources.
+- Permission to create namespaces. If you use the built-in database, you also need cluster-wide permissions to install the CloudNativePG operator and its custom resource definitions (CRDs).
 
-- [kubectl](https://kubernetes.io/docs/reference/kubectl/) configured for the cluster.
-- [Helm](https://helm.sh/) 3.8 or later (the charts are distributed as OCI artifacts). Helm 4 also works.
+## Administration workstation
+
+Install the following tools:
+
+- [kubectl](https://kubernetes.io/docs/reference/kubectl/), configured to connect to your cluster. [kubernetes](https://kubernetes.io/docs/reference/kubectl/)
+- [Helm](https://helm.sh/) 3.8 or later. The charts are distributed as OCI artifacts. Helm 4 is also supported.
 
 ## Information and files from Radiant Logic
 
-- The access to the `docker.io/radiantone` registry: either the image pull secret `ida-registry-credentials.yaml`, or a username and a token to create this secret yourself (see [Installation](./03-installation.md#1-prepare-the-namespaces-and-the-registry-secret)).
-- The Identity Analytics license file.
+Obtain the following before installing:
 
-If the cluster cannot reach Docker Hub, mirror the images to your own registry. For `ida-helm` 3.8.0 and `ida-shared-helm` 3.6.0, the images are:
+- Access to the `docker.io/radiantone` registry, provided as either:
+  - The `ida-registry-credentials.yaml` image pull secret.
+  - A username and token that you can use to create the secret. See [Installation](./03-installation.md#1-prepare-the-namespaces-and-the-registry-secret).
+- An Identity Analytics license file.
+
+### Use a registry mirror
+
+If the cluster cannot access Docker Hub, mirror the required images to your own registry.
+
+For `ida-helm` 3.8.0 and `ida-shared-helm` 3.6.0, mirror the following images:
 
 | Chart | Images |
 | :---- | :----- |
-| `ida-shared-helm` 3.6.0 | `radiantone/ida-apisix-fips:3.6.0`, `radiantone/ida-etcd-fips:3.6.0`, `radiantone/ida-keycloak-fips:3.6.0`, `radiantone/ida-tools-fips:3.6.0`, `radiantone/cgr-postgres-cloudnative-pg-fips:18.4` (internal database) |
-| `ida-helm` 3.8.0 | `radiantone/ida-portal:3.8.0`, `radiantone/ida-batch-server:3.8.0`, `radiantone/ida-controller:3.8.0`, `radiantone/ida-config-server:3.8.0`, `radiantone/ida-git-server:3.8.0`, `radiantone/ida-extract:3.8.0`, `radiantone/ida-ops-manager:3.8.0`, `radiantone/ida-env-manager:3.8.0`, `radiantone/ida-init-db:3.8.0`, `radiantone/ida-tools-fips:3.8.0`, `radiantone/rl-postgres-cloudnative-pg-fips:18.6` (internal database) |
-| CloudNativePG operator (internal database) | `radiantone/rl-cloudnative-pg-fips:1.30` |
+| `ida-shared-helm` 3.6.0 | `radiantone/ida-apisix-fips:3.6.0`, `radiantone/ida-etcd-fips:3.6.0`, `radiantone/ida-keycloak-fips:3.6.0`, `radiantone/ida-tools-fips:3.6.0`, `radiantone/cgr-postgres-cloudnative-pg-fips:18.4` (built-in database) |
+| `ida-helm` 3.8.0 | `radiantone/ida-portal:3.8.0`, `radiantone/ida-batch-server:3.8.0`, `radiantone/ida-controller:3.8.0`, `radiantone/ida-config-server:3.8.0`, `radiantone/ida-git-server:3.8.0`, `radiantone/ida-extract:3.8.0`, `radiantone/ida-ops-manager:3.8.0`, `radiantone/ida-env-manager:3.8.0`, `radiantone/ida-init-db:3.8.0`, `radiantone/ida-tools-fips:3.8.0`, `radiantone/rl-postgres-cloudnative-pg-fips:18.6` (built-in database) |
+| CloudNativePG operator (built-in database) | `radiantone/rl-cloudnative-pg-fips:1.30` |
 
-To pull the images from your mirror, add to both values files:
+To pull images from your mirror, add the following settings to both values files:
 
-```yaml
+```
 image:
-  registry: "<MIRROR_REGISTRY>"   # replaces docker.io/radiantone
+  registry: "<MIRROR_REGISTRY>"   # Replaces docker.io/radiantone
 imageCredentials:
   - existingSecret: <MIRROR_PULL_SECRET>
 ```
 
-For the CloudNativePG operator, set `image.repository` to `<MIRROR_REGISTRY>/rl-cloudnative-pg-fips` in `cnpg-custom-values.yaml` (see [Installation](./03-installation.md#2-install-the-cloudnativepg-operator)).
+For the CloudNativePG operator, set `image.repository` to `<MIRROR_REGISTRY>/rl-cloudnative-pg-fips` in `cnpg-custom-values.yaml`. See [Installation](./03-installation.md#2-install-the-cloudnativepg-operator).
 
-To list the images of another version, render the chart and filter the image lines:
+To list the images used by another chart version, render the chart and filter the image entries:
 
-```bash
+```
 helm template rlia oci://docker.io/radiantone/ida-helm --version <IDA_CHART_VERSION> \
   --set global.license=dummy --set 'imageCredentials[0].existingSecret=x' | grep 'image:' | sort -u
 ```
 
-## Information from your organisation
+## Information from your organization
 
-- **DNS**: a name for the platform (`<IDA_DNS>`) pointing to the ingress controller.
-- **TLS**: a certificate for that name, stored as a Kubernetes TLS secret, or issued by your certificate manager.
-- **Git** (only if you host the project on your own Git server): the URL of the repository, the branch, and an account or token with read access. See [Project repository](#project-repository).
-- **SMTP**: host, port, security mode and optional credentials of a mail relay, to send notifications.
-- **Identity provider** (optional): the SAML or OIDC settings if users log in with your corporate identity provider.
-- **External database** (optional): host, port and an administration account, see [External database](./04-external-database.md).
+Gather the following information and resources:
+
+| Item | Requirements |
+| :--- | :----------- |
+| DNS | A platform hostname (`<IDA_DNS>`) that points to the ingress controller. |
+| TLS | A certificate for the platform hostname, stored in a Kubernetes TLS secret or issued by your certificate manager. |
+| Git | If you host the project on your own Git server, the repository URL, branch, and an account or token with read access. See [Project repository](#project-repository). |
+| SMTP | The mail relay's hostname, port, security mode, and credentials, if required, for sending notifications. |
+| Identity provider (optional) | SAML or OIDC settings if users will sign in through your corporate identity provider. |
+| External database (optional) | The PostgreSQL hostname, port, and an administration account. See [External database](./04-external-database.md). |
 
 ## Project repository
 
-Each instance runs an Identity Analytics project: the configuration of the data collection, the data model, the rules and the portal. The instance reads it from a Git repository, in the folder `brainwave` at the root of the repository (`git.default.fromFolder`), and keeps a local copy of it (`git-server` pod).
+Each instance runs an Identity Analytics project that defines data collection, the data model, rules, and the portal. The instance reads the project from the `brainwave` folder at the root of a Git repository, as specified by `git.default.fromFolder`, and maintains a local copy in the `git-server` pod.
 
-Choose one of these options:
+Choose one of the following repository options:
 
-| Option | Repository and branch | Access | Use it when |
-| :----- | :-------------------- | :----- | :---------- |
-| Reference project | `https://repository.brainwavegrc.com/Brainwave/identityanalytics.git`, branch `release/<MAJOR.MINOR>` of your version (for example `release/3.8`) | Read only | You use the standard project without changes |
-| Fork hosted by Radiant Logic | A fork of the reference project, in an organisation created for you on `repository.brainwavegrc.com` | Read and write | You adapt the project; you usually work on your own branches |
-| Your own Git server | A project based on the Self-Managed reference project, that you maintain (see below) | Your choice | Your organisation requires its own Git server; you handle the project and its updates |
+| Option | Repository and branch | Access | Use when |
+| :----- | :-------------------- | :----- | :------- |
+| Reference project | `https://repository.brainwavegrc.com/Brainwave/identityanalytics.git`, using the `release/<MAJOR.MINOR>` branch that matches your version, such as `release/3.8` | Read-only | You use the standard project without modifications. |
+| Fork hosted by Radiant Logic | A fork of the reference project in an organisation created for you on `repository.brainwavegrc.com` | Read and write | You customise the project, typically on your own branches. |
+| Your own Git server | A project that you maintain, based on the Self-Managed reference project | Managed by your organisation | Your organisation requires its own Git server and manages the project and its updates. |
 
-Whatever the option, you need an account on `repository.brainwavegrc.com`, usually a service account, provided by Radiant Logic on request:
+### Repository credentials
 
-- with the reference project or a fork hosted by Radiant Logic, the instance reads the project with this account. Log in to `https://repository.brainwavegrc.com` with it and generate an access token: the instance uses the account name as username and the token as password (`authType: basic`);
-- with your own Git server, you use this account to get the reference project. The instance reads the project from your server, with an account of your server.
+All options require an account on `repository.brainwavegrc.com`, typically a service account. Radiant Logic provides this account on request.
 
-With your own Git server, the project must contain the Self-Managed reference project of your version: it brings what a Self-Managed instance needs (technical configuration, data source management, connectors). Your existing on-premises project alone is not enough. Either:
+How you use the account depends on where the project is hosted:
 
-- start from the reference project, for a new project;
-- or merge the reference project into your existing project, for example when you migrate an on-premises installation to Self-Managed (see [Project migration](./10-data-migration/project-migration.md)).
+- Reference project or Radiant Logic-hosted fork: The instance uses this account to read the project. Sign in to `https://repository.brainwavegrc.com` and generate an access token. Configure the instance with the account name as the username and the token as the password, using `authType: basic`.
+- Your own Git server: Use the Radiant Logic account to retrieve the reference project. Configure the instance to read from your server using credentials for that server.
 
-To change the project of a running instance, push to its branch: see [Project changes](./11-operations/05-project-changes.md).
+### Requirements for your own Git server
 
-> [!note] When you upgrade to a new minor version, switch the instance to the matching branch (`release/<MAJOR.MINOR>`), or merge it into your own branch if you adapted the project.
+Your project must include the Self-Managed reference project for your version. It provides the technical configuration, data source management, and connectors required by a Self-Managed instance. An existing on-premises project alone is not sufficient.
+
+Either:
+
+- Start with the reference project when creating a new project.
+- Merge the reference project into your existing project, such as when migrating an on-premises installation. See [Project migration](./10-data-migration/project-migration.md).
+
+To update the project used by a running instance, push your changes to the configured branch. See [Project changes](./11-operations/05-project-changes.md).
+
+> [!note] When upgrading to a new minor version, switch the instance to the matching `release/<MAJOR.MINOR>` branch. If you maintain a customised project, merge that release branch into your own branch instead.
 
 ## Network flows
 
+Allow the following network connections:
+
 | From | To | Port | Purpose |
 | :--- | :- | :--- | :------ |
-| Users | Ingress controller | 443 | Portal, configuration interface, Keycloak login |
-| Cluster nodes | Image registry (`docker.io`, `ghcr.io` or your mirror) | 443 | Pull the images |
-| `git-server` pod | Git repository | 443 or 22 | Synchronise the project |
-| `portal`, `batch-server`, `keycloak` pods | SMTP relay | 25, 465 or 587 | Send mail |
-| `keycloak` pod | Identity provider | 443 | SAML or OIDC federation |
-| Platform pods | External PostgreSQL (if used) | 5432 | Databases |
+| Users | Ingress controller | 443 | Access the portal, configuration interface, and Keycloak sign-in page. |
+| Cluster nodes | Image registry (`docker.io`, `ghcr.io`, or your mirror) | 443 | Pull container images. |
+| `git-server` pod | Git repository | 443 or 22 | Synchronise the project. |
+| `portal`, `batch-server`, and `keycloak` pods | SMTP relay | 25, 465, or 587 | Send email. |
+| `keycloak` pod | Identity provider | 443 | Support SAML or OIDC federation. |
+| Platform pods | External PostgreSQL server, if used | 5432 | Connect to the databases. |
 
 ## Sizing
 
-The default requests and limits of the charts amount to the figures below for Shared Services plus one Identity Analytics instance with the built-in database. Plan the nodes so that the requests fit with some headroom, and so that one node can host the largest pod (the database, 16 Gi limit by default).
+The following totals reflect the charts' default resource requests and limits for Shared Services and one Identity Analytics instance using the built-in database.
+
+Provide enough node capacity to accommodate the resource requests, with additional headroom. Also ensure that an individual node can accommodate the largest pod: by default, a database pod with a 16 Gi memory limit.
 
 | Scope | CPU requests | Memory requests | CPU limits | Memory limits | Persistent storage |
 | :---- | -----------: | --------------: | ---------: | ------------: | -----------------: |
-| Shared Services (APISIX, etcd, Keycloak, Keycloak database) | 1.5 | 1.5 Gi | 4.5 | 12.5 Gi | 96 Gi |
-| One Identity Analytics instance (with its database) | 5.8 | 13.3 Gi | 12.2 | 33.6 Gi | 252 Gi |
-| **Total** | **7.3** | **14.8 Gi** | **16.7** | **46.1 Gi** | **348 Gi** |
+| Shared Services: APISIX, etcd, Keycloak, and the Keycloak database | 1.5 | 1.5 Gi | 4.5 | 12.5 Gi | 96 Gi |
+| One Identity Analytics instance, including its database | 5.8 | 13.3 Gi | 12.2 | 33.6 Gi | 252 Gi |
+| Total | 7.3 | 14.8 Gi | 16.7 | 46.1 Gi | 348 Gi |
 
-With an external database, remove the database pods (2.5 CPU and 4.5 Gi requested, 224 Gi of storage) from the cluster figures, and size the PostgreSQL server instead.
+If you use an external database, subtract the database pods' requirements from these cluster totals: 2.5 CPU requested, 4.5 Gi memory requested, and 224 Gi of persistent storage. Size the external PostgreSQL server separately.
 
-These defaults suit small and medium projects. Increase the portal, batch and database resources and the database volume with the number of identities, accounts and permissions loaded, the number of timeslots kept and the number of concurrent users, as shown in [Installation](./03-installation.md). The main drivers are:
+These defaults are suitable for small and medium projects. Increase resources for the portal, batch server, and database, along with database storage, as your workload grows. Consider the number of identities, accounts, and permissions loaded, the number of retained timeslots, and concurrent user activity. See [Installation](./03-installation.md) for configuration details.
 
-| Component | Grows with |
-| :-------- | :--------- |
-| `shared-db` (CPU, memory, data volume) | Volume of the Identity Ledger and number of timeslots kept |
-| `batch-server` (memory) | Size of the source files and complexity of the collectors |
-| `portal` (CPU, memory) | Number of concurrent users and reports |
-| `git-server` (volume) | Size of the project repository |
+The main sizing factors are:
+
+| Component and resources | Main sizing factors |
+| :---------------------- | :------------------ |
+| `shared-db`: CPU, memory, and data volume | Identity Ledger size and number of retained timeslots. |
+| `batch-server`: memory | Source file sizes and collector complexity. |
+| `portal`: CPU and memory | Number of concurrent users and reports. |
+| `git-server`: volume | Project repository size. |
