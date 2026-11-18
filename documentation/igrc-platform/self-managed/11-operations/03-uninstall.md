@@ -94,20 +94,20 @@ Remove the Identity Analytics instances first, then Shared Services. Shared Serv
 
 1. Uninstall the release:
 
-    ```bash
+    ```
     helm uninstall rlia --namespace <IDA_NAMESPACE> --wait
     ```
 
 2. List the remaining persistent volume claims, and delete them to free the storage:
 
-    ```bash
+    ```
     kubectl get pvc --namespace <IDA_NAMESPACE>
     kubectl delete pvc --namespace <IDA_NAMESPACE> --all
     ```
 
 3. Delete the namespace, if it is no longer used:
 
-    ```bash
+    ```
     kubectl delete namespace <IDA_NAMESPACE>
     ```
 
@@ -115,32 +115,32 @@ Remove the Identity Analytics instances first, then Shared Services. Shared Serv
 
 1. Uninstall the release:
 
-    ```bash
+    ```
     helm uninstall rlss --namespace <SHARED_NAMESPACE> --wait
     ```
 
 2. List the remaining persistent volume claims, and delete them:
 
-    ```bash
+    ```
     kubectl get pvc --namespace <SHARED_NAMESPACE>
     kubectl delete pvc --namespace <SHARED_NAMESPACE> --all
     ```
 
 3. Delete the namespace:
 
-    ```bash
+    ```
     kubectl delete namespace <SHARED_NAMESPACE>
     ```
 
 4. With the built-in database, if no other application uses it, remove the CloudNativePG operator:
 
-    ```bash
+    ```
     helm uninstall cnpg --namespace cnpg-system
     ```
 
     The chart keeps the CloudNativePG CRDs. To remove them and the namespace:
 
-    ```bash
+    ```
     kubectl get crds -o name | grep postgresql.cnpg.io | xargs kubectl delete
     kubectl delete namespace cnpg-system
     ```
@@ -151,7 +151,7 @@ With an external database, uninstalling the charts does not delete the databases
 
 To reinstall on them, keep them: see [External database](../04-external-database.md). To remove the platform completely, have your DBA run, with the default names:
 
-```sql
+```
 DROP DATABASE analytics_db;
 DROP DATABASE shared_db;
 DROP DATABASE keycloak_db;
