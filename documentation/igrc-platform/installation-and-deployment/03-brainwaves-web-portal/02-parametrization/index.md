@@ -322,7 +322,6 @@ After update, you should have deployment descriptor that looks along the lines o
       username="__USER__"
       password="__ENCRYPTED_PASSWORD__"
       url="jdbc:sqlserver://__HOSTNAME__:__PORT__;databaseName=__DATABASE__"
-
       connectionProperties="algorithm=AES;mode=ECB;padding=PKCS5PADDING;keyFilename=<TOMCAT_HOME>/conf/db.key"
     />
 
@@ -345,7 +344,6 @@ After update, you should have deployment descriptor that looks along the lines o
       username="__USER__"
       password="__ENCRYPTED_PASSWORD__"
       url="jdbc:sqlserver://__HOSTNAME__:__PORT__;databaseName=__DATABASE__"
-
       connectionProperties="algorithm=AES;mode=ECB;padding=PKCS5PADDING;keyFilename=<TOMCAT_HOME>/conf/db.key"
     />
 </Context>
