@@ -14,7 +14,7 @@ An upgrade installs new chart versions with your existing values files. Always r
 3. If the target is a new minor version (for example 3.6 to 3.7), merge the reference project of that version into your project and set `git.default.branch` to the matching branch.
 4. Upgrade the two charts in the order given by the migration guide of the target version. When the guide gives no order, upgrade Shared Services first, wait until Keycloak is ready, then upgrade each Identity Analytics instance.
 
-    ```bash
+    ```
     helm upgrade rlss oci://docker.io/radiantone/ida-shared-helm \
       --namespace <SHARED_NAMESPACE> --version <SHARED_CHART_VERSION> \
       --values shared.values.yaml --wait --timeout 20m
