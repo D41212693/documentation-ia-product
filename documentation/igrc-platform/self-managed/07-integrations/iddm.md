@@ -5,7 +5,7 @@ parent: "Integrations"
 
 # Identity Data Management Integration
 
-RadiantOne Identity Data Management (IDDM, formerly FID or VDS) is the Radiant Logic product that aggregates identity data from several directories and exposes it as an LDAP directory. This page is optional: follow it only if your organisation already uses Identity Data Management and you want Identity Analytics to read its users and groups from there, instead of extracting them from each source with the [PowerShell extractor](../06-configuration/03-powershell-extraction.md) or the [extractors](../08-extractors/entra-id.md).
+RadiantOne Identity Data Management is the Radiant Logic product that aggregates identity data from several directories and exposes it as an LDAP directory. This integration is optional: follow the instructions on this page only if your organization already uses Identity Data Management and you want Identity Analytics to read its users and groups from there, instead of extracting them from each source with the [PowerShell extractor](../06-configuration/03-powershell-extraction.md) or the [extractors](../08-extractors/entra-id.md).
 
 Identity Analytics can read these sources through Identity Data Management:
 
@@ -13,21 +13,21 @@ Identity Analytics can read these sources through Identity Data Management:
 - Entra ID tenants: users and groups;
 - LDAP directories: users and groups.
 
-The integration has three parts:
+To configure the integration, you will need to do the following:
 
-1. In Identity Data Management, expose each source under a naming context (the root entry of an LDAP tree, for example `o=IDAAD`) with the structure described below.
-2. In the configuration interface of Identity Analytics, set the connection to Identity Data Management.
-3. In the portal, declare one data source per naming context. The extraction runs on a schedule, like the other connectors.
+1. In Identity Data Management, expose each source under a naming context (the root entry of an LDAP tree, for example `o=IDAAD`) with the structure described in this page.
+2. In the Identity Analytics configuration interface, set the connection to Identity Data Management.
+3. In the Identity Analytics portal, declare one data source per naming context. The extraction runs on a schedule, like the other connectors.
 
 ## Connection and network flow
 
-The extractions run in the `extractor` pod of the instance, which connects to the LDAP port of Identity Data Management (2636 for LDAPS and 2389 for LDAP by default). Allow this flow from the cluster, or use a RadiantOne Secure Data Connector (SDC) group.
+The extractions run in the `extractor` pod of the instance, which connects to the LDAP port of Identity Data Management (2636 for LDAPS and 2389 for LDAP by default). Allow this connection from the cluster, or use a RadiantOne Secure Data Connector (SDC) group.
 
-Set the connection in the configuration interface, **Identity Data Management** page: LDAP URL, port and the account used to read the data, then run the ping and authentication tests. See [Configuration interface](../06-configuration/01-config-ui.md#identity-data-management).
+On the Identity Data Management page of the configuration interface, enter the LDAP URL, port, and credentials for an account that can read the data. Then, run the ping and authentication tests. See [Configuration interface](../06-configuration/01-config-ui.md#identity-data-management).
 
 ## Prerequisites in Identity Data Management
 
-Identity Analytics requires the data in Identity Data Management to be organised in a specific way. The following sections describe the configuration for Active Directory, Entra ID and LDAP backends, in the Identity Data Management control panel.
+Identity Analytics requires the data in Identity Data Management to be organized in a specific way. The following sections describe the configuration for Active Directory, Entra ID and LDAP backends, in the Identity Data Management control panel.
 
 ### Active Directory backend configuration
 
@@ -85,7 +85,7 @@ Navigate to the directory browser page and select the `o=<tenant>` level under `
 
 ### LDAP backend configuration
 
-The LDAP backend should have been configured in the Identity Data Management control panel. The configuration is similar to the configuration for the Active Directory backend. To create the required hierarchy in Identity Data Management, follow these steps:  
+The LDAP backend should must be configured in the Identity Data Management control panel. The configuration is similar to the configuration for the Active Directory backend. To create the required hierarchy in Identity Data Management, follow these steps:  
 
 - In the "Directory Namespace" tab, create a new naming context `o=IDALDAP` based on a virtual tree.
 
