@@ -149,9 +149,13 @@ SPNEGO=org.apache.catalina.authenticator.SpnegoAuthenticator
 SAML=com.brainwave.tomcat.authenticator.saml.SAMLAuthenticator
 ```
 
-In `<TOMCAT_CONF_FOLDER>` (`$CATALINA_BASE/conf`), create `SAMLAuthenticator.properties`. A complete sample is in [Configuration file samples](#configuration-file-samples). Each property, and the version in which it appeared, is described in [SAML Authenticator properties](./saml-authenticators-properties).
+Create `SAMLAuthenticator.properties` in `<TOMCAT_CONF_FOLDER>` (`$CATALINA_BASE/conf`). For a complete example, see [Configuration file samples](#configuration-file-samples). For property descriptions and the version in which each property was introduced, see [SAML Authenticator properties](./saml-authenticators-properties).
 
-From **3.4.0**, **4.1.0** and **5.1.0**, a bare file name in that properties file (`idp-metadata.xml`, `sp-metadata.xml`, a role-mapping file, a keystore) is read from `$CATALINA_BASE/conf`. An absolute path is used as given. Any other relative path is resolved from `$CATALINA_BASE`.
+Starting with versions **3.4.0**, **4.1.0**, and **5.1.0**, file paths specified in `SAMLAuthenticator.properties` are resolved as follows:
+
+- File names without a directory component, such as `idp-metadata.xml`, `sp-metadata.xml`, or the name of a role-mapping file or keystore, are resolved relative to `$CATALINA_BASE/conf`.
+- Absolute paths are used as specified.
+- All other relative paths are resolved relative to `$CATALINA_BASE`.
 
 `SAMLAuthenticator.properties` applies to every web application. Since **3.3.10**, and on **4.x** and **5.x**, a web application can use its own file instead: `SAMLAuthenticator-<context-name>.properties`, where `<context-name>` is the context name. That file can point to its own `sp-metadata.xml`. When the context file is absent, `SAMLAuthenticator.properties` is used.
 
