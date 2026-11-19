@@ -5,9 +5,9 @@ description: "Upgrade from Identity Analytics 3.7.x on standard Shared Services 
 
 # Migrating Shared Services and Identity Analytics to FIPS
 
-This guide is for administrators who manage Identity Analytics Self-Managed installation and upgrades. It describes how to upgrade a Self-Managed Identity Analytics installation from Identity Analytics 3.7.x on standard (non-FIPS) Shared Services 3.3.0–3.5.x to Identity Analytics 3.8.0 on Shared Services 3.6.0., which run FIPS images.
+This guide is for administrators who manage Identity Analytics Self-Managed installation and upgrades. It describes how to upgrade a Self-Managed Identity Analytics installation from Identity Analytics 3.7.x on standard (non-FIPS) Shared Services 3.3.0–3.5.x to Identity Analytics 3.8.0 on Shared Services 3.6.0, which run FIPS images.
 
-> [!warning] This is a major upgrade. Shared Services 3.6.0 and Identity Analytics 3.8.0 switch all applications to FIPS images: Keycloak, APISIX, etcd, PostgreSQL, the portal, the batch server, and data recovery. These images use only FIPS 140-3 validated cryptographic modules. After the switch, Keycloak can no longer read passwords stored by standard Keycloak. Users whose passwords are not converted before the upgrade must reset them. Review [Design](#design) and plan password resets before you begin. To let users retain their passwords, complete [step 3](#3-optional-let-users-keep-their-password). 
+> [!warning] **This is a major upgrade.** Shared Services 3.6.0 and Identity Analytics 3.8.0 switch all applications to FIPS images: Keycloak, APISIX, etcd, PostgreSQL, the portal, the batch server, and data recovery. These images use only FIPS 140-3 validated cryptographic modules. After the switch, **Keycloak can no longer read passwords stored by standard Keycloak**. Users whose passwords are not converted before the upgrade must reset them. Review [Design](#design) and plan password resets before you begin. To let users retain their passwords, complete [step 3](#3-optional-let-users-keep-their-password).
 
 ## Overview
 
@@ -24,7 +24,7 @@ Analytics. The FIPS images are required from these versions on: there is no opti
 ### The Identity Analytics realm
 
 The users of Identity Analytics are in one Keycloak realm, named after the Kubernetes namespace where Identity
-Analytics is deployed. For example, Identity Analytics deployed in the namespace `ida-prod` uses the realm `ida-prod`. This guide uses Identity Analytics as the realm name. Replace it with your Identity Analytics realm name, <NAMESPACE>.
+Analytics is deployed. For example, Identity Analytics deployed in the namespace `ida-prod` uses the realm `ida-prod`. This guide calls it the **Identity Analytics realm** and writes its name `<NAMESPACE>`.
 
 ### At a glance
 
@@ -67,12 +67,6 @@ Keycloak then restarts using the FIPS image. The two Shared Services administrat
 | Other users of the Identity Analytics realm | Click **Forgot Password?**, or ask an admin to reset it in the Keycloak Admin Console. |
 | Users who signed in with the hash rule set, before the switch ([step 3](#3-optional-let-users-keep-their-password)) | None. Their passwords already use pbkdf2. |
 
-The Job runs again on every later Shared Services upgrade. On a Keycloak already on FIPS it changes nothing and every
-password keeps working.
-
-The Identity Analytics 3.8.0 upgrade adds the same hash rule to the Identity Analytics realm if it is missing, and a
-new installation creates the realm with it. It does not change the other rules of the policy, nor the stored passwords.
-
 The Job runs again during subsequent Shared Services upgrades. If Keycloak already uses FIPS, it makes no changes, and existing passwords continue to work.
 
 The Identity Analytics 3.8.0 upgrade also adds the hash rule to the Identity Analytics realm if it is missing. New installations create the realm with this rule. This operation does not modify other password policy rules or existing password hashes.
@@ -96,18 +90,18 @@ Before you begin, ensure that you have:
   - `svc-realms-admin`, stored in `keycloak-svc-admin-credentials`.
   - `database.postgres.password` and `database.keycloak.password`, or `database.external.password` for an external database, including credentials supplied through `existingSecret`.
   - `keycloak.auth.adminPassword`.
-- A password policy requiring at least 14 characters in every realm. A lower minimum can allow users to choose passwords that FIPS Keycloak rejects.
-- A maintenance window of approximately 30 minutes. Users cannot sign in while Keycloak restarts, and no execution plans should run during the upgrade.
+- A password policy requiring at least 14 characters in every realm. A realm set to fewer still locks its users out after a reset.
+- A maintenance window of approximately 30 minutes. Users cannot sign in while Keycloak restarts, and no execution plan must run during the upgrade.
 
 Change any passwords shorter than 14 characters before upgrading. Update each password in its values file or Secret and in the corresponding system: Keycloak for administrator accounts, or the database role for PostgreSQL accounts.
 
 ## Procedure
 
-
+![The FIPS migration as a process flow: who does each step (administrator, end users, Shared Services, Identity Analytics) and when Keycloak switches to FIPS](images/fips-migration-process.png)
 
 ### 1. Back up the databases
 
-The upgrade deletes passwords that FIPS Keycloak cannot read. A Helm rollback restores the previous charts and images, but it does not recover deleted passwords. Recovering those passwords requires a database backup.
+The upgrade deletes passwords that FIPS Keycloak cannot read. A Helm rollback restores the previous charts and images, but it does **not** recover deleted passwords. Recovering those passwords requires a database backup.
 
 1. Back up the Keycloak and Identity Analytics databases using your usual backup procedure.
 
@@ -216,7 +210,7 @@ Allow as much time as needed for users to sign in. Standard Keycloak supports bo
     - `purged password-history` entries, including for users who retain their passwords. These entries are expected.
     - A final summary such as `CAUSE=none OUTCOME=DONE usersRehashed=2 … credentialsPurged=<n>`.
 
-    If the summary shows `OUTCOME=FAIL`, the upgrade has stopped without switching to FIPS. See [Troubleshooting](#troubleshooting).
+    If the summary shows `OUTCOME=FAIL`, the upgrade has stopped and nothing changed. See [Troubleshooting](#troubleshooting).
 
 3. Verify that the `keycloak` service is running and ready, and that the `keycloak-master-realm` Job has completed.
 
@@ -278,5 +272,5 @@ A rollback does not recover passwords deleted by the migration Job. To recover t
 | Job log `OUTCOME=SKIP` | Keycloak was already on FIPS and the administrators cannot sign in | Contact Radiant Logic Support for the administrator recovery procedure |
 | Keycloak does not start, logs show `FipsUnapprovedOperationError: password must be at least 112 bits` | A PostgreSQL password is shorter than 14 characters | Change it in the values and in the database role, then upgrade again |
 | `keycloak-master-realm` or `environment-setup` Job fails with `invalid_grant` | The administrators' passwords were not rehashed (Job turned off or skipped) | Contact Radiant Logic Support for the administrator recovery procedure |
-| A user gets "Invalid username or password" with their usual password | Pre-FIPS user: the password was deleted at the switch | Forgot-password reset or admin reset ([step 6](#6-give-the-users-their-password-back)) |
+| A user gets "Invalid username or password" with their usual password | Pre-FIPS user: the password was deleted at the switch | Forgot-password reset or admin reset ([step 6](#6-restore-user-access)) |
 | A new password is refused | Shorter than 14 characters, or than the realm's own minimum | Use a longer password |
