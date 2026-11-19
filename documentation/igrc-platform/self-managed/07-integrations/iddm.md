@@ -85,7 +85,7 @@ Navigate to the directory browser page and select the `o=<tenant>` level under `
 
 ### LDAP backend configuration
 
-The LDAP backend should must be configured in the Identity Data Management control panel. The configuration is similar to the configuration for the Active Directory backend. To create the required hierarchy in Identity Data Management, follow these steps:  
+The LDAP backend must be configured in the Identity Data Management control panel. The configuration is similar to the configuration for the Active Directory backend. To create the required hierarchy in Identity Data Management, follow these steps:  
 
 - In the "Directory Namespace" tab, create a new naming context `o=IDALDAP` based on a virtual tree.
 
