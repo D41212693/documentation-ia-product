@@ -107,7 +107,7 @@ The upgrade deletes passwords that FIPS Keycloak cannot read. A Helm rollback re
 
 2. Optionally, if you use the internal database, configure the Shared Services chart to start a backup before the migration Job runs:
 
-    ```
+    ```yaml
     database:
       backup:
         enabled: true
@@ -140,14 +140,14 @@ The upgrade deletes passwords that FIPS Keycloak cannot read. A Helm rollback re
 
     For example, replace this manually configured portal setting from 3.7.x:
 
-    ```
+    ```yaml
     portal:
       javaOptions: "-Dmy.option=value --add-modules=org.bouncycastle.fips.pkix -DFIPS_ENABLED=true"
     ```
 
     With:
 
-    ```
+    ```yaml
     portal:
       javaOptions: "-Dmy.option=value"
     ```
@@ -167,9 +167,9 @@ Before upgrading Shared Services, configure standard Keycloak to use the FIPS-co
 2. For each realm whose users should retain their passwords, including the Identity Analytics realm (`<NAMESPACE>`):
 
     1. Select the realm.
-    2. Go to Authentication > Policies > Password policy.
-    3. Click Add policy and select Hashing Algorithm.
-    4. Enter `pbkdf2-sha512` and click Save.
+    2. Go to **Authentication** > **Policies** > **Password policy**.
+    3. Click **Add policy** and select **Hashing Algorithm**.
+    4. Enter `pbkdf2-sha512` and click **Save**.
 
     The new hashing rule is added without changing the other policy rules. Existing password hashes remain unchanged until users sign in or change their passwords.
 
@@ -177,7 +177,7 @@ Before upgrading Shared Services, configure standard Keycloak to use the FIPS-co
 
 4. Optionally, if you use the internal database, run the following query to identify users whose passwords still use `argon2`. The query reads the algorithm name, not the password data.
 
-    ```
+    ```bash
     kubectl --namespace <SHARED_NAMESPACE> exec -i keycloak-db-1 -c postgres -- \
       psql -U postgres -d keycloak_db -c "select r.name realm, u.username, c.credential_data::json->>'algorithm' algorithm
         from keycloak.credential c
@@ -194,7 +194,7 @@ Allow as much time as needed for users to sign in. Standard Keycloak supports bo
 
 1. Run the upgrade:
 
-    ```
+    ```bash
     helm upgrade <SHARED_RELEASE> oci://docker.io/radiantone/ida-shared-helm \
       --version 3.6.0 --namespace <SHARED_NAMESPACE> \
       --values <shared-values.yaml> --wait --timeout 20m
@@ -214,13 +214,13 @@ Allow as much time as needed for users to sign in. Standard Keycloak supports bo
 
 3. Verify that the `keycloak` service is running and ready, and that the `keycloak-master-realm` Job has completed.
 
-4. Sign in to the Keycloak Admin Console as `master-admin` using the existing password.
+4. **Sign in** to the Keycloak Admin Console as `master-admin` using the existing password.
 
 ### 5. Upgrade Identity Analytics to 3.8.0
 
 1. Run the upgrade:
 
-    ```
+    ```bash
     helm upgrade <RELEASE> oci://docker.io/radiantone/ida-helm \
       --version 3.8.0 --namespace <NAMESPACE> \
       --set global.license="$(base64 -w0 <PATH_TO_LICENSE_FILE>)" \
@@ -237,13 +237,13 @@ Allow as much time as needed for users to sign in. Standard Keycloak supports bo
 
 ### 6. Restore user access
 
-1. For the Setup account, select Forgot Password? on the Identity Analytics sign-in page and enter `Setup`. Open the password reset link sent by email and set a password. The previous password can be reused because the upgrade deleted the old password history.
+1. For the Setup account, select **Forgot Password?** on the Identity Analytics sign-in page and enter `Setup`. Open the password reset link sent by email and set a password. The previous password can be reused because the upgrade deleted the old password history.
 
-2. For other Pre-FIPS users, either ask them to use Forgot Password? or reset their passwords in the Keycloak Admin Console:
+2. For other Pre-FIPS users, either ask them to use **Forgot Password?** or reset their passwords in the Keycloak Admin Console:
 
-    1. Select the Identity Analytics realm, `<NAMESPACE>`.
-    2. Go to Users and select the user.
-    3. Open the Credentials tab and click Reset password.
+    1. Select the **Identity Analytics realm**, `<NAMESPACE>`.
+    2. Go to **Users** and select the user.
+    3. Open the **Credentials** tab and click **Reset password**.
     4. Enter a password that meets the realm's policy and save it. The default minimum is 16 characters, and FIPS requires at least 14.
 
     Keep the realm's password history rule enabled. Password resets work with this rule in place.
@@ -254,7 +254,7 @@ Allow as much time as needed for users to sign in. Standard Keycloak supports bo
 
 A Helm rollback of Shared Services restores standard Keycloak, which supports both `argon2` and `pbkdf2`. The two Shared Services administrators and users who have already reset their passwords can still sign in.
 
-A rollback does not recover passwords deleted by the migration Job. To recover them, restore the database backup created in [step 1](#1-back-up-the-databases).
+A rollback does **not** recover passwords deleted by the migration Job. To recover them, restore the database backup created in [step 1](#1-back-up-the-databases).
 
 ## Known limitations
 
