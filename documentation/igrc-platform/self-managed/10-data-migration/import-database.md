@@ -180,7 +180,7 @@ Before you switch users to the new platform:
 
 - [ ] All four scripts ended without error (check `/work/logs`) and the `ops-db-maintenance` job is complete.
 - [ ] The number of rows of the main Identity Ledger tables (identities, accounts, permissions, timeslots) matches the source database.
-- [ ] After the finalisation below, the portal shows the last timeslot of the source, and a first execution plan runs on the new platform.
+- [ ] After the finalization below, the portal shows the last timeslot of the source, and a first execution plan runs on the new platform.
 - [ ] Keep the source database and the export archive until the new platform is accepted: they are your way back.
 
 ## Finalize the recovery process
