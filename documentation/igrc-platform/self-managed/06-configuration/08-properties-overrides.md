@@ -25,6 +25,8 @@ batch:
       my_project_property: my_value
 ```
 
+The keys of the existing project properties are the variables of the technical configuration in the Git project: `default.configuration` for the portal, and the configuration set in **Technical Configuration Name** for the batch (`docker` by default).
+
 Then run `helm upgrade`.
 
 Properties managed by Identity Analytics, such as URLs and paths, cannot be changed: their override is ignored, with a warning in the log.
