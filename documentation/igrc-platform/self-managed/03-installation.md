@@ -5,10 +5,11 @@ description: "Install CloudNativePG, Shared Services and Identity Analytics with
 
 # Installation
 
-An installation runs in four steps: prepare the namespaces, install the CloudNativePG operator, install Shared Services, then install one or more Identity Analytics instances. Review the [prerequisites](./02-prerequisites.md) first.
+To install self-managed Identity Analytics, you will need to perform these steps: 
+* Review the [prerequisites](./02-prerequisites.md).
+* Prepare the namespaces, install the CloudNativePG operator, install Shared Services, then install one or more Identity Analytics instances.  first.
 
-
-The values provided on this page form a minimal, complete configuration for a working platform. Replace the placeholders with your environment-specific values before installing. These configurations have been validated with `ida-helm` 3.8.0 and `ida-shared-helm` 3.6.0.
+This page describes the installation steps. The values provided on this page form a minimal, complete configuration for a working platform. Replace the placeholders with your environment-specific values before installing. These configurations have been validated with `ida-helm` 3.8.0 and `ida-shared-helm` 3.6.0.
 
 > [!note] If you use a PostgreSQL server outside the cluster, skip step 2 and refer to [External database](./04-external-database.md) for the database values.
 
