@@ -1,7 +1,7 @@
 ---
 title: "Prerequisites and sizing"
 description: "Kubernetes, tools, network, DNS, TLS, registry, and resource requirements for Self-Managed Identity Analytics."
-***
+---
 
 # Prerequisites and sizing
 

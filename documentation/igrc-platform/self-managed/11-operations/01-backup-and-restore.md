@@ -1,7 +1,7 @@
 ---
 title: "Backup and restore"
 description: "Back up and restore the databases and settings of Self-Managed Identity Analytics."
-***
+---
 
 # Backup and restore
 
