@@ -11,7 +11,7 @@ Before running an on-premises Identity Analytics project on Self-Managed, update
 
 1. Review your project's `.gitignore` files. Adjust any rules that could prevent required files from being merged, such as rules that exclude the entire configuration folder.
 
-2. Create a branch in your project's Git repository containing the reference project provided by Radiant Logic for your target Self-Managed version.
+2. **Create a branch** in your project's Git repository containing the reference project provided by Radiant Logic for your target Self-Managed version.
 
 3. In iGRC Studio, merge the reference project branch into the latest version of your project. Resolve any merge conflicts, which are usually limited and straightforward.
 
@@ -33,6 +33,6 @@ Before running an on-premises Identity Analytics project on Self-Managed, update
 
 6. Replace on-premises extraction methods, such as `igrc_extract` and scheduled server scripts, with Self-Managed extractors or file uploads to the controller. See the Configuration and Extractors pages.
 
-7. Commit and push the migrated project branch. Configure the instance to use this branch through the `git.default` Helm values or the Git Project page in the configuration interface.
+7. **Commit and push** the migrated project branch. Configure the instance to use this branch through the `git.default` Helm values or the **Git Project** page in the configuration interface.
 
 After migrating the project, import the database if you want to retain historical data (see [Import database](./import-database.md)), then configure authentication for the instance.
