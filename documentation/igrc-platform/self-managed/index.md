@@ -27,7 +27,7 @@ The Identity Analytics and Shared Services charts are published in the `docker.i
 - Identity Analytics: `oci://docker.io/radiantone/ida-helm`
 - Shared Services: `oci://docker.io/radiantone/ida-shared-helm`
 
-## Documents structure
+## How this guide is organized
 
 | Step | Page | Topics |
 | :--- | :--- | :----- |
