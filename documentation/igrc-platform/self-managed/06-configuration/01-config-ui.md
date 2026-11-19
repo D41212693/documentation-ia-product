@@ -19,7 +19,7 @@ Use the menu on the left or the home page tiles to navigate between pages. Direc
 > [!warning]
 > Select Save or Test and save before leaving a page. Unsaved changes are lost.
 
-## Configuration settings
+## Configuration precedence
 
 Some settings can be configured through both Helm values and the configuration interface or another console. During installation and upgrades, the `config-store-init` job writes Helm values to the configuration store. Some values are written every time; others are written only during the initial installation. Refer to the table below for further details.
 
