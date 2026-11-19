@@ -29,7 +29,7 @@ Your cluster must meet the following requirements:
 
 Install the following tools:
 
-- [kubectl](https://kubernetes.io/docs/reference/kubectl/), configured to connect to your cluster. [kubernetes](https://kubernetes.io/docs/reference/kubectl/)
+- [kubectl](https://kubernetes.io/docs/reference/kubectl/), configured to connect to your cluster.
 - [Helm](https://helm.sh/) 3.8 or later. The charts are distributed as OCI artifacts. Helm 4 is also supported.
 
 ## Information and files from Radiant Logic
