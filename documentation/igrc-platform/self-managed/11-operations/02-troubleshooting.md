@@ -1,7 +1,7 @@
 ---
 title: "Troubleshooting"
 description: "Diagnose pods and jobs that fail to start in Self-Managed Identity Analytics."
-***
+---
 
 # Troubleshooting
 
