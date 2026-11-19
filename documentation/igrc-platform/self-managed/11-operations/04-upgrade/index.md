@@ -5,9 +5,9 @@ description: "Upgrade Self-Managed Identity Analytics to a new release."
 
 # Self-Managed upgrades
 
-An upgrade installs new chart versions with your existing values files. Always read the migration guide of each version between yours and the target first: it lists the values changes and, for some versions, a specific upgrade order.
+To upgrade, install the new chart versions using your existing values files. Before you start read the migration guides for every release after your current version, up to and including the target version. Check for required changes for your values files. Note any requirements for the order in which components must be upgraded.
 
-## Procedure
+## Steps
 
 1. Read the release notes and the migration guides below, and apply the values changes they list.
 2. Take a backup of the databases (see [Backup and restore](../11-operations/01-backup-and-restore.md)), or enable `database.backup.onUpgrade`.
@@ -25,7 +25,7 @@ An upgrade installs new chart versions with your existing values files. Always r
       --values ida.values.yaml --timeout 30m
     ```
 
-    Always give a `--timeout`: pre-upgrade jobs can run for several minutes. Plan a window of about 30 minutes: users cannot sign in while Keycloak restarts, and no execution plan must run during the upgrade.
+    Always define a `--timeout` period as pre-upgrade jobs can run for several minutes. Plan a window of about 30 minutes. Note that users cannot sign in while Keycloak restarts, and no execution plan must run during the upgrade.
 
 5. If the compatibility table gives a new CloudNativePG chart for the target release, upgrade the operator with [step 2 of the installation](../03-installation.md#2-install-the-cloudnativepg-operator). The database pods restart once.
 6. Run the [post-installation checks](../05-post-installation.md).
