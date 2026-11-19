@@ -9,14 +9,14 @@ Run these checks after each installation and after each upgrade. They lead to tw
 
 | Milestone | Criteria | Steps |
 | :-------- | :------- | :---- |
-| **Platform installed** | All pods running and all jobs complete; the technical administrator logs in to the configuration interface and to the controller; the project is synchronised from Git | 1 to 3 |
+| **Platform installed** | All pods running and all jobs complete; the technical administrator logs in to the configuration interface and to the controller; the project is synchronized from Git | 1 to 3 |
 | **Platform usable** | A first execution plan is completed and its timeslot is validated: users see their data in the portal | 4 and 5 |
 
 ## 1. Check the platform
 
 1. All pods are `Running` and all jobs `Complete`:
 
-    ```
+    ```bash
     kubectl get pods,jobs -n <SHARED_NAMESPACE>
     kubectl get pods,jobs -n <IDA_NAMESPACE>
     ```
@@ -25,19 +25,19 @@ Run these checks after each installation and after each upgrade. They lead to tw
 
 2. With the built-in database, both PostgreSQL clusters are healthy:
 
-    ```
+    ```bash
     kubectl get clusters.postgresql.cnpg.io -A
     ```
 
 3. The ingresses exist in the Shared Services namespace and point to your DNS name:
 
-    ```
+    ```bash
     kubectl get ingress -n <SHARED_NAMESPACE>
     ```
 
 4. The portal answers with a redirection to the Keycloak login page of the instance realm (`/auth/realms/<IDA_NAMESPACE>/…`):
 
-    ```
+    ```bash
     curl -sI https://<IDA_DNS><IDA_PATH>/portal | grep -i '^location'
     ```
 
@@ -60,7 +60,7 @@ If the mail cannot be sent, log in to the Keycloak master realm (`https://<IDA_D
 ## 3. Check the project and the mail
 
 - Check the repository and the branch of the project. With **Use default** on in **Git Project** (configuration interface), the page shows no repository or branch: they come from `git.default.repository` and `git.default.branch` of your values. To use another branch, turn **Use default** off and enter it there: this setting is kept across upgrades.
-- Check that the project is synchronised: the `portal-0` pod becomes ready only once a synchronised version of the project is available (otherwise its logs show `No Git hash is available yet`). In case of doubt, read the logs of the `git-server-0` pod. See [Project changes](./11-operations/05-project-changes.md).
+- Check that the project is synchronized: the `portal-0` pod becomes ready only once a synchronized version of the project is available (otherwise its logs show `No Git hash is available yet`). In case of doubt, read the logs of the `git-server-0` pod. See [Project changes](./11-operations/05-project-changes.md).
 - If SMTP is enabled, check the SMTP settings in the controller (**Configuration**, **Email server** tab, read only) and add the recipients of the execution plan notifications (**Configuration**, **Notifications** tab). Without recipients, the controller does not send these mails.
 
 ## 4. Give users access
