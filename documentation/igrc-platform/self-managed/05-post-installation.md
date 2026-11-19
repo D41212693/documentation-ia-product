@@ -16,7 +16,7 @@ Run these checks after each installation and after each upgrade. They lead to tw
 
 1. All pods are `Running` and all jobs `Complete`:
 
-    ```bash
+    ```
     kubectl get pods,jobs -n <SHARED_NAMESPACE>
     kubectl get pods,jobs -n <IDA_NAMESPACE>
     ```
@@ -25,19 +25,19 @@ Run these checks after each installation and after each upgrade. They lead to tw
 
 2. With the built-in database, both PostgreSQL clusters are healthy:
 
-    ```bash
+    ```
     kubectl get clusters.postgresql.cnpg.io -A
     ```
 
 3. The ingresses exist in the Shared Services namespace and point to your DNS name:
 
-    ```bash
+    ```
     kubectl get ingress -n <SHARED_NAMESPACE>
     ```
 
 4. The portal answers with a redirection to the Keycloak login page of the instance realm (`/auth/realms/<IDA_NAMESPACE>/…`):
 
-    ```bash
+    ```
     curl -sI https://<IDA_DNS><IDA_PATH>/portal | grep -i '^location'
     ```
 
