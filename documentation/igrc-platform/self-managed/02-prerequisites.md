@@ -55,7 +55,7 @@ For `ida-helm` 3.8.0 and `ida-shared-helm` 3.6.0, mirror the following images:
 
 To pull images from your mirror, add the following settings to both values files:
 
-```
+```yaml
 image:
   registry: "<MIRROR_REGISTRY>"   # Replaces docker.io/radiantone
 imageCredentials:
@@ -66,7 +66,7 @@ For the CloudNativePG operator, set `image.repository` to `<MIRROR_REGISTRY>/rl-
 
 To list the images used by another chart version, render the chart and filter the image entries:
 
-```
+```bash
 helm template rlia oci://docker.io/radiantone/ida-helm --version <IDA_CHART_VERSION> \
   --set global.license=dummy --set 'imageCredentials[0].existingSecret=x' | grep 'image:' | sort -u
 ```
@@ -93,8 +93,8 @@ Choose one of the following repository options:
 | Option | Repository and branch | Access | Use when |
 | :----- | :-------------------- | :----- | :------- |
 | Reference project | `https://repository.brainwavegrc.com/Brainwave/identityanalytics.git`, using the `release/<MAJOR.MINOR>` branch that matches your version, such as `release/3.8` | Read-only | You use the standard project without modifications. |
-| Fork hosted by Radiant Logic | A fork of the reference project in an organisation created for you on `repository.brainwavegrc.com` | Read and write | You customise the project, typically on your own branches. |
-| Your own Git server | A project that you maintain, based on the Self-Managed reference project | Managed by your organisation | Your organisation requires its own Git server and manages the project and its updates. |
+| Fork hosted by Radiant Logic | A fork of the reference project in an organization created for you on `repository.brainwavegrc.com` | Read and write | You customize the project, typically on your own branches. |
+| Your own Git server | A project that you maintain, based on the Self-Managed reference project | Managed by your organization | Your organization requires its own Git server and manages the project and its updates. |
 
 ### Repository credentials
 
@@ -116,7 +116,7 @@ Either:
 
 To update the project used by a running instance, push your changes to the configured branch. See [Project changes](./11-operations/05-project-changes.md).
 
-> [!note] When upgrading to a new minor version, switch the instance to the matching `release/<MAJOR.MINOR>` branch. If you maintain a customised project, merge that release branch into your own branch instead.
+> [!note] When upgrading to a new minor version, switch the instance to the matching `release/<MAJOR.MINOR>` branch. If you maintain a customized project, merge that release branch into your own branch instead.
 
 ## Network flows
 
@@ -126,7 +126,7 @@ Allow the following network connections:
 | :--- | :- | :--- | :------ |
 | Users | Ingress controller | 443 | Access the portal, configuration interface, and Keycloak sign-in page. |
 | Cluster nodes | Image registry (`docker.io`, `ghcr.io`, or your mirror) | 443 | Pull container images. |
-| `git-server` pod | Git repository | 443 or 22 | Synchronise the project. |
+| `git-server` pod | Git repository | 443 or 22 | Synchronize the project. |
 | `portal`, `batch-server`, and `keycloak` pods | SMTP relay | 25, 465, or 587 | Send email. |
 | `keycloak` pod | Identity provider | 443 | Support SAML or OIDC federation. |
 | Platform pods | External PostgreSQL server, if used | 5432 | Connect to the databases. |
