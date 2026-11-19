@@ -128,6 +128,8 @@ dataRecovery:
 
 `existingSecret` is not needed with `credentials.aws.useIRSA`, `credentials.azure.useWorkloadIdentity` or `credentials.gcp.useWorkloadIdentity`. The file is downloaded to `/work/upload/export.tgz`, ready for the recovery scripts.
 
+The download runs in a separate container that uses the cloud provider's CLI image: `mcr.microsoft.com/azure-cli`, `amazon/aws-cli` or `google/cloud-sdk`, tag `latest` by default. To use a registry mirror or a fixed version, set `downloader.image.repository` and `downloader.image.tag`. With `provider: other`, these values are required, as well as `downloader.command` or `downloader.args`.
+
 ## Connect to the pod
 
 Use your favorite method to open a shell session on the pod. For instance, from your laptop you can use
