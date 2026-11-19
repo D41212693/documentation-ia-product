@@ -12,7 +12,7 @@ Use the configuration interface to manage instance settings that are not control
 The configuration interface is available at `https://<IDA_DNS><IDA_PATH>/config`. Log in with the technical administrator account (`setup`) or another account with the `technicaladmin` role.
 
 > [!note]
-> In Self-Managed deployments, Helm values control infrastructure settings such as the DNS name, TLS, database, SMTP server, resources, and license. These settings are not displayed in this interface. See [Configuration precedence](#configuration-precedence).
+> In Self-Managed deployments, Helm values control infrastructure settings such as the DNS name, TLS, database, SMTP server, resources, and license. These settings are not displayed in this interface. See [Configuration settings](#configuration-settings).
 
 Use the menu on the left or the home page tiles to navigate between pages. Direct links to individual pages, such as `<IDA_PATH>/config/git`, are not supported.
 
