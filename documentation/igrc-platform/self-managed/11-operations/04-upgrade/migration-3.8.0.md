@@ -130,7 +130,7 @@ apply to every container the chart renders, including the containers whose
 component block is disabled.
 
 It ships disabled, so **rendered output is unchanged** until you turn it on.
-Nothing needs to be migrated to stay on the current behaviour.
+Nothing needs to be migrated to stay on the current behavior.
 
 | Setting | Default | Effect |
 |---------|---------|--------|
@@ -988,7 +988,7 @@ and, on the batch, make Eclipse exit 13 (OSGi uses-constraint violation on
 `org.bouncycastle.asn1`).
 
 The chart already refused `JAVA_OPTS`, `JAVA_TOOL_OPTIONS` and `_JAVA_OPTIONS`
-from a component `env` map ([CHG-005](#chg-005-jvm-heap-options-set-outside-jvmmemory-are-now-ignored)).
+from a component `env` map ([CHG-005 of the 3.7.1 migration](./migration-3.7.1.md#chg-005-jvm-heap-options-set-outside-jvmmemory-are-now-ignored)).
 `JDK_JAVA_OPTIONS` is now refused the same way and reported by `WARN-001`.
 
 `batch.javaOptions` and `batch.javaEclipseOptions` are unchanged. Extra JVM
@@ -1203,7 +1203,7 @@ post-plan steps optional. See the [Purge page](../../06-configuration/01-config-
 of the configuration interface.
 
 **No action is required on upgrade.** The shipped defaults reproduce 3.7
-behaviour exactly: a scheduled execution plan still removes hidden timeslots and
+behavior exactly: a scheduled execution plan still removes hidden timeslots and
 then applies the retention policy, a plan started by hand still purges nothing,
 and no purge runs on a schedule. The machine API ships unpublished.
 
@@ -1377,7 +1377,7 @@ On a fresh external install:
 
 - ops-manager does not register `/ops/db/check*` or `/ops/db/maintenance*`
   (ClusterIP returns 404)
-- Helm does not render Job or catalogue ConfigMaps
+- Helm does not render Job or catalog ConfigMaps
 - Environment Manager does not create Keycloak `ida-ops-api` (client, `operator`
   role, grants, admin user role, `ida-ops-manager` audience mapper)
 - Environment Manager does not create APISIX ops UI routes, M2M routes, or the
@@ -1394,7 +1394,7 @@ Switching an existing install from internal to external does not delete a
 leftover `ida-ops-api` client. That cleanup is out of scope.
 
 This chart version requires matching images for ops-manager, env-manager,
-config-server, configui, and data-recovery so each component honours
+config-server, configui, and data-recovery so each component honors
 `database.type`.
 
 ### Operator action
@@ -1524,7 +1524,7 @@ database:
       ops: ops
 ```
 
-### Two behaviours worth knowing
+### Two behaviors worth knowing
 
 **The init container is best effort.** Unlike the equivalent container on
 config, git-server and controller, it waits for the database for a bounded time

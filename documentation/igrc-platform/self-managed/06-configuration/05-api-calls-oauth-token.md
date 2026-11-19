@@ -168,3 +168,62 @@ The response should look like this:
   "content": [Report as a Base64-String]
 }
 ```
+
+## Purge API
+
+A script can start a timeslot purge and follow it, like the **Submit a purge** button of the controller. The API is not published by default.
+
+### Enable the API
+
+Add to your Identity Analytics values, then run `helm upgrade`:
+
+```yaml
+operationsManager:
+  purge:
+    api:
+      enabled: true
+```
+
+By default, the gateway accepts one call every 10 seconds and 5 calls per hour on the purge API, status checks and refused calls included (`operationsManager.purge.api.limits`).
+
+### Get a token
+
+The purge API uses the `ida-ops-api` client. Read its secret from the cluster:
+
+```bash
+kubectl get secret keycloak-app-realm-admin-credentials -n <IDA_NAMESPACE> -o jsonpath='{.data.ops_manager_client_secret}' | base64 -d
+```
+
+Then get a token as described in [Getting the access token](#getting-the-access-token), with `client_id=ida-ops-api` and this secret.
+
+### Start a purge
+
+```bash
+curl -X POST "https://<EXTERNAL_DNS><IDA_PATH>/ops/purge/runs" \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"mode":"legacy","unit":"timeslots","value":"1"}'
+```
+
+| Field | Values |
+| :-- | :-- |
+| `mode` | `policy` applies the retention policy of the project. `legacy` uses `unit` and `value`. |
+| `unit` | `timeslots` (number of timeslots to keep) or `days` (age in days to keep). |
+| `value` | The number of timeslots or days, as a string. |
+
+The answer is `202` with the identifier of the run, for example `{"id": 3, "message": "The purge run was started"}`.
+
+| Code | Meaning |
+| :-- | :-- |
+| `400` | Invalid body, for example `mode` missing, or `legacy` without `unit` and `value`. |
+| `401` | No token, or invalid token. |
+| `409` | An execution plan or a purge is already running. |
+| `429` | Less than 10 seconds since the previous call. |
+| `503` | 5 calls already made in the last hour. |
+
+### Follow the purge
+
+```bash
+curl -H "Authorization: Bearer $TOKEN" "https://<EXTERNAL_DNS><IDA_PATH>/ops/purge/runs/<ID>"
+```
+
+The `status` field is `R` while the purge runs and `C` when it is completed. Each call counts in the hourly limit: to follow a long purge, use the controller, where the run appears in **Execution plans** with the type **Purge**.

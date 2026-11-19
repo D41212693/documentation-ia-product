@@ -33,7 +33,7 @@ A Self-Managed deployment consists of two Helm releases and one operator. Shared
 | `ops-manager` | Deployment | 80 (service `events-mngt`) | - | Event handling and operation jobs |
 | `shared-db` | CloudNativePG cluster | 5432 | 128 Gi data + 32 Gi WAL | Databases `analytics_db` (Identity Ledger, workflow and audit log schemas) and `shared_db` (controller, configuration, Git sync) |
 
-### Initialisation jobs
+### Initialization jobs
 
 Each `helm install` or `helm upgrade` runs jobs that prepare the platform. They end in the `Completed` state:
 
@@ -60,7 +60,7 @@ The platform needs PostgreSQL for Keycloak and for each Identity Analytics insta
 | Mode | How it works | When to use it |
 | :--- | :----------- | :------------- |
 | `internal` (default) | The CloudNativePG operator creates `keycloak-db` and `shared-db` inside the cluster, with persistent volumes | Standard case. Backups are configured in the chart. |
-| `external` | The charts connect to a PostgreSQL server you provide and create the databases, roles and schemas (`autoInit: true`, required) | Your organisation requires a managed or centrally operated database service. See [External database](./04-external-database.md). |
+| `external` | The charts connect to a PostgreSQL server you provide and create the databases, roles and schemas (`autoInit: true`, required) | Your organization requires a managed or centrally operated database service. See [External database](./04-external-database.md). |
 
 ## Limits
 

@@ -97,4 +97,4 @@ Enter the email addresses to notify when an execution plan or a purge succeeds, 
 
 ![Email server configuration](images/controller-config-email-server.png "Email server configuration")
 
-This tab displays the SMTP settings of the instance. It is read only: the SMTP settings come from the `smtp.*` values of the Helm chart. To change them, update your values file and run `helm upgrade`. See [Which setting wins](../06-configuration/01-config-ui.md#which-setting-wins). When SMTP is enabled, enter an address in **Send test email to** and click the send icon to check the SMTP settings.
+This tab displays the SMTP settings of the instance. It is read only: the SMTP settings come from the `smtp.*` values of the Helm chart. To change them, update your values file and run `helm upgrade`. See [Configuration settings](../06-configuration/01-config-ui.md#configuration-settings). When SMTP is enabled, enter an address in **Send test email to** and click the send icon to check the SMTP settings.

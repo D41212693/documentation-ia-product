@@ -5,7 +5,7 @@ description: "Run Self-Managed Identity Analytics on a PostgreSQL server outside
 
 # External database
 
-Both charts support an externally managed PostgreSQL server as an alternative to the built-in CloudNativePG database. To configure this deployment option, `set database.type: external` in the values files for both charts:
+Both charts support an externally managed PostgreSQL server as an alternative to the built-in CloudNativePG database. To configure this deployment option, set `database.type: external` in the values files for both charts:
 
 * Shared Services: Configures the Keycloak database.
 * Identity Analytics: Configures the application databases.
@@ -17,7 +17,7 @@ The CloudNativePG operator is not required in this configuration. You are respon
 ## Requirements
 
 - PostgreSQL 18, or PostgreSQL 17 from Identity Analytics 3.8, reachable from the cluster nodes on its port (5432 by default). Do not use `localhost`: give an address or DNS name the pods can resolve.
-- An administration account, used by the initialisation jobs at installation and at each upgrade (see [Administration account](#administration-account)).
+- An administration account, used by the initialization jobs at installation and at each upgrade (see [Administration account](#administration-account)).
 - TLS: if the server requires it, the CA certificate of the server, stored in a secret (see [Encrypted connections](#encrypted-connections)).
 - Passwords of 14 characters or more for the administration account and the application accounts: from Identity Analytics 3.8, the charts refuse shorter ones.
 - DB Check and DB Maintenance of the configuration interface are not available with an external database.
@@ -35,7 +35,7 @@ The administration account is a superuser, or an account with these privileges:
 
 To give them to an account, run as a superuser, before the installation:
 
-```
+```sql
 CREATE ROLE <DB_ADMIN_USER> LOGIN PASSWORD '<DB_ADMIN_PASSWORD>';  -- if the account does not exist yet
 ALTER ROLE <DB_ADMIN_USER> CREATEDB CREATEROLE;
 ALTER ROLE <DB_ADMIN_USER> SET createrole_self_grant = 'set, inherit';
@@ -47,7 +47,7 @@ ALTER DATABASE postgres OWNER TO <DB_ADMIN_USER>;
 
 Add to `shared.values.yaml`:
 
-```
+```yaml
 database:
   type: external
   external:
@@ -66,7 +66,7 @@ keycloak:
     password: "<KEYCLOAK_SERVICE_PASSWORD>"
 ```
 
-> [!warning] `database.external.username` and `password` are required. They are the account Keycloak connects with, created by the initialisation job. If they are missing, the job `init-external-keycloak-db` fails with `syntax error at or near "WITH"`.
+> [!warning] `database.external.username` and `password` are required. They are the account Keycloak connects with, created by the initialization job. If they are missing, the job `init-external-keycloak-db` fails with `syntax error at or near "WITH"`.
 
 `keycloak.service.password` is also required with an external database. If you reinstall on an existing database, reuse the password of the first installation.
 
@@ -74,7 +74,7 @@ keycloak:
 
 Add to `ida.values.yaml`:
 
-```
+```yaml
 database:
   type: external
   external:
@@ -91,7 +91,7 @@ database:
 
 `port` is required. The job `external-db-init` creates the objects below on the first installation and checks them on each upgrade.
 
-## What the initialisation creates
+## What the initialization creates
 
 | Object | Name | Owner or rights |
 | :----- | :--- | :-------------- |
@@ -112,7 +112,7 @@ The database, role and schema names can be changed under `database.analytics` an
 
 Enable TLS to the server in both values files:
 
-```
+```yaml
 database:
   external:
     ssl:
