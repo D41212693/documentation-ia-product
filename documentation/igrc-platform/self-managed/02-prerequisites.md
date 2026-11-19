@@ -53,6 +53,18 @@ For `ida-helm` 3.8.0 and `ida-shared-helm` 3.6.0, mirror the following images:
 | `ida-helm` 3.8.0 | `radiantone/ida-portal:3.8.0`, `radiantone/ida-batch-server:3.8.0`, `radiantone/ida-controller:3.8.0`, `radiantone/ida-config-server:3.8.0`, `radiantone/ida-git-server:3.8.0`, `radiantone/ida-extract:3.8.0`, `radiantone/ida-ops-manager:3.8.0`, `radiantone/ida-env-manager:3.8.0`, `radiantone/ida-init-db:3.8.0`, `radiantone/ida-tools-fips:3.8.0`, `radiantone/rl-postgres-cloudnative-pg-fips:18.6` (built-in database) |
 | CloudNativePG operator (built-in database) | `radiantone/rl-cloudnative-pg-fips:1.30` |
 
+The table lists the images of the components enabled by default. Optional components use additional images:
+
+| Chart | Component (value) | Images |
+| :---- | :---------------- | :----- |
+| `ida-helm` 3.8.0 | Data import (`dataRecovery`) | `radiantone/ida-data-recovery:3.8.0` |
+| `ida-helm` 3.8.0 | Archive download for data import (`dataRecovery.downloader`) | `mcr.microsoft.com/azure-cli`, `amazon/aws-cli` or `google/cloud-sdk`, depending on the provider (tag `latest` by default) |
+| `ida-helm` 3.8.0 | AI features (`aida`) | `radiantone/ida-aiservice:3.8.0`, `radiantone/ida-litellm:3.8.0` |
+| `ida-helm` 3.8.0 | Log forwarding (`logs.fluentd`) | `radiantone/ida-fluentd:3.8.0` |
+| `ida-shared-helm` 3.6.0 | APISIX dashboard (`apisixUI`) | `docker.io/apache/apisix-dashboard:3.0.1-alpine` |
+
+Tools installed outside the charts, such as Velero or an Istio service mesh, use their own images: see their documentation.
+
 To pull images from your mirror, add the following settings to both values files:
 
 ```yaml
@@ -64,11 +76,16 @@ imageCredentials:
 
 For the CloudNativePG operator, set `image.repository` to `<MIRROR_REGISTRY>/rl-cloudnative-pg-fips` in `cnpg-custom-values.yaml`. See [Installation](./03-installation.md#2-install-the-cloudnativepg-operator).
 
-To list the images used by another chart version, render the chart and filter the image entries:
+`image.registry` does not apply to the download image of data import and to the APISIX dashboard. To pull them from your mirror, set the full image name:
+
+- `dataRecovery.downloader.image.repository` and `dataRecovery.downloader.image.tag` in the Identity Analytics values. Set a fixed tag rather than `latest`.
+- `apisixUI.image.repository` and `apisixUI.image.tag` in the Shared Services values.
+
+To list the images of your configuration, or of another chart version, render the chart with your values file:
 
 ```bash
 helm template rlia oci://docker.io/radiantone/ida-helm --version <IDA_CHART_VERSION> \
-  --set global.license=dummy --set 'imageCredentials[0].existingSecret=x' | grep 'image:' | sort -u
+  -f <IDA_VALUES_FILE> | grep -E 'image(Name)?:' | sort -u
 ```
 
 ## Information from your organization
