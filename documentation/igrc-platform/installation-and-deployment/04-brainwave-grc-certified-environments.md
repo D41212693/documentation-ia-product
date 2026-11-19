@@ -119,7 +119,12 @@ For installation instructions, refer to the following guides:
 
 ## Java Application Server
 
-The Java Application Server is a third‑party component and is not provided with Identity Analytics. Apache Tomcat 9.0 (all Operating Systems) is the only application server supported by Identity Analytics.
+The Java Application Server is a third‑party component and is not provided with Identity Analytics. The supported application server depends on the version (all Operating Systems):
+
+| Version                           | Application server |
+| :-------------------------------- | :----------------: |
+| Descartes R7, Eiffel R3 and newer | Apache Tomcat 11.0 |
+| Descartes R6, Eiffel R2 and older | Apache Tomcat 9.0  |
 
 ## Web browsers
 

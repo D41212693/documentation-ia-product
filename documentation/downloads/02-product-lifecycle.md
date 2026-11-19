@@ -19,10 +19,12 @@ description: iGRCanalytics product lifecycle
 
 | Version                | Release date |       Active       |      Passive       |      Limited       | End of support |
 | :--------------------- | :----------: | :----------------: | :----------------: | :----------------: | :------------: |
-| Eiffel R2 SP3          |  29/07/2026  | :white_check_mark: |                    |                    |   31/12/2029   |
+| Eiffel R3              |  10/11/2026  | :white_check_mark: |                    |                    |   31/12/2029   |
+| Eiffel R2 SP3          |  29/07/2026  |                    |                    | :white_check_mark: |   31/12/2029   |
 | Eiffel R2 (SP0-SP2)    |  30/09/2025  |                    |                    | :white_check_mark: |   31/12/2029   |
 | Eiffel R1              |  30/09/2025  |                    |                    | :white_check_mark: |   31/12/2029   |
-| Descartes R6 SP2       |  29/07/2026  | :white_check_mark: |                    |                    |   31/12/2027   |
+| Descartes R7           |  19/11/2026  | :white_check_mark: |                    |                    |   31/12/2027   |
+| Descartes R6 SP2       |  29/07/2026  |                    |                    | :white_check_mark: |   31/12/2027   |
 | Descartes R6 (SP0-SP1) |  19/05/2026  |                    |                    | :white_check_mark: |   31/12/2027   |
 | Descartes R5 SP9       |  03/06/2026  |                    |                    | :white_check_mark: |   31/12/2027   |
 | Descartes R5 (SP0-8)   |  13/08/2024  |                    |                    | :white_check_mark: |   31/12/2027   |

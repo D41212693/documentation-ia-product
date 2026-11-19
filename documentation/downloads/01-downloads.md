@@ -17,9 +17,9 @@ description: Download all iGRCanalytics information
 
 > [!note] If you are migrating from a version of the product prior to **Curie R3** see [**here**](../igrc-platform/installation-and-deployment/07-database/04-schema-35-upgrade-procedure/index.md) for the detailed procedure.
 
-## Descartes R6
+## Descartes R7
 
-Descartes R6 is the latest release of iGRCanalytics. For a complete list of changes, see the [release notes](./08-release-notes-descartes-r6.md).
+Descartes R7 is the latest release of iGRCanalytics. It requires Java 21 and Tomcat 11. For a complete list of changes and what to check before upgrading, see the [release notes](./09-release-notes-descartes-r7.md).
 
 Download the installers from the [Radiant Logic file sharing site](https://files.radiantlogic.com/receive/?packageCode=IX0qTSRyilShjhpxusLWpUDzzb4rduq2tO9F81NhEt4). After signing in, go to Home > Customer Downloads > Installers > IDA.
 
