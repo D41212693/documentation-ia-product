@@ -23,7 +23,7 @@ To configure the integration, you will need to do the following:
 
 The extractions run in the `extractor` pod of the instance, which connects to the LDAP port of Identity Data Management (2636 for LDAPS and 2389 for LDAP by default). Allow this connection from the cluster, or use a RadiantOne Secure Data Connector (SDC) group.
 
-On the Identity Data Management page of the configuration interface, enter the LDAP URL, port, and credentials for an account that can read the data. Then, run the ping and authentication tests. See [Configuration interface](../06-configuration/01-config-ui.md#identity-data-management).
+On the **Identity Data Management** page of the configuration interface, enter the LDAP URL, port, and credentials for an account that can read the data. Then, run the ping and authentication tests. See [Configuration interface](../06-configuration/01-config-ui.md#identity-data-management).
 
 ## Prerequisites in Identity Data Management
 
