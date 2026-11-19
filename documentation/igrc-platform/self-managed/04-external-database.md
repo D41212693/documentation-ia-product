@@ -5,7 +5,12 @@ description: "Run Self-Managed Identity Analytics on a PostgreSQL server outside
 
 # External database
 
-Both charts can use a PostgreSQL server you operate instead of the built-in CloudNativePG database: set `database.type: external` in the Shared Services values (Keycloak database) and in the Identity Analytics values (application databases). In this mode, the CloudNativePG operator is not needed, and backups, high availability and tuning of the database are your responsibility.
+Both charts support an externally managed PostgreSQL server as an alternative to the built-in CloudNativePG database. To configure this deployment option, `set database.type: external` in the values files for both charts:
+
+* Shared Services: Configures the Keycloak database.
+* Identity Analytics: Configures the application databases.
+
+The CloudNativePG operator is not required in this configuration. You are responsible for database administration, including backups, high availability, and performance tuning.
 
 > [!note] This page completes [Installation](./03-installation.md): skip step 2 (CloudNativePG) and add the `database` and `keycloak.service` blocks below to your values files.
 
@@ -30,7 +35,7 @@ The administration account is a superuser, or an account with these privileges:
 
 To give them to an account, run as a superuser, before the installation:
 
-```sql
+```
 CREATE ROLE <DB_ADMIN_USER> LOGIN PASSWORD '<DB_ADMIN_PASSWORD>';  -- if the account does not exist yet
 ALTER ROLE <DB_ADMIN_USER> CREATEDB CREATEROLE;
 ALTER ROLE <DB_ADMIN_USER> SET createrole_self_grant = 'set, inherit';
@@ -42,7 +47,7 @@ ALTER DATABASE postgres OWNER TO <DB_ADMIN_USER>;
 
 Add to `shared.values.yaml`:
 
-```yaml
+```
 database:
   type: external
   external:
@@ -69,7 +74,7 @@ keycloak:
 
 Add to `ida.values.yaml`:
 
-```yaml
+```
 database:
   type: external
   external:
@@ -107,7 +112,7 @@ The database, role and schema names can be changed under `database.analytics` an
 
 Enable TLS to the server in both values files:
 
-```yaml
+```
 database:
   external:
     ssl:
