@@ -988,7 +988,7 @@ and, on the batch, make Eclipse exit 13 (OSGi uses-constraint violation on
 `org.bouncycastle.asn1`).
 
 The chart already refused `JAVA_OPTS`, `JAVA_TOOL_OPTIONS` and `_JAVA_OPTIONS`
-from a component `env` map ([CHG-005](#chg-005-jvm-heap-options-set-outside-jvmmemory-are-now-ignored)).
+from a component `env` map ([CHG-005 of the 3.7.1 migration](./migration-3.7.1.md#chg-005-jvm-heap-options-set-outside-jvmmemory-are-now-ignored)).
 `JDK_JAVA_OPTIONS` is now refused the same way and reported by `WARN-001`.
 
 `batch.javaOptions` and `batch.javaEclipseOptions` are unchanged. Extra JVM
