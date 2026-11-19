@@ -5,7 +5,7 @@ description: "Run Self-Managed Identity Analytics on a PostgreSQL server outside
 
 # External database
 
-Both charts support an externally managed PostgreSQL server as an alternative to the built-in CloudNativePG database. To configure this deployment option, `set database.type: external` in the values files for both charts:
+Both charts support an externally managed PostgreSQL server as an alternative to the built-in CloudNativePG database. To configure this deployment option, set `database.type: external` in the values files for both charts:
 
 * Shared Services: Configures the Keycloak database.
 * Identity Analytics: Configures the application databases.
