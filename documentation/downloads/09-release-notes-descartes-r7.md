@@ -7,7 +7,7 @@ description: Descartes R7 Release Notes
 
 > Release date: 2026-11-19
 
-Descartes R7 moves iGRCanalytics to a new platform: a recent Eclipse platform, Java 21 and Tomcat 11. It brings the product changes of Identity Analytics 3.8 and includes all the changes of Eiffel R2 SP1 to SP3.
+Descartes R7 moves iGRCanalytics to a new platform: a recent Eclipse platform, Java 21 and Tomcat 11.
 
 ## Before installing or upgrading
 
@@ -16,12 +16,11 @@ Descartes R7 moves iGRCanalytics to a new platform: a recent Eclipse platform, J
 The web portal of Descartes R7 runs on Apache Tomcat 11 only. Tomcat 9 is no longer supported.
 
 - Install Tomcat 11 with Java 21 before deploying the portal.
-- If the portal uses the Radiant Logic authentication modules (LDAP, SAML, HTTP headers), switch to their 5.x line, built for Tomcat 11. See [Web portal parametrization](../igrc-platform/installation-and-deployment/03-brainwaves-web-portal/02-parametrization/index.md).
 - Add the following java9 option to your Tomcat: `--add-opens=java.base/java.net=ALL-UNNAMED`.
 
 ### Identity Analytics (IAP) version
 
-Descartes R7 requires IAP 3.8, and IAP 3.8 requires Descartes R7.
+IAP 3.8 requires Descartes R7.
 
 ### SQL Server: use the latest JDBC driver
 
@@ -29,7 +28,7 @@ Use the latest version of the Microsoft JDBC Driver for SQL Server: we have seen
 
 ### Known vulnerability: CVE-2026-113730 (OGNL)
 
-**BWIPUAR-4128** — Descartes R7 ships MyBatis 3.5.19, which embeds OGNL 3.4.4, so vulnerability scanners report CVE-2026-113730. It can't be exploited in iGRCanalytics: the attack needs OGNL expressions supplied by an attacker, and the product only evaluates the fixed expressions of its own workflow engine mappings, never user input. The fix (MyBatis 3.6.1) is planned for Descartes R7 SP1.
+**BWIPUAR-4128** — Descartes R7 ships MyBatis 3.5.19, which embeds OGNL 3.4.4, so vulnerability scanners report CVE-2026-113730. It can't be exploited in iGRCanalytics. The fix (MyBatis 3.6.1 or newer) is planned for Descartes R7 SP1.
 
 ## New Features
 
@@ -93,16 +92,13 @@ Use the latest version of the Microsoft JDBC Driver for SQL Server: we have seen
 
 - **BWIPUAR-2984** — Missing slf4j logs in the portal
 
-- **Platform upgrade** — Issues found while testing the new platform before the release: reconciliation, SQL Server and JNDI connections, Oracle dialects, Hibernate, portal logs, email notifications, FIPS, controls, tabs, manager rules and role mining (BWIPUAR-3493, BWIPUAR-3503, BWIPUAR-3505, BWIPUAR-3592, BWIPUAR-3594, BWIPUAR-3596, BWIPUAR-3619, BWIPUAR-3632, BWIPUAR-3695, BWIPUAR-3714, BWIPUAR-3723, BWIPUAR-3728, BWIPUAR-3734).
+- **Platform upgrade** — Upgrading to a newer Eclispe version
 
-## Also included from Eiffel R2 SP1 to SP3
+- **BWIPUAR-2412** — Filters on page tables based on a business view
 
-These changes were not in Descartes R6 SP2:
+## FIPS Compliance
 
 - **BWIPUAR-2237** — FIPS: credentials of the remediation configured from the IDA UI
 - **BWIPUAR-2713** — FIPS: SMTP user and password
-- **BWIPUAR-2412** — Filters on page tables based on a business view
-- **SQ-1405** — Accounts from LDIF files were not shown in the portal
-- **IDO-784** — Reporting of service and technical accounts
 
 Software Bill of Materials of the iGRC components (CycloneDX 1.5 JSON and CSV): [Descartes-R7-SBOM.zip](./assets/sbom/Descartes-R7-SBOM.zip)
