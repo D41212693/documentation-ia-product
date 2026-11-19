@@ -7,7 +7,7 @@ description: "Set Analytics properties per environment from the Helm values."
 
 From `ida-helm` 3.8.0, you can set properties of the portal and the batch in the Identity Analytics values, for example to give each environment its own portal colors and title.
 
-```yaml
+```
 portal:
   technicalConfiguration:
     configOverride:          # config.properties
