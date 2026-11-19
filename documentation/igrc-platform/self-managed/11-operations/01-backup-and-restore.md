@@ -125,7 +125,7 @@ kubectl get backup -n <namespace> <name>
 
 In both database modes, source files uploaded to the controller are stored on its volumes. The charts do not back up these volumes.
 
-Retain the original files so that you can upload them again, or back up the volumes in `<IDA_NAMESPACE>` with your organisation's Kubernetes backup tool. For example, you can use a self-managed [Velero](https://velero.io/) installation to back up Kubernetes resources and persistent volumes. [velero](https://velero.io/)
+Retain the original files so that you can upload them again, or back up the volumes in `<IDA_NAMESPACE>` with your organisation's Kubernetes backup tool. For example, you can use a self-managed [Velero](https://velero.io/) installation to back up Kubernetes resources and persistent volumes.
 
 ## Restore
 
