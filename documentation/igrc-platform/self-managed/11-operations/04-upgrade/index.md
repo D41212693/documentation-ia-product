@@ -32,7 +32,7 @@ To upgrade, install the new chart versions using your existing values files. Bef
 
 > [!warning] Downgrades are not supported: an upgrade migrates the database schemas. To go back, restore the backup taken before the upgrade.
 
-Each upgrade runs the `config-store-init` job again. It applies the values (for example `smtp`) to the configuration store and overwrites the same settings changed by hand in the configuration interface: report such changes in your values files before you upgrade. The Git project chosen in the configuration interface is kept. See [Configuration precedence](../06-configuration/01-config-ui.md#configuration-precedence).
+Each upgrade runs the `config-store-init` job again. It applies the values (for example `smtp`) to the configuration store and overwrites the same settings changed by hand in the configuration interface: report such changes in your values files before you upgrade. The Git project chosen in the configuration interface is kept. See [Configuration settings](../06-configuration/01-config-ui.md#configuration-settings).
 
 ## Version-specific guides
 
