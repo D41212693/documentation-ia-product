@@ -7,7 +7,7 @@ description: "Back up and restore the databases and settings of Self-Managed Ide
 
 Backups are not configured by default. If you use the built-in database, enable CloudNativePG backups for both charts as soon as the platform contains data you need to retain.
 
-> [!note] The database backup and restore procedures on this page apply only to the built-in database (`database.type: internal`). If you use an external database, work with your organization's database administrators (DBAs) to plan PostgreSQL backups and restores. The guidance for the Git project, installation settings, generated secrets, and controller volumes applies to both database modes.
+> [!note] The database backup and restore procedures on this page apply only to the built-in database (`database.type: internal`). If you use an external database, work with your organisation's database administrators (DBAs) to plan PostgreSQL backups and restores. The guidance for the Git project, installation settings, generated secrets, and controller volumes applies to both database modes.
 
 ## What to back up
 
@@ -26,7 +26,7 @@ During the initial installation, the charts generate keys and passwords and stor
 
 In `<IDA_NAMESPACE>`:
 
-- `secrets-store-encryption-key` and `secrets-store-encryption-key-v2`: Encrypt secrets in the configuration store, such as Git credentials. Without these keys, the restored configuration store cannot be read, Git synchronization fails, and the portal does not start.
+- `secrets-store-encryption-key` and `secrets-store-encryption-key-v2`: Encrypt secrets in the configuration store, such as Git credentials. Without these keys, the restored configuration store cannot be read, Git synchronisation fails, and the portal does not start.
 - `controller-cookie-secret-key`.
 - `keycloak-app-realm-admin-credentials`: Contains the initial technical administrator password. Back up this secret only if `global.technicalAdmin.password` is not set in your values files.
 
@@ -40,7 +40,7 @@ In `<SHARED_NAMESPACE>`:
 
 Export the secrets with the following commands. Omit `keycloak-app-realm-admin-credentials` if `global.technicalAdmin.password` is set in your values files.
 
-```bash
+```
 kubectl get secret -n <IDA_NAMESPACE> secrets-store-encryption-key secrets-store-encryption-key-v2 \
   controller-cookie-secret-key keycloak-app-realm-admin-credentials -o yaml > ida-secrets.yaml
 kubectl get secret -n <SHARED_NAMESPACE> keycloak-master-admin keycloak-db-credentials \
@@ -62,7 +62,7 @@ CloudNativePG uses Barman to back up databases to Amazon S3, an S3-compatible ob
 
 Add a configuration block like the following to both `ida.values.yaml` and `shared.values.yaml`. Use a different destination path for each chart.
 
-```yaml
+```
 database:
   backup:
     enabled: true
@@ -90,7 +90,7 @@ Backups are stored under `<BUCKET_PATH>/<CLUSTER_NAME>/`. The `base` directory c
 
 Check the backups and schedules in both namespaces:
 
-```bash
+```
 kubectl get backups.postgresql.cnpg.io,scheduledbackups.postgresql.cnpg.io -n <IDA_NAMESPACE>
 kubectl get backups.postgresql.cnpg.io,scheduledbackups.postgresql.cnpg.io -n <SHARED_NAMESPACE>
 ```
@@ -99,7 +99,7 @@ kubectl get backups.postgresql.cnpg.io,scheduledbackups.postgresql.cnpg.io -n <S
 
 To create a base backup without waiting for the next scheduled backup, create a `Backup` resource. For example, run an on-demand backup immediately after enabling backups or completing a restore.
 
-```bash
+```
 kubectl apply -f - <<EOF
 apiVersion: postgresql.cnpg.io/v1
 kind: Backup
@@ -117,7 +117,7 @@ For Shared Services, specify the `keycloak-db` cluster in `<SHARED_NAMESPACE>`.
 
 The backup is complete when the following command shows the phase as `completed`:
 
-```bash
+```
 kubectl get backup -n <namespace> <name>
 ```
 
@@ -125,7 +125,7 @@ kubectl get backup -n <namespace> <name>
 
 In both database modes, source files uploaded to the controller are stored on its volumes. The charts do not back up these volumes.
 
-Retain the original files so that you can upload them again, or back up the volumes in `<IDA_NAMESPACE>` with your organization's Kubernetes backup tool. For example, you can use a self-managed [Velero](https://velero.io/) installation to back up Kubernetes resources and persistent volumes.
+Retain the original files so that you can upload them again, or back up the volumes in `<IDA_NAMESPACE>` with your organisation's Kubernetes backup tool. For example, you can use a self-managed [Velero](https://velero.io/) installation to back up Kubernetes resources and persistent volumes. [velero](https://velero.io/)
 
 ## Restore
 
@@ -146,7 +146,7 @@ The Keycloak database contains the realms for all instances. Restore Shared Serv
 
 3. Restore the generated secrets before installing the charts. Remove the `resourceVersion`, `uid`, and `creationTimestamp` fields from the exported files, then create the secrets using the `helm` field manager:
 
-    ```bash
+    ```
     grep -v -E '^\s+(resourceVersion|uid|creationTimestamp):' shared-secrets.yaml > shared-secrets.clean.yaml
     grep -v -E '^\s+(resourceVersion|uid|creationTimestamp):' ida-secrets.yaml > ida-secrets.clean.yaml
     kubectl create --field-manager=helm -f shared-secrets.clean.yaml
@@ -166,7 +166,7 @@ For each release:
     - Set `database.backup.destinationPath` to a new, empty path. The restored cluster cannot write backups to the path it is restoring from.
     - Add a `recovery` block that points to the original backup path.
 
-    ```yaml
+    ```
     database:
       backup:
         destinationPath: "<NEW_BUCKET_PATH>"

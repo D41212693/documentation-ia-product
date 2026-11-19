@@ -5,12 +5,9 @@ description: "Install CloudNativePG, Shared Services and Identity Analytics with
 
 # Installation
 
-To install Self-Managed Identity Analytics, review the [prerequisites](./02-prerequisites.md), then:
-
-* Prepare the namespaces.
-* Install the CloudNativePG operator.
-* Install Shared Services.
-* Install one or more Identity Analytics instances.
+To install self-managed Identity Analytics, you will need to perform these steps: 
+* Review the [prerequisites](./02-prerequisites.md).
+* Prepare the namespaces, install the CloudNativePG operator, install Shared Services, then install one or more Identity Analytics instances.  first.
 
 This page describes the installation steps. The values provided on this page form a minimal, complete configuration for a working platform. Replace the placeholders with your environment-specific values before installing. These configurations have been validated with `ida-helm` 3.8.0 and `ida-shared-helm` 3.6.0.
 
@@ -32,7 +29,7 @@ This page describes the installation steps. The values provided on this page for
 
 Create the namespaces and apply the image pull secret received from Radiant Logic (`ida-registry-credentials.yaml`) in **both** namespaces:
 
-```bash
+```
 kubectl create namespace <SHARED_NAMESPACE>
 kubectl create namespace <IDA_NAMESPACE>
 kubectl apply -n <SHARED_NAMESPACE> -f ida-registry-credentials.yaml
@@ -41,7 +38,7 @@ kubectl apply -n <IDA_NAMESPACE> -f ida-registry-credentials.yaml
 
 If you received a username and a token instead of the file, create the secret in both namespaces. Keep the name `ida-registry-credentials`: the values files below refer to it.
 
-```bash
+```
 for ns in <SHARED_NAMESPACE> <IDA_NAMESPACE>; do
   kubectl create secret docker-registry ida-registry-credentials -n "$ns" \
     --docker-server=docker.io --docker-username=<REGISTRY_USER> --docker-password=<REGISTRY_TOKEN>
@@ -52,7 +49,7 @@ If `helm` cannot pull the charts (`unauthorized`), log in to the registry with t
 
 If you serve TLS from the ingress, create the certificate secret in the Shared Services namespace (the ingresses of both charts are created there):
 
-```bash
+```
 kubectl create secret tls <TLS_SECRET> -n <SHARED_NAMESPACE> --cert=tls.crt --key=tls.key
 ```
 
@@ -62,7 +59,7 @@ CloudNativePG (CNPG) creates and manages the PostgreSQL clusters used by Keycloa
 
 1. Create `cnpg-custom-values.yaml`:
 
-    ```yaml
+    ```
     fullnameOverride: cnpg
     image:
       repository: docker.io/radiantone/rl-cloudnative-pg-fips
@@ -77,7 +74,7 @@ CloudNativePG (CNPG) creates and manages the PostgreSQL clusters used by Keycloa
 
 2. Install the operator:
 
-    ```bash
+    ```
     helm repo add cnpg https://cloudnative-pg.github.io/charts
     helm repo update
     helm upgrade --install cnpg cnpg/cloudnative-pg \
@@ -89,7 +86,7 @@ CloudNativePG (CNPG) creates and manages the PostgreSQL clusters used by Keycloa
 
 3. Check that the operator runs and that the `clusters.postgresql.cnpg.io`, `backups.postgresql.cnpg.io`, `scheduledbackups.postgresql.cnpg.io` and `imagecatalogs.postgresql.cnpg.io` CRDs exist:
 
-    ```bash
+    ```
     kubectl get pods -n cnpg-system
     kubectl get crds | grep postgresql.cnpg.io
     ```
@@ -100,7 +97,7 @@ Shared Services (Keycloak, APISIX gateway and its etcd store) are installed once
 
 1. Create `shared.values.yaml`:
 
-    ```yaml
+    ```
     global:
       externalDns: "<IDA_DNS>"
     imageCredentials:
@@ -121,7 +118,7 @@ Shared Services (Keycloak, APISIX gateway and its etcd store) are installed once
 
 2. Install the chart:
 
-    ```bash
+    ```
     helm upgrade --install rlss oci://docker.io/radiantone/ida-shared-helm \
       --namespace <SHARED_NAMESPACE> \
       --version <SHARED_CHART_VERSION> \
@@ -131,7 +128,7 @@ Shared Services (Keycloak, APISIX gateway and its etcd store) are installed once
 
 3. Check that `apisix`, `apisix-etcd-0`, `keycloak-0` and the `keycloak-db-1` database pod are running:
 
-    ```bash
+    ```
     kubectl get pods -n <SHARED_NAMESPACE>
     ```
 
@@ -153,7 +150,7 @@ Repeat this step for each instance, each in its own namespace.
 
 2. Create `ida.values.yaml`:
 
-    ```yaml
+    ```
     global:
       externalDns: "<IDA_DNS>"
       pathPrefix: "<IDA_PATH>" # Required, with its leading slash (for example /ida)
@@ -204,7 +201,7 @@ Repeat this step for each instance, each in its own namespace.
 
 3. Install the chart, passing the license file:
 
-    ```bash
+    ```
     helm upgrade --install rlia oci://docker.io/radiantone/ida-helm \
       --namespace <IDA_NAMESPACE> \
       --version <IDA_CHART_VERSION> \
@@ -213,7 +210,7 @@ Repeat this step for each instance, each in its own namespace.
       --timeout 30m
     ```
 
-    The installation runs initialization jobs (`config-store-init`, `analytics-update-db`, `environment-setup`) and takes a few minutes.
+    The installation runs initialisation jobs (`config-store-init`, `analytics-update-db`, `environment-setup`) and takes a few minutes.
 
     > [!note] The license file is a binary file: pass it base64-encoded in `global.license` (with PowerShell: `[Convert]::ToBase64String([IO.File]::ReadAllBytes("<PATH_TO_LICENSE_FILE>"))`). The chart also accepts `--set-file global.licenseFile=<PATH_TO_LICENSE_FILE>`, but Helm then stores a corrupted copy of the file in the values of the release: pass the file again at each upgrade and never use `--reuse-values`. When both are set, `global.license` wins over `global.licenseFile`.
 
@@ -225,7 +222,7 @@ The charts come with default requests, limits and volume sizes (see [Prerequisit
 
 **Shared Services** (`shared.values.yaml`):
 
-```yaml
+```
 bwapisix:
   resources:
     requests: { cpu: 500m, memory: 512Mi }
@@ -250,7 +247,7 @@ database:
 
 **Identity Analytics** (`ida.values.yaml`):
 
-```yaml
+```
 portal:
   resources:
     requests: { cpu: "1", memory: 4Gi }
@@ -288,7 +285,7 @@ To use a specific storage class for every volume of a chart, set `global.storage
 
 Node selectors, tolerations and affinities are set per component, or for the whole chart under `global`. See the [Kubernetes documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/).
 
-```yaml
+```
 # shared.values.yaml
 global:
   nodeSelector: {}
@@ -316,7 +313,7 @@ To give the platform pods a priority class, set `global.priorityClassName`.
 
 The built-in database is tuned with `database.postgres.overrideConf` in `ida.values.yaml`. The defaults are:
 
-```yaml
+```
 database:
   postgres:
     overrideConf:

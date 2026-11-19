@@ -128,8 +128,6 @@ dataRecovery:
 
 `existingSecret` is not needed with `credentials.aws.useIRSA`, `credentials.azure.useWorkloadIdentity` or `credentials.gcp.useWorkloadIdentity`. The file is downloaded to `/work/upload/export.tgz`, ready for the recovery scripts.
 
-The download runs in a separate container that uses the cloud provider's CLI image: `mcr.microsoft.com/azure-cli`, `amazon/aws-cli` or `google/cloud-sdk`, tag `latest` by default. To use a registry mirror or a fixed version, set `downloader.image.repository` and `downloader.image.tag`. With `provider: other`, these values are required, as well as `downloader.command` or `downloader.args`.
-
 ## Connect to the pod
 
 Use your favorite method to open a shell session on the pod. For instance, from your laptop you can use
@@ -182,7 +180,7 @@ Before you switch users to the new platform:
 
 - [ ] All four scripts ended without error (check `/work/logs`) and the `ops-db-maintenance` job is complete.
 - [ ] The number of rows of the main Identity Ledger tables (identities, accounts, permissions, timeslots) matches the source database.
-- [ ] After the finalization below, the portal shows the last timeslot of the source, and a first execution plan runs on the new platform.
+- [ ] After the finalisation below, the portal shows the last timeslot of the source, and a first execution plan runs on the new platform.
 - [ ] Keep the source database and the export archive until the new platform is accepted: they are your way back.
 
 ## Finalize the recovery process

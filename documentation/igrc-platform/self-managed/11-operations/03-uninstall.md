@@ -84,3 +84,78 @@ DROP ROLE app_user, shared_user, analytics_support, analytics_read_access, <KEYC
 ```
 
 Then remove the administration account or revoke its privileges if it is no longer needed.
+# Uninstallation
+
+Remove the Identity Analytics instances first, then Shared Services. Shared Services must stay installed as long as one instance remains.
+
+> [!warning] Deleting the persistent volume claims deletes the data, including the built-in database. Take a [backup](./01-backup-and-restore.md) first if you may need the data again.
+
+## Remove an Identity Analytics instance
+
+1. Uninstall the release:
+
+    ```
+    helm uninstall rlia --namespace <IDA_NAMESPACE> --wait
+    ```
+
+2. List the remaining persistent volume claims, and delete them to free the storage:
+
+    ```
+    kubectl get pvc --namespace <IDA_NAMESPACE>
+    kubectl delete pvc --namespace <IDA_NAMESPACE> --all
+    ```
+
+3. Delete the namespace, if it is no longer used:
+
+    ```
+    kubectl delete namespace <IDA_NAMESPACE>
+    ```
+
+## Remove Shared Services
+
+1. Uninstall the release:
+
+    ```
+    helm uninstall rlss --namespace <SHARED_NAMESPACE> --wait
+    ```
+
+2. List the remaining persistent volume claims, and delete them:
+
+    ```
+    kubectl get pvc --namespace <SHARED_NAMESPACE>
+    kubectl delete pvc --namespace <SHARED_NAMESPACE> --all
+    ```
+
+3. Delete the namespace:
+
+    ```
+    kubectl delete namespace <SHARED_NAMESPACE>
+    ```
+
+4. With the built-in database, if no other application uses it, remove the CloudNativePG operator:
+
+    ```
+    helm uninstall cnpg --namespace cnpg-system
+    ```
+
+    The chart keeps the CloudNativePG CRDs. To remove them and the namespace:
+
+    ```
+    kubectl get crds -o name | grep postgresql.cnpg.io | xargs kubectl delete
+    kubectl delete namespace cnpg-system
+    ```
+
+## External database
+
+With an external database, uninstalling the charts does not delete the databases: `analytics_db`, `shared_db` and `keycloak_db` and their roles stay on the PostgreSQL server. Only the realm of the instance is deleted from `keycloak_db` by the `helm uninstall` of the instance, with its users, role assignments and identity provider settings: a reinstallation creates a new realm.
+
+To reinstall on them, keep them: see [External database](../04-external-database.md). To remove the platform completely, have your DBA run, with the default names:
+
+```
+DROP DATABASE analytics_db;
+DROP DATABASE shared_db;
+DROP DATABASE keycloak_db;
+DROP ROLE app_user, shared_user, analytics_support, analytics_read_access, <KEYCLOAK_DB_USER>;
+```
+
+Then remove the administration account, or its privileges, if it is no longer needed.

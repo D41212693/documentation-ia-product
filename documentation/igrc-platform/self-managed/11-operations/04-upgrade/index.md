@@ -14,7 +14,7 @@ To upgrade, install the new chart versions using your existing values files. Bef
 3. If the target is a new minor version (for example 3.6 to 3.7), merge the reference project of that version into your project and set `git.default.branch` to the matching branch.
 4. Upgrade the two charts in the order given by the migration guide of the target version. When the guide gives no order, upgrade Shared Services first, wait until Keycloak is ready, then upgrade each Identity Analytics instance.
 
-    ```bash
+    ```
     helm upgrade rlss oci://docker.io/radiantone/ida-shared-helm \
       --namespace <SHARED_NAMESPACE> --version <SHARED_CHART_VERSION> \
       --values shared.values.yaml --wait --timeout 20m
@@ -32,7 +32,7 @@ To upgrade, install the new chart versions using your existing values files. Bef
 
 > [!warning] Downgrades are not supported: an upgrade migrates the database schemas. To go back, restore the backup taken before the upgrade.
 
-Each upgrade runs the `config-store-init` job again. It applies the values (for example `smtp`) to the configuration store and overwrites the same settings changed by hand in the configuration interface: report such changes in your values files before you upgrade. The Git project chosen in the configuration interface is kept. See [Configuration settings](../06-configuration/01-config-ui.md#configuration-settings).
+Each upgrade runs the `config-store-init` job again. It applies the values (for example `smtp`) to the configuration store and overwrites the same settings changed by hand in the configuration interface: report such changes in your values files before you upgrade. The Git project chosen in the configuration interface is kept. See [Which setting wins](../06-configuration/01-config-ui.md#which-setting-wins).
 
 ## Version-specific guides
 
