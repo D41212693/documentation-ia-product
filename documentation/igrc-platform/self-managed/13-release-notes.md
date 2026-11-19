@@ -53,6 +53,7 @@ Identity Analytics 3.8 runs on a new platform (Eclipse, Java 21 and Tomcat 11) a
 - **BWIPUAR-3359** — The logs of an execution plan are kept when the batch server stops in the middle of it, and the controller marks the plan as failed right away.
 - **BWIPUAR-3075** — Containers no longer allow privilege escalation, wherever possible.
 - **BWIPUAR-3715** — SQL Tools removed.
+- **BWIPUAR-2594** — Add portal and batch properties per environment from the Helm values. See [Portal and batch properties](./06-configuration/08-properties-overrides.md).
 
 ### Bug Fixes
 
