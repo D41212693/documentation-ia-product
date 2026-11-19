@@ -13,20 +13,20 @@ Uninstall all Identity Analytics instances before removing Shared Services. Shar
 
 1. Uninstall the Helm release:
 
-    ```
+    ```bash
     helm uninstall rlia --namespace <IDA_NAMESPACE> --wait
     ```
 
 2. List the remaining persistent volume claims, then delete them to release the storage:
 
-    ```
+    ```bash
     kubectl get pvc --namespace <IDA_NAMESPACE>
     kubectl delete pvc --namespace <IDA_NAMESPACE> --all
     ```
 
 3. Delete the namespace if it is no longer needed:
 
-    ```
+    ```bash
     kubectl delete namespace <IDA_NAMESPACE>
     ```
 
@@ -36,32 +36,32 @@ After removing all Identity Analytics instances:
 
 1. Uninstall the Helm release:
 
-    ```
+    ```bash
     helm uninstall rlss --namespace <SHARED_NAMESPACE> --wait
     ```
 
 2. List and delete the remaining persistent volume claims:
 
-    ```
+    ```bash
     kubectl get pvc --namespace <SHARED_NAMESPACE>
     kubectl delete pvc --namespace <SHARED_NAMESPACE> --all
     ```
 
 3. Delete the namespace:
 
-    ```
+    ```bash
     kubectl delete namespace <SHARED_NAMESPACE>
     ```
 
 4. If you used the built-in database and no other application requires the CloudNativePG operator, uninstall it:
 
-    ```
+    ```bash
     helm uninstall cnpg --namespace cnpg-system
     ```
 
     The chart retains the CloudNativePG custom resource definitions (CRDs). To delete them and the operator namespace, run:
 
-    ```
+    ```bash
     kubectl get crds -o name | grep postgresql.cnpg.io | xargs kubectl delete
     kubectl delete namespace cnpg-system
     ```
@@ -76,7 +76,7 @@ To reuse the databases for a reinstallation, retain them and follow the guidance
 
 To remove the platform completely, ask your DBA to run the following commands. These commands use the default database and role names; adjust them if your installation uses different names.
 
-```
+```sql
 DROP DATABASE analytics_db;
 DROP DATABASE shared_db;
 DROP DATABASE keycloak_db;
