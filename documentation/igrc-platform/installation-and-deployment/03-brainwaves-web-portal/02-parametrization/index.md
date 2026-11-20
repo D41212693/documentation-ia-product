@@ -203,7 +203,11 @@ On 3.x:
 java -jar bw-tomcat-9.0-addons.java17-3.x.x.jar generateKey AES 256 <TOMCAT_HOME>\conf\db.key
 ```
 
-This key will be used to encrypt passwords of datasource and used by Tomcat to decrypt database service account password. Ensure that your setup appropriate security on the location of the key.
+This key will be used to encrypt passwords of datasource and used by Tomcat to decrypt database service account password.
+
+Store `db.key` in `$CATALINA_BASE/conf`, or set `keyFilename` to an absolute path, as in the commands above. From **3.4.0**, **4.1.0** and **5.1.0**, a bare file name is read from `$CATALINA_BASE/conf`, and any other relative path is resolved from `$CATALINA_BASE`. An absolute path is used as given. The examples use an absolute path, so they keep working when `CATALINA_BASE` and `CATALINA_HOME` differ.
+
+The key file must be readable by the account that runs Tomcat and must not be readable by other accounts. On Linux, mode `600` or `640`. On Windows, an ACL limited to the Tomcat service account.
 
 ##### Encrypt Tomcat Datasource passwords
 
@@ -318,7 +322,6 @@ After update, you should have deployment descriptor that looks along the lines o
       username="__USER__"
       password="__ENCRYPTED_PASSWORD__"
       url="jdbc:sqlserver://__HOSTNAME__:__PORT__;databaseName=__DATABASE__"
-
       connectionProperties="algorithm=AES;mode=ECB;padding=PKCS5PADDING;keyFilename=<TOMCAT_HOME>/conf/db.key"
     />
 
@@ -341,7 +344,6 @@ After update, you should have deployment descriptor that looks along the lines o
       username="__USER__"
       password="__ENCRYPTED_PASSWORD__"
       url="jdbc:sqlserver://__HOSTNAME__:__PORT__;databaseName=__DATABASE__"
-
       connectionProperties="algorithm=AES;mode=ECB;padding=PKCS5PADDING;keyFilename=<TOMCAT_HOME>/conf/db.key"
     />
 </Context>
