@@ -48,7 +48,7 @@ For example to request the results of the view `br_identity` (element `/views/id
 
 The results are as follows:
 
-```json
+```
 { "total":862,
 "limit":1000,
 "success" : true,
@@ -98,7 +98,7 @@ For example:
 
 The results are as follows:
 
-```json
+```
 {
   "limit": 2,
   "start": 10,
@@ -172,7 +172,7 @@ For example:
 
 The results are as follows:
 
-```json
+```
 { "success" : true,
   "total" : 273,
   "views" : [ { "description" : "Rule details",
@@ -208,7 +208,7 @@ For example:
 
 The results are as follows:
 
-```json
+```
 {  "success" : true,
    "columns" : [ { "label" : "Identifiant unique interne de l'identité",
         "name" : "recorduid",
@@ -281,7 +281,7 @@ For example:
 
 The results are as follows:
 
-```json
+```
 {
   "success": true,
   "parameters": [
@@ -310,7 +310,7 @@ For example:
 
 The results are as follows:
 
-```json
+```
 {
   "total": 2,
   "limit": 2147483647,
@@ -339,7 +339,7 @@ The results are as follows:
 
 When an error appears, the engine sends back a response with the attribute `success = false` in the header of the results, for example:
 
-```json
+```
 {
   "success": false,
   "message": "java.lang.NumberFormatException: For input string: \"99999999999\""
@@ -355,7 +355,7 @@ The type of error is also displayed allowing you to debug you webservice.
 The WebService service relies on the access security of the Tomcat container and thus on the access security as defined in the configuration file of the Web application under `/WEB-INF/web.xml`.  
 By default the section is as follows, note that the URL `ws/*` is protected the same way as the others:
 
-```xml
+```
 <security-constraint>
     <web-resource-collection>
         <web-resource-name>Portal</web-resource-name>
@@ -410,7 +410,7 @@ To activate Identity Analytics's Tomcat SSO Valve (`com.brainwave.tomcat.valve.P
 Then:
 - Edit your `/conf/server.xml` file and add the following section between the \<Host\> tags :
 
-```xml
+```
 <Valve className="com.brainwave.tomcat.valve.PassthroughAuthenticationValve"
   config="sso.xml"
   refreshRate="5"
@@ -428,7 +428,7 @@ The SSO valve points to an XML configuration file. Put it in `$CATALINA_BASE/con
 
 `$CATALINA_BASE/conf/sso.xml` contains the SSO tokens and their user configuration. Here is an example:
 
-```xml
+```
 <tokens>
     <token id="HsCnykb8RtMdGpKlu7W7SlJs" login="ABOURGET18" IPpattern="^.*$">
         <role>user</role>
@@ -446,13 +446,13 @@ In order to use your token you can either add an "ssokey" custom HTTP request he
 
 Compute the digest with Tomcat's `digest` command. `-s 0` is required: a salted hash is not accepted. On Linux, from `$CATALINA_HOME/bin`:
 
-```sh
+```
 ./digest.sh -a SHA-256 -s 0 "<clear token>"
 ```
 
 On Windows, `digest.bat` takes the same arguments. The command prints `<clear token>:<hexadecimal digest>`. Store only the hexadecimal part as the token `id`:
 
-```xml
+```
 <tokens>
     <token id="2c62feca79d1878118bcaf231eb3e03a8f4efe98ecb70d17b04169e6d8e79c8e" login="ABOURGET18" IPpattern="^.*$">
         <role>user</role>
@@ -467,7 +467,7 @@ Here is an example of an URL:
 
 Here is also an Example of a HTTP header which is the prefered method:
 
-```txt
+```
 GET /PortalReports/ws/views HTTP/1.1
 Host: localhost:9090
 ssokey: HsCnykb8RtMdGpKlu7W7SlJs
@@ -483,7 +483,7 @@ The [Remote Address Filter](http://tomcat.apache.org/tomcat-9.0-doc/config/filte
 
 Setting access rights by role according to the URL is done with the `Security Constraint` sections, for example:
 
-```xml
+```
 <security-constraint>
     <display-name>Web Services Access</display-name>
     <web-resource-collection>
