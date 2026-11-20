@@ -19,31 +19,41 @@ The following configuration has been validated on Windows and Linux:
 - Tomcat 11.0 with the **5.x** line (recommended)
 
 
-## Pre-requisites
+## Prerequisites
 
-The component that reads the login header, the roles header, and the role mapping is `com.brainwave.tomcat.valve.HttpAuthenticationValve`.
+The `com.brainwave.tomcat.valve.HttpAuthenticationValve` component reads the login header, roles header, and role mapping.
 
-These libraries are not available for direct download. Contact Professional Services or Support to obtain the files for your Tomcat and Java versions.
+The required libraries are not available for direct download. Contact Professional Services or Support to obtain the files for your Tomcat and Java versions.
 
-**4.x (recommended)** — Tomcat 9.0. This valve runs on Java 8, and on Java 17.
+### Version 4.x (recommended)
+
+Compatible with Tomcat 9.0 and Java 8 or Java 17.
+
+Required libraries:
 
 - `tomcat-addons-valve-http-authentication-4.x.x.jar`
-- From **4.1.0**, also `tomcat-addons-common-4.x.x.jar`. **4.0.x** did not need it.
+- `tomcat-addons-common-4.x.x.jar` — Required starting with version 4.1.0. Not required for version 4.0.x.
 
-**5.x (recommended)** — Tomcat 11.0 (Jakarta). Java 21 or later.
+### Version 5.x (recommended)
+
+Compatible with Tomcat 11.0 (Jakarta) and Java 21 or later.
+
+Required libraries:
 
 - `tomcat-addons-valve-http-authentication-5.x.x.jar`
-- From **5.1.0**, also `tomcat-addons-common-5.x.x.jar`. **5.0.x** did not need it.
+- `tomcat-addons-common-5.x.x.jar` — Required starting with version 5.1.0. Not required for version 5.0.x.
 
-**3.x (not recommended)** — Tomcat 9.0. The valve is inside the single library JAR:
+### Version 3.x (not recommended)
+
+Compatible with Tomcat 9.0. The valve is included in a single JAR file. Use the file that matches your Java version:
 
 - Java 8: `bw-tomcat-9.0-addons.java1.8-3.x.x.jar`
 - Java 17 or later: `bw-tomcat-9.0-addons.java17-3.x.x.jar`
 
-Ensure that:
+Before you begin, ensure that:
 
-- Tomcat instance is installed and available
-- The operator has RW privileges in needed files and folders to proceed to the installation
+- A Tomcat instance is installed and accessible.
+- The user performing the installation has read and write permissions for the required files and directories.
 
 ## Installation
 
@@ -65,7 +75,7 @@ Follow these steps:
 
 1. Under `<TOMCAT_CONF_FOLDER>`, create `http-header-valve.xml`:
 
-```xml
+```
 <config loginHttpHeader="<HTTP_HEADER_LOGIN_FIELD>" rolesHttpHeader="<HTTP_HEADER_MEMBERS_FIELD>" rolesSeparator="<HTTP_HEADER_MEMBERS_SEPARATOR_FIELD>" roleMapping="<HTTP_HEADER_ROLE_MAPPING_FILE>">
     <role>user</role>
 </config>
@@ -80,9 +90,10 @@ Each `<role>` element is a default role added to every authenticated user. The X
 <SHIBBOLETH_ROLE2>=<PORTAL_ROLE2>
 ```
 
-3. In `<TOMCAT_CONF_FOLDER>/Catalina/localhost/<WEBAPP_NAME>.xml`, declare the valve. `<TOMCAT_CONF_FOLDER>` is `$CATALINA_BASE/conf`. From **3.4.0**, **4.1.0** and **5.1.0**, a bare `config` such as `http-header-valve.xml` is read from that directory. An absolute path, or a path relative to `$CATALINA_BASE`, also works. Put `http-header-valve.xml` and the role-mapping file there. A bare name is not resolved from the process working directory.
+3. Declare the valve in `<TOMCAT_CONF_FOLDER>/Catalina/localhost/<WEBAPP_NAME>.xml`, where `<TOMCAT_CONF_FOLDER>` is `$CATALINA_BASE/conf`.
+Starting with versions 3.4.0, 4.1.0, and 5.1.0, a filename without a directory path in the `config` attribute, such as `http-header-valve.xml`, is resolved relative to `<TOMCAT_CONF_FOLDER>`, not the process working directory. You can also specify an absolute path or a path relative to `$CATALINA_BASE`. Place `http-header-valve.xml` and the role-mapping file in `<TOMCAT_CONF_FOLDER>`.
 
-```xml
+```
 <?xml version="1.0" encoding="UTF-8"?>
 <Context override="true">
     <Manager pathname="" />
@@ -95,7 +106,7 @@ This valve does not use `<auth-method>`.
 
 4. In `server.xml`, if `org.apache.catalina.realm.UserDatabaseRealm` is present and unused, remove it. If that leaves `org.apache.catalina.realm.LockOutRealm` empty, remove the `LockOutRealm` as well.
 
-```xml
+```
 <!-- Use the LockOutRealm to prevent attempts to guess user passwords
     via a brute-force attack -->
     <Realm className="org.apache.catalina.realm.LockOutRealm">
@@ -121,7 +132,7 @@ This valve does not use `<auth-method>`.
 
 **3.x:** the same single JAR as the valve (`bw-tomcat-9.0-addons.java1.8-3.x.x.jar` or `bw-tomcat-9.0-addons.java17-3.x.x.jar`).
 
-```xml
+```
 <Valve className="com.brainwave.tomcat.authenticator.HTTPHeaderAuthenticator"
        userRequestHeaderName="samAccountName"
        authorize="true"
