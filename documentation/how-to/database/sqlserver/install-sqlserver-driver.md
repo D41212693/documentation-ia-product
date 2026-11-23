@@ -17,6 +17,8 @@ Search for the "JDBC drivers for SQL Server". This should display an [MSDN page]
 
 > [!Note] Please be sure to download the latest version of the JDBC dirvers
 
+> [!warning] We have seen instabilities with older versions of the driver. If your installation uses an older one, replace it with the latest version, keeping the file name expected by the product.
+
 Click "Download" and be sure to download the correct version for your operating system (either Windows, `.exe` file, or Linux, `.tar.gz` file).  
 
 Please follow the installation instruction provided by Microsoft copied bellow :  

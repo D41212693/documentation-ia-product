@@ -149,9 +149,17 @@ SPNEGO=org.apache.catalina.authenticator.SpnegoAuthenticator
 SAML=com.brainwave.tomcat.authenticator.saml.SAMLAuthenticator
 ```
 
-In `<TOMCAT_CONF_FOLDER>`, create `SAMLAuthenticator.properties`. A complete sample is in [Configuration file samples](#configuration-file-samples). Each property, and the version in which it appeared, is described in [SAML Authenticator properties](./saml-authenticators-properties).
+Create `SAMLAuthenticator.properties` in `<TOMCAT_CONF_FOLDER>` (`$CATALINA_BASE/conf`). For a complete example, see [Configuration file samples](#configuration-file-samples). For property descriptions and the version in which each property was introduced, see [SAML Authenticator properties](./saml-authenticators-properties).
+
+Starting with versions **3.4.0**, **4.1.0**, and **5.1.0**, file paths specified in `SAMLAuthenticator.properties` are resolved as follows:
+
+- File names without a directory component, such as `idp-metadata.xml`, `sp-metadata.xml`, or the name of a role-mapping file or keystore, are resolved relative to `$CATALINA_BASE/conf`.
+- Absolute paths are used as specified.
+- All other relative paths are resolved relative to `$CATALINA_BASE`.
 
 `SAMLAuthenticator.properties` applies to every web application. Since **3.3.10**, and on **4.x** and **5.x**, a web application can use its own file instead: `SAMLAuthenticator-<context-name>.properties`, where `<context-name>` is the context name. That file can point to its own `sp-metadata.xml`. When the context file is absent, `SAMLAuthenticator.properties` is used.
+
+The samples on this page do not sign authentication requests. To sign them, follow [Sign authentication requests](#sign-authentication-requests).
 
 ### Step 3: Identity Analytics Portal generation
 
@@ -168,7 +176,7 @@ Once configured, a new `SAML` authentication method is available.
 
 > Note: the SAML method is declared in the `/WEB-INF/web.xml` file under the security configuration in the `auth-method` parameter.
 
-```xml
+```
 <login-config>
 <auth-method>SAML</auth-method>
 </login-config>
@@ -189,21 +197,145 @@ Once your `<WEBAPP_NAME>` webapp is generated, the last step is to:
 
 The portal should be accessible from your browser using `<WEBAPP_URL>/<WEBAPP_URI>`.
 
+## Sign authentication requests
+
+The service provider supports signing SAML authentication requests starting with version 3.3.7 and in all 4.x and 5.x versions.
+
+Signing is optional. Leave it disabled if the identity provider accepts unsigned requests. The configuration samples below disable signing by setting `AuthnRequestsSigned="false"` and `WantAuthnRequestsSigned="false"`.
+
+Enable signing if the identity provider requires signed authentication requests or if the service provider metadata declares that requests are signed.
+
+For property descriptions and the version in which each property was introduced, see [SAML Authenticator properties](./saml-authenticators-properties).
+
+### 1. Enable signing in the metadata
+
+The authenticator signs authentication requests when either of the following attributes is `true`:
+
+- `AuthnRequestsSigned` on the `SPSSODescriptor` element in `sp-metadata.xml`.
+- `WantAuthnRequestsSigned` on the `IDPSSODescriptor` element in `idp-metadata.xml`.
+
+To enable signing through the service provider metadata, update `sp-metadata.xml`:
+
+```
+<md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+```
+
+Alternatively, enable signing through `idp-metadata.xml`:
+
+```
+<md:IDPSSODescriptor WantAuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+```
+
+The identity provider usually supplies `idp-metadata.xml`. Change `WantAuthnRequestsSigned` only if you maintain that file locally. Setting `AuthnRequestsSigned="true"` in `sp-metadata.xml` is sufficient to enable signing for this service provider.
+
+### 2. Create the key pair
+
+Run the following command in `<TOMCAT_CONF_FOLDER>` (`$CATALINA_BASE/conf`):
+
+```
+keytool -genkeypair -validity 3000 -keyalg RSA -alias privatekey -keypass changeit -storepass changeit -storetype PKCS12 -keystore samlkeystore.p12
+```
+
+When creating and configuring the keystore:
+
+- Set `privateKeyAlias` to the alias specified in the command: `privatekey`.
+- Use the same password for the keystore and the private key. Both passwords are `changeit` in this example.
+- Set `privateKeystoreFormat=PKCS12` to match `-storetype PKCS12`.
+- Answer the certificate questions, or leave the answers empty.
+
+The command stores a self-signed certificate and its private key in the keystore. Keep the certificate in the keystore entry, even after copying it into `sp-metadata.xml`. Starting with versions 4.0.2, 4.1.0, 5.0.2, and 5.1.0, the authenticator reads the certificate from the keystore when signing requests.
+
+#### Version compatibility
+
+In versions 4.0.0, 4.0.1, 5.0.0, and 5.0.1, signed authentication requests fail before reaching the identity provider:
+
+- HTTP-POST returns HTTP 500.
+- HTTP-Redirect returns HTTP 403.
+
+Use version 4.0.2 or later for Tomcat 9, or version 5.0.2 or later for Tomcat 11. The 3.x versions are not affected.
+
+#### Keystore permissions and location
+
+Restrict access to the keystore so that the account running Tomcat can read it and other accounts cannot:
+
+- On Linux, use mode `600`, or mode `640` with a group restricted to the required account.
+- On Windows, use an ACL restricted to the Tomcat service account.
+
+Starting with versions 3.4.0, 4.1.0, and 5.1.0, `privateKeystore=samlkeystore.p12` resolves to `$CATALINA_BASE/conf/samlkeystore.p12`. Absolute paths are used as specified. All other relative paths are resolved relative to `$CATALINA_BASE`.
+
+### 3. Publish the certificate in the service provider metadata
+
+Export the certificate:
+
+```
+keytool -exportcert -rfc -keystore samlkeystore.p12 -storepass changeit -alias privatekey -file samlcert.pem
+```
+
+Open `samlcert.pem` and copy the Base64-encoded content between `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----`. Do not include those two lines.
+
+In `sp-metadata.xml`, add a `KeyDescriptor` element inside `SPSSODescriptor`. Replace the placeholder below with the copied certificate content. The `KeyInfo` element contains the certificate information used to verify signatures. [w3](http://www.w3.org/2000/09/xmldsig)
+
+```
+<md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+        <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <ds:X509Data>
+                <ds:X509Certificate>REPLACE_WITH_THE_BASE64_CERTIFICATE</ds:X509Certificate>
+            </ds:X509Data>
+        </ds:KeyInfo>
+    </md:KeyDescriptor>
+</md:SPSSODescriptor>
+```
+
+Provide the updated `sp-metadata.xml` to the identity provider when registering the application so that it can trust the signing certificate.
+
+### 4. Configure the keystore properties
+
+Add the following properties to `SAMLAuthenticator.properties`. The authenticator reads these properties only when signing is enabled.
+
+```
+privateKeystore=samlkeystore.p12
+privateKeystorePass=changeit
+privateKeyAlias=privatekey
+privateKeyPass=changeit
+privateKeystoreFormat=PKCS12
+sigAlgo=rsa-sha256
+```
+
+The `sigAlgo` property is optional:
+
+- In 4.x and 5.x, the default is `rsa-sha256`. These versions reject SHA-1.
+- In versions 3.3.8 through 3.3.10, the default is `rsa-sha1`.
+
+Restart Tomcat to apply the changes.
+
 ## Debug
 
-To activate traces, add the following line at the end of the `/conf/logging.properties`. Do **not** use this in **production**. This is just for troubleshooting `SAML` request/response.
+To enable trace logging for troubleshooting SAML requests and responses, add the following line to the end of `$CATALINA_BASE/conf/logging.properties`:
 
-```xml
+```
 com.brainwave.tomcat.authenticator.saml.SAMLAuthenticator.level = ALL
 ```
 
+Do not enable this logging in production.
+
 ## Configuration file samples
 
-Place these files in `<TOMCAT_CONF_FOLDER>`. Property meanings and the version in which each property appeared are in [SAML Authenticator properties](./saml-authenticators-properties).
+Place the following files in `<TOMCAT_CONF_FOLDER>` (`$CATALINA_BASE/conf`).
+
+Starting with versions 3.4.0, 4.1.0, and 5.1.0, file paths specified in `SAMLAuthenticator.properties` are resolved as follows:
+
+- File names without a directory component are resolved relative to `$CATALINA_BASE/conf`.
+- Absolute paths are used as specified.
+- All other relative paths are resolved relative to `$CATALINA_BASE`.
+
+For property descriptions and the version in which each property was introduced, see [SAML Authenticator properties](./saml-authenticators-properties).
+
+The private keystore must be readable by the account running Tomcat and inaccessible to other accounts.
 
 ### SAMLAuthenticator.properties
 
-```properties
+```
 # SAML Authenticator property file
 
 idpMetadata=idp-metadata.xml
@@ -218,29 +350,25 @@ genericUserPattern={login} ({generic})
 defaultURI=/sandbox/portal
 forceURI=/sandbox/portal
 
-# Optional. SAML attribute used as the login instead of the NameID.
-# Available since 2.1, and still available in 3.x, 4.x and 5.x.
+# Optional. Use this SAML attribute as the login instead of NameID.
+# Available since version 2.1, including in 3.x, 4.x, and 5.x.
 # userAttributeIdentifier=
 
-# Keystore used to sign authentication requests. Available since 3.3.7, and in 4.x and 5.x.
-# Required when AuthnRequestsSigned or WantAuthnRequestsSigned is true.
+# Uncomment to configure authentication request signing.
+# Also enable signing in the metadata. See "Sign authentication requests" above.
 # privateKeystore=samlkeystore.p12
 # privateKeystorePass=changeit
 # privateKeyAlias=privatekey
 # privateKeyPass=changeit
 # privateKeystoreFormat=PKCS12
-
-# Signature algorithm. Available since 3.3.8.
-# On 3.3.8 through 3.3.10 the default is rsa-sha1.
-# On 4.x and 5.x the default is rsa-sha256, and SHA-1 is rejected.
 # sigAlgo=rsa-sha256
 ```
 
 ### idp-metadata.xml
 
-Replace this sample with the metadata file provided by the Identity Provider.
+Replace this sample with the metadata file supplied by the identity provider.
 
-```xml
+```
 <?xml version="1.0" encoding="UTF-8"?>
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://idp.example.com/saml">
   <md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -260,9 +388,9 @@ Replace this sample with the metadata file provided by the Identity Provider.
 
 ### sp-metadata.xml
 
-Update `entityID` and both `Location` values. The path must keep `/logout` and `/acs`, and the application name must match the deployed web application.
+Update `entityID` and both `Location` values for your deployment. Keep the `/logout` and `/acs` suffixes, and ensure that the application name in each path matches the deployed web application.
 
-```xml
+```
 <?xml version="1.0"?>
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
                      validUntil="2099-01-19T13:33:05Z"
@@ -279,21 +407,25 @@ Update `entityID` and both `Location` values. The path must keep `/logout` and `
 </md:EntityDescriptor>
 ```
 
-`WantAssertionsSigned="true"` requires signed assertions. On 4.x and 5.x, a response is accepted when the response itself is signed or when every assertion is signed. If this attribute is true, assertions must still be signed when the response is signed.
+Setting `WantAssertionsSigned="true"` requires signed assertions.
+
+In 4.x and 5.x, the authenticator accepts a response if the response itself is signed or every assertion is signed. However, when `WantAssertionsSigned="true"`, every assertion must be signed even if the response itself is signed.
 
 ### rolemapping.properties
 
-The left side is the role returned by the Identity Provider. The right side is the portal role.
+Map each role returned by the identity provider to a portal role. Specify the identity provider role on the left and the portal role on the right.
 
-```properties
+```
 Domain Users=user
 IGA-Admins=igrc-administrator
 ```
 
 ### staticroles.properties
 
-Optional static roles, in the form `login=role1,role2`. Leave the file empty when it is not used. The property `staticRole` must still name the file.
+Optionally, assign static roles using the format `login=role1,role2`.
 
-```properties
+If static roles are not used, leave the file empty. The `staticRole` property must still reference the file.
+
+```
 jdoe@example.com=user,igrc-administrator
 ```
