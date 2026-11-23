@@ -255,7 +255,7 @@ batch:
    `projectOverride` for extra Analytics properties. Already-rendered keys
    are skipped (warning in the batch log). An image that does not yet
    merge overrides ignores the file. See
-   [Portal and batch properties](../../06-configuration/08-properties-overrides.md).
+   [Portal and batch properties](../01-configuration/06-properties-overrides.md).
 
 ### Upgrade impact
 
@@ -378,7 +378,7 @@ portal:
 3. Optional: set `portal.technicalConfiguration.configOverride` /
    `projectOverride` for extra Analytics properties. Already-rendered keys
    are skipped (warning in the init log). See
-   [Portal and batch properties](../../06-configuration/08-properties-overrides.md).
+   [Portal and batch properties](../01-configuration/06-properties-overrides.md).
 4. Remove unused customizations of `tools.image` that existed only for
    the portal init. Batch-server no longer uses `tools.image`
    ([CHG-021](#chg-021-batch-templates-embedded-in-the-image)).
