@@ -12,24 +12,27 @@ From `ida-helm` 3.8.0, you can add properties to the `config.properties` and `pr
 ```yaml
 portal:
   technicalConfiguration:
-    configOverride:          # config.properties
+    configOverride: # config.properties
       interface.browser-title: "IDA - ACCEPTANCE"
       interface.header.title: "ACCEPTANCE"
       interface.header.color.bg.top: "D50000"
       pages.formats.date: "yyyy-MM-dd"
-    projectOverride:         # project.properties
+    projectOverride: # project.properties
       ias_maxentriestoreview: 5000
       my_project_property: my_value
 
 batch:
   technicalConfiguration:
-    configOverride: {}
-    projectOverride:
+    configOverride: {} # config.properties
+    projectOverride: # project.properties
       ias_permissionroletype: Role
       my_project_property: my_value
 ```
 
-The keys of the existing project properties are the variables of the technical configuration in the Git project: `default.configuration` for the portal, and the configuration set in **Technical Configuration Name** for the batch (`docker` by default).
+The keys of the existing project properties are the variables of the technical configuration in the Git project:
+
+- `default.configuration` for the portal
+- The value of `batch.technicalConfiguration.name` in the Identity Analytics values for the batch (`docker` by default).
 
 Then run `helm upgrade`. The portal applies the properties when its pod restarts. The batch applies them at each execution plan and each purge.
 
@@ -45,14 +48,14 @@ For example: `server.url`, `pages.debug`, `upload.directory`, `logPath`, `number
 
 ## Portal theme properties
 
-| Setting | Property |
-| :-- | :-- |
-| Browser title | `interface.browser-title` |
-| Header title | `interface.header.title` |
-| Logo | `interface.header.logo` |
-| Header background | `interface.header.color.bg.top` |
-| Header title color | `interface.header.color.fg.title` |
-| Left menu background | `interface.header.color2.bgtoolbar` |
-| Selected menu item | `interface.header.color2.bgselitem` |
-| Page colors | `interface.pages.color.bg1` … `bg4`, `fg1` … `fg4` |
-| Date format | `pages.formats.date` |
+| Setting              | Property                                           |
+| :------------------- | :------------------------------------------------- |
+| Browser title        | `interface.browser-title`                          |
+| Header title         | `interface.header.title`                           |
+| Logo                 | `interface.header.logo`                            |
+| Header background    | `interface.header.color.bg.top`                    |
+| Header title color   | `interface.header.color.fg.title`                  |
+| Left menu background | `interface.header.color2.bgtoolbar`                |
+| Selected menu item   | `interface.header.color2.bgselitem`                |
+| Page colors          | `interface.pages.color.bg1` … `bg4`, `fg1` … `fg4` |
+| Date format          | `pages.formats.date`                               |
