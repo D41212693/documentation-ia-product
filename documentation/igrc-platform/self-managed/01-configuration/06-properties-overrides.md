@@ -9,7 +9,7 @@ From `ida-helm` 3.8.0, you can add properties to the `config.properties` and `pr
 
 ## Set the properties
 
-```yaml
+```
 portal:
   technicalConfiguration:
     configOverride: # config.properties
