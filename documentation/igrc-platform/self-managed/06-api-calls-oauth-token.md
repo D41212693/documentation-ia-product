@@ -14,7 +14,7 @@ As a reminder, it is required to use an account with access to the portal, _i.e.
 
 To configure this, add the following values to your helm values for IDA file:
 
-```yaml
+```
 portal:
   internalWebServices:
     enabled: true
@@ -145,7 +145,7 @@ Where `campaignInstanceId` is the campaign's unique identifier (its ticketlog re
 
 The response should look like this:
 
-```json
+```
 {
   "success": [Boolean],
   "title": [Report name + extension],
@@ -161,7 +161,7 @@ A script can start a timeslot purge and follow it, like the **Submit a purge** b
 
 Add to your Identity Analytics values, then run `helm upgrade`:
 
-```yaml
+```
 operationsManager:
   purge:
     api:
